@@ -1,0 +1,28 @@
+[
+  {
+    "id": "945c31fc-c6b9-4026-b9aa-7e3575376d82",
+    "name": "salim mwamkoba",
+    "email": "salomonsterk@gmail.com",
+    "phone": "+254117008433",
+    "dates": "12/8/2026",
+    "guests": 2,
+    "adventureId": "a1",
+    "message": "",
+    "status": "contacted",
+    "createdAt": "2026-11-07T09:25:15.074Z",
+    "updatedAt": "2026-11-07T09:26:08.801Z"
+  },
+  {
+    "id": "d73c8001-6ffb-4f74-b7d5-6f827c291f93",
+    "name": "salim mwamkoba",
+    "email": "salomonsterk@gmail.com",
+    "phone": "0117008433",
+    "dates": "12/8/2026",
+    "guests": "1",
+    "adventureId": "a1",
+    "message": "",
+    "status": "confirmed",
+    "createdAt": "2026-11-05T23:05:56.491Z",
+    "updatedAt": "2026-11-06T12:02:31.524Z"
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "name": "utamaduni-safaris",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Utamaduni Safaris – Wildlife & Coastal Tourism web app (Kombani, Kwale, Kenya)",
+  "scripts": {
+    "install:all": "cd server && npm install && cd ../client && npm install --legacy-peer-deps",
+    "server": "cd server && npm start",
+    "client": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start"
+  }
+}
