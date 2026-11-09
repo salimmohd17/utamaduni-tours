@@ -7,7 +7,7 @@
     "install:all": "cd server && npm install && cd ../client && npm install --legacy-peer-deps",
     "server": "cd server && npm start",
     "client": "cd client && npm run dev",
-    "build": "cd client && npm run build",
+    "build": "npm --prefix client install --legacy-peer-deps && npm --prefix client run build",
     "start": "cd server && npm start"
   }
 }
