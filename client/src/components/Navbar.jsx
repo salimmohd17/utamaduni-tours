@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
+import { useUser } from '../context/UserContext'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
+  const { user } = useUser()
   const isHome = location.pathname === '/'
 
   useEffect(() => {
@@ -31,7 +33,7 @@ export default function Navbar() {
         : 'bg-white/95 backdrop-blur-md border-b border-green-100 shadow-sm'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
-        {/* Logo — hippo icon */}
+        {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5 group">
           <img
             src="/assets/hippo.jpg"
@@ -49,12 +51,25 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-7">
+        <nav className="hidden md:flex items-center gap-6">
           <NavLink to="/" className={linkClass} end>Home</NavLink>
           <NavLink to="/destinations" className={linkClass}>Destinations</NavLink>
           <NavLink to="/adventures" className={linkClass}>Adventures</NavLink>
           <NavLink to="/moments" className={linkClass}>Moments</NavLink>
           <NavLink to="/about" className={linkClass}>About</NavLink>
+          {/* My Bookings — shows user name when logged in */}
+          <NavLink
+            to="/my-bookings"
+            className={({ isActive }) =>
+              `text-sm font-medium transition-colors duration-200 ${
+                isActive
+                  ? isTransparent ? 'text-[#d4a017]' : 'text-green-700'
+                  : isTransparent ? 'text-white/90 hover:text-[#d4a017]' : 'text-stone-700 hover:text-green-700'
+              }`
+            }
+          >
+            {user ? `📋 ${user.name.split(' ')[0]}` : 'My Bookings'}
+          </NavLink>
           <Link
             to="/book"
             className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-200 shadow hover:shadow-md hover:scale-105 ${
@@ -82,7 +97,7 @@ export default function Navbar() {
       </div>
 
       {/* Mobile menu */}
-      <div className={`md:hidden overflow-hidden transition-all duration-300 ${open ? 'max-h-96' : 'max-h-0'}`}>
+      <div className={`md:hidden overflow-hidden transition-all duration-300 ${open ? 'max-h-screen' : 'max-h-0'}`}>
         <div className="bg-white border-t border-green-100 px-4 py-5 space-y-1 shadow-lg">
           {[
             { to: '/', label: '🏠 Home', end: true },
@@ -90,6 +105,7 @@ export default function Navbar() {
             { to: '/adventures', label: '🧭 Adventures' },
             { to: '/moments', label: '📸 Moments' },
             { to: '/about', label: '👥 About' },
+            { to: '/my-bookings', label: user ? `📋 My Bookings (${user.name.split(' ')[0]})` : '📋 My Bookings' },
           ].map(item => (
             <NavLink
               key={item.to}

@@ -60,48 +60,31 @@ export default function Destinations() {
 
   return (
     <div className="pt-20 pb-20 bg-[#f0fdf4]">
-      {/* Hero Header */}
-      <div
-        className="relative text-white py-28"
-        style={{
-          backgroundImage: "url('/assets/samburu ,crystal pool.webp')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
-        }}
-      >
+      {/* Hero Header — mobile-safe (no backgroundAttachment:fixed on mobile) */}
+      <div className="relative text-white py-24 sm:py-28">
+        <img
+          src="/assets/samburu ,crystal pool.webp"
+          alt="Destinations hero"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          loading="eager"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-green-900/80 via-green-900/60 to-green-900/85" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <span className="text-[#d4a017] text-sm tracking-widest uppercase font-medium">Destinations</span>
-          <h1 className="font-display text-5xl md:text-6xl mt-3 text-white drop-shadow-2xl">Places We Love</h1>
-          <p className="mt-5 text-green-100 max-w-2xl mx-auto text-lg leading-relaxed">
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl mt-3 text-white drop-shadow-2xl">Places We Love</h1>
+          <p className="mt-5 text-green-100 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed">
             From the Maasai Mara to Diani Beach — every corner of Kenya, one trusted team.
           </p>
         </div>
       </div>
 
-      {/* Quick nav pills */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 mt-8">
-        <div className="flex flex-wrap gap-2 justify-center">
-          {destinations.map((d) => (
-            <a
-              key={d.id}
-              href={`#${d.id}`}
-              className="px-4 py-1.5 rounded-full bg-white border border-green-200 text-green-800 text-sm font-medium hover:bg-green-700 hover:text-white hover:border-green-700 transition"
-            >
-              {d.title.split(' ')[0] === 'Maasai' ? 'Maasai Mara' : d.title.split('&')[0].trim()}
-            </a>
-          ))}
-        </div>
-      </div>
-
-      {/* Destination articles */}
+      {/* Destination articles — NO pill listing at top */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-24 mt-16">
         {destinations.map((d, i) => (
           <article
             id={d.id}
             key={d.id}
-            className={`grid md:grid-cols-2 gap-12 items-center ${i % 2 === 1 ? 'md:[&>*:first-child]:order-2' : ''}`}
+            className={`grid md:grid-cols-2 gap-8 sm:gap-12 items-center ${i % 2 === 1 ? 'md:[&>*:first-child]:order-2' : ''}`}
           >
             {/* Image */}
             <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl relative group">
@@ -109,6 +92,7 @@ export default function Destinations() {
                 src={destinationImages[d.id] || d.image}
                 alt={d.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-500" />
               {/* Official link badge on hover */}
@@ -132,8 +116,8 @@ export default function Destinations() {
                 <MapPin size={16} className="text-[#d4a017]" />
                 <span className="text-[#d4a017] text-sm font-medium uppercase tracking-wider">Kenya</span>
               </div>
-              <h2 className="font-display text-3xl md:text-4xl text-green-900 mb-4 leading-tight">{d.title}</h2>
-              <p className="text-stone-600 leading-relaxed mb-6 text-lg">{d.description}</p>
+              <h2 className="font-display text-2xl sm:text-3xl md:text-4xl text-green-900 mb-4 leading-tight">{d.title}</h2>
+              <p className="text-stone-600 leading-relaxed mb-6 text-base sm:text-lg">{d.description}</p>
 
               {/* Highlights */}
               <div className="flex flex-wrap gap-2 mb-6">
@@ -177,10 +161,13 @@ export default function Destinations() {
       </div>
 
       {/* Bottom CTA */}
-      <div
-        className="mt-24 mx-4 sm:mx-8 rounded-3xl overflow-hidden relative py-20 px-8 text-center"
-        style={{ backgroundImage: "url('/assets/view.webp')", backgroundSize: 'cover', backgroundPosition: 'center' }}
-      >
+      <div className="mt-24 mx-4 sm:mx-8 rounded-3xl overflow-hidden relative py-20 px-8 text-center">
+        <img
+          src="/assets/view.webp"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          loading="lazy"
+        />
         <div className="absolute inset-0 bg-green-900/85" />
         <div className="relative">
           <h2 className="font-display text-3xl md:text-4xl text-white mb-4">Ready to Explore All of Kenya?</h2>

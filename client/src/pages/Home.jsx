@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import { useContent } from '../context/ContentContext'
 import { Globe, PawPrint, Waves, Map, ChevronLeft, ChevronRight, Star } from 'lucide-react'
 import { useState, useEffect, useRef, useCallback } from 'react'
-
 const stats = [
   { num: '47+', label: 'Parks & Reserves' },
   { num: '100%', label: 'Local Guides' },
@@ -335,7 +334,7 @@ export default function Home() {
         <img
           src="/assets/ol pojeta conservercy , rhino.webp"
           alt=""
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover object-center"
           loading="lazy"
           decoding="async"
         />
@@ -393,38 +392,50 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-24 bg-white">
+      {/* Testimonials — infinite horizontal slider */}
+      <section className="py-24 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-14">
             <span className="text-green-700 text-sm font-medium tracking-widest uppercase">Testimonials</span>
             <h2 className="font-display text-3xl md:text-4xl text-green-900 mt-2">What Our Guests Say</h2>
             <p className="text-stone-500 mt-3">Join hundreds of adventurers who've discovered Kenya with us.</p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonials.slice(0, 3).map((t, i) => (
-              <div key={i} className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-7 border border-green-100 hover:shadow-xl transition hover:-translate-y-1 duration-300">
+        </div>
+        {/* Infinite marquee track */}
+        <div className="relative">
+          <div className="flex gap-6 testimonials-track" style={{ width: 'max-content' }}>
+            {[...testimonials, ...testimonials, ...testimonials].map((t, i) => (
+              <div
+                key={i}
+                className="w-80 shrink-0 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-7 border border-green-100 shadow-sm"
+              >
                 <div className="flex gap-1 mb-4">{Array.from({ length: t.stars }).map((_, j) => <Star key={j} size={16} className="fill-[#d4a017] text-[#d4a017]" />)}</div>
-                <p className="text-stone-700 leading-relaxed mb-5 italic">"{t.text}"</p>
-                <div><p className="font-semibold text-green-900">{t.name}</p><p className="text-sm text-stone-500">{t.country}</p></div>
-              </div>
-            ))}
-          </div>
-          <div className="grid md:grid-cols-2 gap-6 mt-6 max-w-3xl mx-auto">
-            {testimonials.slice(3).map((t, i) => (
-              <div key={i} className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-7 border border-green-100 hover:shadow-xl transition hover:-translate-y-1 duration-300">
-                <div className="flex gap-1 mb-4">{Array.from({ length: t.stars }).map((_, j) => <Star key={j} size={16} className="fill-[#d4a017] text-[#d4a017]" />)}</div>
-                <p className="text-stone-700 leading-relaxed mb-5 italic">"{t.text}"</p>
-                <div><p className="font-semibold text-green-900">{t.name}</p><p className="text-sm text-stone-500">{t.country}</p></div>
+                <p className="text-stone-700 leading-relaxed mb-5 italic text-sm">"{t.text}"</p>
+                <div>
+                  <p className="font-semibold text-green-900">{t.name}</p>
+                  <p className="text-sm text-stone-500">{t.country}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
+        <style>{`
+          .testimonials-track {
+            animation: testimonialScroll 40s linear infinite;
+          }
+          .testimonials-track:hover {
+            animation-play-state: paused;
+          }
+          @keyframes testimonialScroll {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(calc(-320px * ${testimonials.length} - 24px * ${testimonials.length})); }
+          }
+        `}</style>
       </section>
 
       {/* Final CTA */}
       <section className="py-28 relative overflow-hidden">
-        <img src="/assets/shanzu beach.jpg" alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" decoding="async" />
+        <img src="/assets/shanzu beach.jpg" alt="" className="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async" />
         <div className="absolute inset-0 bg-gradient-to-t from-green-900 via-green-900/80 to-green-900/60" />
         <div className="relative max-w-3xl mx-auto px-4 text-center">
           <span className="text-[#d4a017] text-sm font-medium tracking-widest uppercase">Ready?</span>

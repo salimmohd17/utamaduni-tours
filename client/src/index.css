@@ -48,3 +48,32 @@ img {
 .hero-slider-wrap {
   overflow: hidden;
 }
+
+/* ---- Responsive background images ----
+   Avoid backgroundAttachment:fixed on mobile (broken on iOS).
+   Use <img> tags with absolute positioning instead (already done in JSX).
+   This is kept as a note; actual fix is in the components. */
+
+/* ---- Infinite testimonials marquee ---- */
+@keyframes testimonialScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(var(--scroll-width, -50%)); }
+}
+
+.testimonials-track {
+  animation: testimonialScroll 40s linear infinite;
+}
+
+.testimonials-track:hover {
+  animation-play-state: paused;
+}
+
+/* Hide number input arrows for stepper inputs */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}

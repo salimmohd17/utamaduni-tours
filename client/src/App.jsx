@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { ArrowUp } from 'lucide-react'
 import { ContentProvider } from './context/ContentContext'
+import { UserProvider } from './context/UserContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Home'
@@ -11,6 +12,7 @@ import Moments from './pages/Moments'
 import About from './pages/About'
 import Book from './pages/Book'
 import Admin from './pages/Admin'
+import MyBookings from './pages/MyBookings'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -54,23 +56,26 @@ function BackToTopButton() {
 export default function App() {
   return (
     <ContentProvider>
-      <div className="min-h-screen flex flex-col">
-        <ScrollToTop />
-        <Navbar />
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/destinations" element={<Destinations />} />
-            <Route path="/adventures" element={<Adventures />} />
-            <Route path="/moments" element={<Moments />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/book" element={<Book />} />
-            <Route path="/admin" element={<Admin />} />
-          </Routes>
-        </main>
-        <Footer />
-        <BackToTopButton />
-      </div>
+      <UserProvider>
+        <div className="min-h-screen flex flex-col">
+          <ScrollToTop />
+          <Navbar />
+          <main className="flex-1">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/destinations" element={<Destinations />} />
+              <Route path="/adventures" element={<Adventures />} />
+              <Route path="/moments" element={<Moments />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/book" element={<Book />} />
+              <Route path="/my-bookings" element={<MyBookings />} />
+              <Route path="/admin" element={<Admin />} />
+            </Routes>
+          </main>
+          <Footer />
+          <BackToTopButton />
+        </div>
+      </UserProvider>
     </ContentProvider>
   )
 }

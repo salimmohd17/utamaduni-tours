@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import api from '../api/client'
 import { useContent } from '../context/ContentContext'
+import { Search } from 'lucide-react'
 
 const TAB_STYLES = (active) =>
   `pb-3 px-2 text-sm font-medium transition ${
@@ -28,6 +29,10 @@ export default function Admin() {
   const [loginForm, setLoginForm] = useState({ username: '', password: '' })
   const [loginError, setLoginError] = useState('')
   const [bookings, setBookings] = useState([])
+  const [bookingFilter, setBookingFilter] = useState('all')
+  const [bookingSearch, setBookingSearch] = useState('')
+  const [confirmingId, setConfirmingId] = useState(null)
+  const [emailStatus, setEmailStatus] = useState({}) // id -> 'sent' | 'failed' | null
   const [tab, setTab] = useState('bookings')
   const [contentEdit, setContentEdit] = useState(null)
   const { refresh } = useContent()
@@ -92,7 +97,14 @@ export default function Admin() {
   }, [token])
 
   const updateStatus = async (id, status) => {
-    await api.patch(`/admin/bookings/${id}`, { status })
+    if (status === 'confirmed') {
+      setConfirmingId(id)
+    }
+    const { data } = await api.patch(`/admin/bookings/${id}`, { status })
+    if (status === 'confirmed') {
+      setConfirmingId(null)
+      setEmailStatus(prev => ({ ...prev, [id]: data.emailSent ? 'sent' : 'no-smtp' }))
+    }
     loadBookings()
   }
 
@@ -100,14 +112,6 @@ export default function Admin() {
     if (!confirm('Delete this booking?')) return
     await api.delete(`/admin/bookings/${id}`)
     loadBookings()
-  }
-
-  const sendConfirmationEmail = (b) => {
-    const subject = encodeURIComponent(`Booking Confirmed – Utamaduni Safaris`)
-    const body = encodeURIComponent(
-      `Dear ${b.name},\n\nYour booking for ${b.dates} has been confirmed!\n\nGuests: ${b.guests}\nAdventure: ${b.adventureId || 'Custom'}\n\nWe look forward to hosting you on an incredible Kenya adventure.\n\nWarm regards,\nUtamaduni Safaris Team\n+254798157303 | +254750135285\nsirleemmuhammad18@gmail.com`
-    )
-    window.open(`mailto:${b.email}?subject=${subject}&body=${body}`)
   }
 
   const saveContent = async () => {
@@ -245,40 +249,106 @@ export default function Admin() {
         </div>
 
         {/* ---- BOOKINGS TAB ---- */}
-        {tab === 'bookings' && (
-          <div className="space-y-4">
-            {bookings.length === 0 && <p className="text-stone-500">No reservations yet.</p>}
-            {bookings.map(b => (
-              <div key={b.id} className="bg-white rounded-xl border border-green-100 p-5 shadow-sm">
-                <div className="flex flex-col sm:flex-row gap-4 justify-between">
-                  <div>
-                    <div className="font-medium text-green-900 text-lg">{b.name}</div>
-                    <div className="text-sm text-stone-500 mt-0.5">
-                      📧 {b.email} · 📞 {b.phone || '—'}
-                    </div>
-                    <div className="text-sm text-stone-500 mt-1">
-                      👥 Guests: {b.guests} · 📅 Dates: {b.dates}
-                    </div>
-                    {b.adventureId && (
-                      <div className="text-sm text-stone-500">🗺️ Adventure: {b.adventureId}</div>
-                    )}
-                    {b.message && <p className="text-sm text-stone-600 mt-2 italic">"{b.message}"</p>}
-                    <div className="text-xs text-stone-400 mt-2 flex items-center gap-2">
-                      {new Date(b.createdAt).toLocaleString()} · <StatusBadge status={b.status} />
-                    </div>
+        {tab === 'bookings' && (() => {
+          const filtered = bookings.filter(b => {
+            const matchStatus = bookingFilter === 'all' || b.status === bookingFilter
+            const q = bookingSearch.toLowerCase()
+            const matchSearch = !q ||
+              b.name?.toLowerCase().includes(q) ||
+              b.email?.toLowerCase().includes(q) ||
+              b.adventureId?.toLowerCase().includes(q) ||
+              b.dates?.toLowerCase().includes(q)
+            return matchStatus && matchSearch
+          })
+
+          const counts = {
+            all: bookings.length,
+            pending: bookings.filter(b => b.status === 'pending').length,
+            confirmed: bookings.filter(b => b.status === 'confirmed').length,
+            contacted: bookings.filter(b => b.status === 'contacted').length,
+            cancelled: bookings.filter(b => b.status === 'cancelled').length,
+          }
+
+          return (
+            <div className="space-y-4">
+              {/* Filter + Search */}
+              <div className="bg-white rounded-xl border border-green-100 p-4 shadow-sm">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="relative flex-1">
+                    <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+                    <input
+                      value={bookingSearch}
+                      onChange={e => setBookingSearch(e.target.value)}
+                      placeholder="Search name, email, adventure, dates…"
+                      className="w-full pl-9 pr-4 py-2 rounded-lg border border-green-200 text-sm outline-none focus:ring-2 focus:ring-green-400"
+                    />
                   </div>
-                  <div className="flex flex-wrap gap-2 items-start shrink-0">
-                    <button onClick={() => updateStatus(b.id, 'confirmed')} className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800 hover:bg-green-200 transition">✅ Confirm</button>
-                    <button onClick={() => updateStatus(b.id, 'contacted')} className="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-800 hover:bg-blue-200 transition">📞 Contacted</button>
-                    <button onClick={() => updateStatus(b.id, 'cancelled')} className="px-3 py-1 text-xs rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200 transition">✖ Cancel</button>
-                    <button onClick={() => sendConfirmationEmail(b)} className="px-3 py-1 text-xs rounded-full bg-[#d4a017]/20 text-yellow-800 hover:bg-[#d4a017]/40 transition">📧 Email Reply</button>
-                    <button onClick={() => deleteBooking(b.id)} className="px-3 py-1 text-xs rounded-full bg-red-50 text-red-600 hover:bg-red-100 transition">🗑 Delete</button>
+                  <div className="flex gap-2 flex-wrap">
+                    {Object.entries(counts).map(([key, count]) => (
+                      <button
+                        key={key}
+                        onClick={() => setBookingFilter(key)}
+                        className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+                          bookingFilter === key
+                            ? 'bg-green-700 text-white border-green-700'
+                            : 'bg-white text-stone-600 border-stone-200 hover:border-green-400'
+                        }`}
+                      >
+                        {key.charAt(0).toUpperCase() + key.slice(1)} ({count})
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+
+              {filtered.length === 0 && (
+                <p className="text-stone-500 text-center py-8">
+                  {bookings.length === 0 ? 'No reservations yet.' : 'No bookings match your filter.'}
+                </p>
+              )}
+              {filtered.map(b => (
+                <div key={b.id} className="bg-white rounded-xl border border-green-100 p-5 shadow-sm">
+                  <div className="flex flex-col sm:flex-row gap-4 justify-between">
+                    <div>
+                      <div className="font-medium text-green-900 text-lg">{b.name}</div>
+                      <div className="text-sm text-stone-500 mt-0.5">
+                        📧 {b.email} · 📞 {b.phone || '—'}
+                      </div>
+                      <div className="text-sm text-stone-500 mt-1">
+                        👥 Guests: {b.guests} · 📅 Dates: {b.dates}
+                      </div>
+                      {b.adventureId && (
+                        <div className="text-sm text-stone-500">🗺️ Adventure: {b.adventureId}</div>
+                      )}
+                      {b.message && <p className="text-sm text-stone-600 mt-2 italic">"{b.message}"</p>}
+                      <div className="text-xs text-stone-400 mt-2 flex items-center gap-2 flex-wrap">
+                        {new Date(b.createdAt).toLocaleString()} · <StatusBadge status={b.status} />
+                        {emailStatus[b.id] === 'sent' && (
+                          <span className="text-green-600 font-medium">✉️ Confirmation email sent!</span>
+                        )}
+                        {emailStatus[b.id] === 'no-smtp' && (
+                          <span className="text-amber-600 font-medium">📧 Confirmed (configure SMTP to auto-email)</span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-2 items-start shrink-0">
+                      <button
+                        onClick={() => updateStatus(b.id, 'confirmed')}
+                        disabled={confirmingId === b.id}
+                        className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800 hover:bg-green-200 transition disabled:opacity-60"
+                      >
+                        {confirmingId === b.id ? '⏳…' : '✅ Confirm & Email'}
+                      </button>
+                      <button onClick={() => updateStatus(b.id, 'contacted')} className="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-800 hover:bg-blue-200 transition">📞 Contacted</button>
+                      <button onClick={() => updateStatus(b.id, 'cancelled')} className="px-3 py-1 text-xs rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200 transition">✖ Cancel</button>
+                      <button onClick={() => deleteBooking(b.id)} className="px-3 py-1 text-xs rounded-full bg-red-50 text-red-600 hover:bg-red-100 transition">🗑 Delete</button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )
+        })()}
 
         {/* ---- SITES TO VISIT TAB ---- */}
         {tab === 'sites' && (

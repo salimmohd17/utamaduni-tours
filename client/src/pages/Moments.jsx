@@ -36,15 +36,13 @@ export default function Moments() {
   return (
     <div className="pt-20 pb-20">
       {/* Hero Header */}
-      <div
-        className="relative text-white py-28"
-        style={{
-          backgroundImage: "url('/assets/nairobi nationa park, bird.webp')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
-        }}
-      >
+      <div className="relative text-white py-28">
+        <img
+          src="/assets/nairobi nationa park, bird.webp"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          loading="eager"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-green-900/80 via-green-900/60 to-green-900/85" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <span className="text-[#d4a017] text-sm tracking-widest uppercase font-medium">Gallery</span>

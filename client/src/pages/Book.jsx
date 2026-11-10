@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import api from '../api/client'
 import { useContent } from '../context/ContentContext'
-import { Calendar, Users, MessageSquare, Phone, Mail, MapPin } from 'lucide-react'
+import { useUser } from '../context/UserContext'
+import { Calendar, Users, MessageSquare, Phone, Mail, MapPin, Minus, Plus, LogIn } from 'lucide-react'
 
 // USD to KES conversion
 const USD_TO_KES = 130
 
-// Duration-based pricing helpers (mirrors Adventures page logic)
+// Duration-based pricing helpers
 function getDayMultiplier(days, minDays) {
   if (days <= minDays) return 1
   const extra = days - minDays
@@ -16,6 +17,7 @@ function getDayMultiplier(days, minDays) {
 
 export default function Book() {
   const { content } = useContent()
+  const { user } = useUser()
   const [params] = useSearchParams()
   const [form, setForm] = useState({
     name: '', email: '', phone: '', dates: '', days: 2, guests: 2,
@@ -24,6 +26,13 @@ export default function Book() {
   const [status, setStatus] = useState(null)
   const [errorMsg, setErrorMsg] = useState('')
 
+  // Pre-fill from user account
+  useEffect(() => {
+    if (user) {
+      setForm(f => ({ ...f, name: f.name || user.name, email: f.email || user.email }))
+    }
+  }, [user])
+
   useEffect(() => {
     const adv = params.get('adventure')
     if (adv) setForm(f => ({ ...f, adventureId: adv }))
@@ -31,14 +40,19 @@ export default function Book() {
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
+  const setDays = (val) => {
+    const d = Math.max(1, Math.min(30, Number(val)))
+    setForm(f => ({ ...f, days: isNaN(d) ? 1 : d }))
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setStatus('loading')
     setErrorMsg('')
     try {
-      await api.post('/bookings', form)
+      await api.post('/bookings', { ...form, userId: user?.id || null })
       setStatus('success')
-      setForm({ name: '', email: '', phone: '', dates: '', days: 2, guests: 2, adventureId: '', visitorType: 'foreigner', message: '' })
+      setForm({ name: user?.name || '', email: user?.email || '', phone: '', dates: '', days: 2, guests: 2, adventureId: '', visitorType: 'foreigner', message: '' })
     } catch (err) {
       setStatus('error')
       setErrorMsg(err.response?.data?.error || 'Something went wrong. Please try again.')
@@ -59,21 +73,20 @@ export default function Book() {
 
   return (
     <div className="pt-20 pb-20">
-      {/* Hero Header */}
+      {/* Hero Header — mobile-safe background */}
       <div
-        className="relative text-white py-28"
+        className="relative text-white py-20 sm:py-28"
         style={{
           backgroundImage: "url('/assets/amboseli scenery.jpg')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-green-900/80 via-green-900/65 to-green-900/85" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <span className="text-[#d4a017] text-sm tracking-widest uppercase font-medium">Reservation</span>
-          <h1 className="font-display text-5xl md:text-6xl mt-3 drop-shadow-2xl">Book Your Kenya Adventure</h1>
-          <p className="mt-5 text-green-100 max-w-xl mx-auto text-lg leading-relaxed">
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl mt-3 drop-shadow-2xl">Book Your Kenya Adventure</h1>
+          <p className="mt-5 text-green-100 max-w-xl mx-auto text-base sm:text-lg leading-relaxed">
             We will reply within 24 hours with a tailored Kenya itinerary and final pricing just for you.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3 text-sm">
@@ -83,6 +96,33 @@ export default function Book() {
           </div>
         </div>
       </div>
+
+      {/* Account Banner */}
+      {!user && (
+        <div className="bg-green-700 text-white px-4 py-3">
+          <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
+            <p className="text-green-100">
+              💡 <strong>Have an account?</strong> Sign in to track your booking status and receive updates.
+            </p>
+            <Link
+              to="/my-bookings"
+              className="flex items-center gap-2 px-5 py-2 rounded-full bg-white text-green-800 font-bold hover:bg-green-100 transition shrink-0 shadow"
+            >
+              <LogIn size={15} /> Sign In / Register
+            </Link>
+          </div>
+        </div>
+      )}
+      {user && (
+        <div className="bg-green-50 border-b border-green-100 px-4 py-3">
+          <div className="max-w-6xl mx-auto flex items-center justify-between gap-3 text-sm">
+            <p className="text-green-700">
+              ✅ Signed in as <strong>{user.name}</strong> — your booking will be linked to your account.
+            </p>
+            <Link to="/my-bookings" className="text-green-700 font-semibold hover:underline">View My Bookings →</Link>
+          </div>
+        </div>
+      )}
 
       {/* Form + Contact */}
       <div
@@ -94,19 +134,37 @@ export default function Book() {
           {/* Main Form */}
           <div className="md:col-span-2">
             {status === 'success' ? (
-              <div className="bg-white border border-green-200 rounded-3xl p-12 text-center shadow-xl">
+              <div className="bg-white border border-green-200 rounded-3xl p-10 sm:p-12 text-center shadow-xl">
                 <div className="text-6xl mb-5">🌿</div>
                 <h2 className="font-display text-3xl text-green-900 mb-3">Asante Sana!</h2>
                 <p className="text-green-700 text-lg leading-relaxed mb-2">Your reservation request has been received.</p>
                 <p className="text-stone-500">Our team will contact you within 24 hours with your personalised itinerary and quote.</p>
-                <button onClick={() => setStatus(null)} className="mt-8 px-8 py-3 rounded-full bg-green-700 text-white font-semibold hover:bg-green-900 transition shadow">
-                  Send another request
-                </button>
+                {user ? (
+                  <Link
+                    to="/my-bookings"
+                    className="mt-8 inline-block px-8 py-3 rounded-full bg-green-700 text-white font-semibold hover:bg-green-900 transition shadow"
+                  >
+                    View My Bookings →
+                  </Link>
+                ) : (
+                  <div className="mt-8 space-y-3">
+                    <p className="text-sm text-stone-500">Create a free account to track your booking progress:</p>
+                    <Link
+                      to="/my-bookings"
+                      className="inline-block px-8 py-3 rounded-full bg-green-700 text-white font-semibold hover:bg-green-900 transition shadow"
+                    >
+                      Create Account & Track Booking
+                    </Link>
+                    <button onClick={() => setStatus(null)} className="block mx-auto text-sm text-stone-400 hover:text-stone-600 transition mt-2">
+                      or send another request
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <form
                 onSubmit={handleSubmit}
-                className="bg-white rounded-3xl border border-green-100 shadow-xl p-8 md:p-10 space-y-6"
+                className="bg-white rounded-3xl border border-green-100 shadow-xl p-6 sm:p-10 space-y-6"
               >
                 <div className="text-center mb-2">
                   <h2 className="font-display text-3xl text-green-900">Your Safari Starts Here</h2>
@@ -172,30 +230,77 @@ export default function Book() {
 
                 {/* Duration + Guests + Visitor Type */}
                 <div className="grid sm:grid-cols-3 gap-5">
+                  {/* Days stepper — plus/minus with text input */}
                   <div>
                     <label className="block text-sm font-semibold text-stone-700 mb-1.5">
-                      Duration (days)
+                      Duration (days) <span className="text-xs text-stone-400 font-normal">max 30</span>
                     </label>
                     <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setDays(form.days - 1)}
+                        disabled={form.days <= 1}
+                        className="w-10 h-10 rounded-xl border border-green-200 bg-green-50 text-green-800 font-bold hover:bg-green-100 disabled:opacity-40 transition flex items-center justify-center shrink-0"
+                      >
+                        <Minus size={16} />
+                      </button>
                       <input
-                        type="range" min="1" max="30" name="days" value={form.days}
-                        onChange={handleChange}
-                        className="flex-1 accent-green-700"
+                        type="number"
+                        min="1"
+                        max="30"
+                        value={form.days}
+                        onChange={e => setDays(e.target.value)}
+                        className="flex-1 text-center px-2 py-2.5 rounded-xl border border-green-200 focus:ring-2 focus:ring-green-500 outline-none font-bold text-green-900 text-lg"
                       />
-                      <span className="w-14 text-center px-2 py-1.5 rounded-xl bg-green-50 text-green-800 font-bold text-sm border border-green-200">
-                        {form.days}d
-                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setDays(form.days + 1)}
+                        disabled={form.days >= 30}
+                        className="w-10 h-10 rounded-xl border border-green-200 bg-green-50 text-green-800 font-bold hover:bg-green-100 disabled:opacity-40 transition flex items-center justify-center shrink-0"
+                      >
+                        <Plus size={16} />
+                      </button>
+                    </div>
+                    <div className="mt-1.5">
+                      <input
+                        type="range" min="1" max="30" value={form.days}
+                        onChange={e => setDays(e.target.value)}
+                        className="w-full accent-green-700"
+                      />
+                      <div className="flex justify-between text-xs text-stone-400 mt-0.5">
+                        <span>1 day</span><span>30 days</span>
+                      </div>
                     </div>
                   </div>
+
                   <div>
                     <label className="block text-sm font-semibold text-stone-700 mb-1.5">
                       <Users size={13} className="inline mr-1" /> Guests
                     </label>
-                    <input
-                      type="number" min="1" max="50" name="guests" value={form.guests} onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-xl border border-green-200 focus:ring-2 focus:ring-green-500 outline-none transition"
-                    />
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setForm(f => ({ ...f, guests: Math.max(1, f.guests - 1) }))}
+                        disabled={form.guests <= 1}
+                        className="w-10 h-10 rounded-xl border border-green-200 bg-green-50 text-green-800 font-bold hover:bg-green-100 disabled:opacity-40 transition flex items-center justify-center shrink-0"
+                      >
+                        <Minus size={16} />
+                      </button>
+                      <input
+                        type="number" min="1" max="50" name="guests" value={form.guests} onChange={handleChange}
+                        className="flex-1 text-center px-2 py-2.5 rounded-xl border border-green-200 focus:ring-2 focus:ring-green-500 outline-none font-bold text-green-900 text-lg"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setForm(f => ({ ...f, guests: Math.min(50, f.guests + 1) }))}
+                        disabled={form.guests >= 50}
+                        className="w-10 h-10 rounded-xl border border-green-200 bg-green-50 text-green-800 font-bold hover:bg-green-100 disabled:opacity-40 transition flex items-center justify-center shrink-0"
+                      >
+                        <Plus size={16} />
+                      </button>
+                    </div>
                   </div>
+
                   <div>
                     <label className="block text-sm font-semibold text-stone-700 mb-1.5">Visitor Type</label>
                     <select
@@ -268,6 +373,27 @@ export default function Book() {
 
           {/* Sidebar */}
           <div className="space-y-5">
+            {/* My Bookings CTA */}
+            {user ? (
+              <Link
+                to="/my-bookings"
+                className="block bg-gradient-to-br from-green-700 to-green-900 rounded-2xl p-5 text-white text-center shadow-lg hover:shadow-xl transition group"
+              >
+                <div className="text-3xl mb-2">📋</div>
+                <h3 className="font-display text-lg mb-1">Track My Bookings</h3>
+                <p className="text-green-200 text-sm">View all your reservations and their current status</p>
+                <span className="inline-block mt-3 text-[#d4a017] text-sm font-semibold group-hover:underline">View Now →</span>
+              </Link>
+            ) : (
+              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+                <p className="text-amber-900 font-semibold text-sm mb-2">🔔 Track Your Booking</p>
+                <p className="text-amber-700 text-xs leading-relaxed mb-3">Create a free account to see your booking status and get notified when it's confirmed.</p>
+                <Link to="/my-bookings" className="block w-full text-center py-2.5 rounded-full bg-amber-600 text-white font-bold text-sm hover:bg-amber-700 transition">
+                  Create Free Account
+                </Link>
+              </div>
+            )}
+
             {/* Contact Card */}
             <div className="bg-white rounded-2xl border border-green-100 shadow-lg p-6">
               <h3 className="font-display text-xl text-green-900 mb-4">Need help? Contact us</h3>

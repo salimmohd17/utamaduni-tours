@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { Pool } = require('pg');
+const nodemailer = require('nodemailer');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,8 +27,9 @@ const DATA_DIR = path.join(__dirname, 'data');
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 const BOOKINGS_FILE = path.join(DATA_DIR, 'bookings.json');
-const CONTENT_FILE = path.join(DATA_DIR, 'content.json');
-const ADMIN_FILE = path.join(DATA_DIR, 'admin.json');
+const CONTENT_FILE  = path.join(DATA_DIR, 'content.json');
+const ADMIN_FILE    = path.join(DATA_DIR, 'admin.json');
+const USERS_FILE    = path.join(DATA_DIR, 'users.json');
 
 // Helpers
 function readJSON(file, fallback = []) {
@@ -38,6 +40,68 @@ function readJSON(file, fallback = []) {
 }
 function writeJSON(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2));
+}
+
+// ---- Nodemailer transporter ----
+function createTransporter() {
+  if (!process.env.SMTP_HOST) return null;
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: process.env.SMTP_SECURE === 'true',
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+}
+
+async function sendConfirmationEmail(booking) {
+  const transporter = createTransporter();
+  if (!transporter) {
+    console.log('SMTP not configured — skipping confirmation email for', booking.email);
+    return false;
+  }
+  try {
+    await transporter.sendMail({
+      from: `"Utamaduni Safaris" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+      to: booking.email,
+      subject: 'Booking Confirmed – Utamaduni Safaris 🌿',
+      html: `
+        <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#f0fdf4;padding:30px;border-radius:12px;">
+          <div style="text-align:center;margin-bottom:24px;">
+            <h1 style="color:#14532d;font-size:28px;margin:0;">🌿 Utamaduni Safaris</h1>
+            <p style="color:#15803d;font-size:14px;margin:4px 0;">Kenya. Wild. Alive.</p>
+          </div>
+          <div style="background:#fff;padding:28px;border-radius:10px;border:1px solid #bbf7d0;">
+            <h2 style="color:#14532d;margin-top:0;">Your Booking is Confirmed! ✅</h2>
+            <p style="color:#374151;">Dear <strong>${booking.name}</strong>,</p>
+            <p style="color:#374151;">We're thrilled to confirm your reservation. Here are your details:</p>
+            <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+              <tr><td style="padding:8px 0;color:#6b7280;font-size:14px;">📅 Dates</td><td style="padding:8px 0;font-weight:600;color:#14532d;">${booking.dates}</td></tr>
+              <tr><td style="padding:8px 0;color:#6b7280;font-size:14px;">👥 Guests</td><td style="padding:8px 0;font-weight:600;color:#14532d;">${booking.guests}</td></tr>
+              <tr><td style="padding:8px 0;color:#6b7280;font-size:14px;">🗺️ Adventure</td><td style="padding:8px 0;font-weight:600;color:#14532d;">${booking.adventureId || 'Custom itinerary'}</td></tr>
+              <tr><td style="padding:8px 0;color:#6b7280;font-size:14px;">🔖 Reference</td><td style="padding:8px 0;font-weight:600;color:#14532d;">${booking.id.slice(0,8).toUpperCase()}</td></tr>
+            </table>
+            <p style="color:#374151;">Our team will be in touch shortly with your full itinerary and payment details.</p>
+            <div style="margin-top:24px;padding:16px;background:#f0fdf4;border-radius:8px;text-align:center;">
+              <p style="margin:0;font-size:14px;color:#374151;">Need help? Contact us:</p>
+              <p style="margin:4px 0;color:#15803d;font-weight:600;">📞 +254 798 157 303 &nbsp;|&nbsp; +254 750 135 285</p>
+              <p style="margin:4px 0;color:#15803d;">💬 WhatsApp us anytime</p>
+            </div>
+          </div>
+          <p style="text-align:center;color:#9ca3af;font-size:12px;margin-top:20px;">
+            Utamaduni Safaris · Kombani, Kwale County, Kenya<br>
+            &copy; 2026 Utamaduni Safaris. All rights reserved.
+          </p>
+        </div>
+      `,
+    });
+    return true;
+  } catch (err) {
+    console.error('Email send failed:', err.message);
+    return false;
+  }
 }
 
 async function ensureDatabaseSchema() {
@@ -126,152 +190,21 @@ if (!fs.existsSync(ADMIN_FILE)) {
   writeJSON(ADMIN_FILE, { username: 'admin', passwordHash: hash });
 }
 
+// Seed users file
+if (!fs.existsSync(USERS_FILE)) writeJSON(USERS_FILE, []);
+
 // Seed default content
 if (!fs.existsSync(CONTENT_FILE)) {
   writeJSON(CONTENT_FILE, {
     siteName: 'Utamaduni Safaris',
     tagline: 'Kenya. Wild. Alive. — From the Savannah to the Ocean',
-    about: 'Utamaduni Safaris was born in Kombani, a small town in Kwale County, from the friendship of two young men who grew up surrounded by Kenya\'s most incredible natural wonders. Salim and Abdallah saw the beauty of Shimba Hills, the magic of the coast, and the richness of Swahili culture — and decided the world needed to experience it too.',
+    about: "Utamaduni Safaris was born in Kombani, a small town in Kwale County, from the friendship of two young men who grew up surrounded by Kenya's most incredible natural wonders.",
     contactPhone: '+254798157303',
     contactEmail: 'sirleemmuhammad18@gmail.com',
     address: 'Kombani, Matuga Sub-County, Kwale County, Kenya',
-    destinations: [
-      {
-        id: 'shimba',
-        title: 'Shimba Hills National Reserve',
-        short: 'Coastal rainforest, elephants & Kenya\'s only sable antelope.',
-        description: 'Just inland from the coast, Shimba Hills protects one of East Africa\'s last large coastal rainforests. Home to elephants, the rare sable antelope, and the beautiful Sheldrick Falls.',
-        image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1200&q=80',
-        highlights: ['Sable antelope', 'Elephants', 'Sheldrick Falls', 'Birdwatching']
-      },
-      {
-        id: 'diani',
-        title: 'Diani & Tiwi Beaches',
-        short: 'Powder-white sands and turquoise Indian Ocean waters.',
-        description: 'Diani Beach is repeatedly voted among Africa\'s best. Long stretches of soft sand, calm lagoons, kitesurfing, and relaxed Swahili coastal life.',
-        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80',
-        highlights: ['White sand', 'Water sports', 'Sunset dhows', 'Beach restaurants']
-      },
-      {
-        id: 'kisite',
-        title: 'Kisite-Mpunguti Marine Park',
-        short: 'Dolphins, coral reefs and dhow sailing to Wasini Island.',
-        description: 'Kenya\'s premier marine park. Snorkel vibrant reefs, swim with dolphins, sail traditional dhows and enjoy fresh seafood on car-free Wasini Island.',
-        image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=80',
-        highlights: ['Dolphins', 'Snorkelling', 'Wasini Island', 'Coral reefs']
-      },
-      {
-        id: 'kaya',
-        title: 'Kaya Forests & Culture',
-        short: 'Sacred Mijikenda forests and living coastal heritage.',
-        description: 'Guided walks into sacred kaya forests with community elders. Learn about traditional beliefs, conservation practices, local dances and Swahili coastal cuisine.',
-        image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&q=80',
-        highlights: ['Sacred forests', 'Cultural guides', 'Traditional dance', 'Local markets']
-      },
-      {
-        id: 'mara',
-        title: 'Maasai Mara National Reserve',
-        short: 'The Great Migration and Africa\'s most iconic safari destination.',
-        description: 'The Maasai Mara is Kenya\'s most celebrated reserve, home to the annual wildebeest migration, the Big Five, and spectacular open savannah landscapes that define the African safari experience.',
-        image: '/assets/wildbeest-migration.jpg',
-        highlights: ['Great Migration', 'Big Five', 'Hot air balloon', 'Maasai culture']
-      },
-      {
-        id: 'amboseli',
-        title: 'Amboseli National Park',
-        short: 'Elephants against the backdrop of mighty Mount Kilimanjaro.',
-        description: 'Amboseli offers some of Africa\'s most iconic views — massive elephant herds roaming freely beneath the snow-capped peak of Mount Kilimanjaro. A photographer\'s paradise.',
-        image: 'https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?w=1200&q=80',
-        highlights: ['Elephant herds', 'Mount Kilimanjaro views', 'Big Five', 'Photography']
-      },
-      {
-        id: 'tsavo',
-        title: 'Tsavo East & West',
-        short: 'Kenya\'s largest park — red elephants, lava flows and vast wilderness.',
-        description: 'Tsavo is Kenya\'s largest national park system, divided into Tsavo East and West. Famous for its red-dusted elephants, the Mzima Springs, Lugard Falls, and incredible biodiversity.',
-        image: '/assets/elephants.jpg',
-        highlights: ['Red elephants', 'Mzima Springs', 'Lugard Falls', 'Vast wilderness']
-      },
-      {
-        id: 'mtknya',
-        title: 'Mount Kenya',
-        short: 'Africa\'s second-highest peak — trekking, glaciers and unique alpine wildlife.',
-        description: 'Mount Kenya offers dramatic trekking routes through bamboo forests, moorlands and glaciated peaks. The surrounding national park is home to buffalo, leopard, and rare mountain bongo.',
-        image: 'https://images.unsplash.com/photo-1570197571499-166b36435e9f?w=1200&q=80',
-        highlights: ['Trekking routes', 'Glaciers', 'Mountain bongo', 'Alpine scenery']
-      },
-      {
-        id: 'nakuru',
-        title: 'Lake Nakuru National Park',
-        short: 'Flamingos, rhinos and a lake that turns pink.',
-        description: 'Lake Nakuru is famous for its stunning flamingo flocks that colour the water pink. The park is also one of Kenya\'s most reliable places to spot both black and white rhinos.',
-        image: 'https://images.unsplash.com/photo-1504275107627-0c2ba7a43dba?w=1200&q=80',
-        highlights: ['Flamingos', 'Black & white rhinos', 'Rothschild giraffe', 'Scenic lake']
-      },
-      {
-        id: 'samburu',
-        title: 'Samburu National Reserve',
-        short: 'Rare northern species in a dramatic semi-arid landscape.',
-        description: 'Samburu is home to species found nowhere else in Kenya — the Grevy\'s zebra, reticulated giraffe, Somali ostrich, Beisa oryx and the gerenuk. Set in a stunning semi-arid landscape along the Ewaso Ng\'iro River.',
-        image: 'https://images.unsplash.com/photo-1455287278107-115faab3049c?w=1200&q=80',
-        highlights: ['Grevy\'s zebra', 'Reticulated giraffe', 'Gerenuk', 'River wildlife']
-      },
-      {
-        id: 'hellsgate',
-        title: "Hell's Gate National Park",
-        short: "Cycle through gorges, geysers and dramatic cliffs — no car needed.",
-        description: "Hell's Gate is Kenya's most unique park — you can cycle or hike through it. Dramatic volcanic cliffs, Ol Njorowa Gorge, Fischer's Tower, and natural geothermal geysers make it unforgettable.",
-        image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1200&q=80',
-        highlights: ['Cycling safari', 'Gorge hiking', 'Geothermal geysers', 'Rock climbing']
-      },
-      {
-        id: 'lamu',
-        title: 'Lamu Island',
-        short: 'UNESCO-listed Swahili city, dhow sailing and pristine beaches.',
-        description: 'Lamu Old Town is a UNESCO World Heritage Site — Kenya\'s oldest living Swahili settlement. No cars, just donkeys and dhows. Stunning beaches, fresh seafood and a timeless coastal atmosphere.',
-        image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=1200&q=80',
-        highlights: ['Swahili architecture', 'Dhow sailing', 'Pristine beaches', 'Cultural heritage']
-      },
-      {
-        id: 'watamu',
-        title: 'Watamu Marine Park',
-        short: 'Sea turtles, world-class diving and pristine coral reefs.',
-        description: 'Watamu is a marine biodiversity hotspot. The marine national park protects nesting sea turtles, vibrant coral gardens, tropical fish, and offers some of East Africa\'s best snorkelling and diving.',
-        image: 'https://images.unsplash.com/photo-1559827291-72ee739d0d9a?w=1200&q=80',
-        highlights: ['Sea turtles', 'Coral diving', 'Snorkelling', 'Blue Cave']
-      },
-      {
-        id: 'malindi',
-        title: 'Malindi',
-        short: 'Historic Swahili coast town with beaches, heritage and marine life.',
-        description: 'Malindi blends Portuguese colonial history with Swahili coastal culture. Visit the Vasco da Gama pillar, explore the marine park, enjoy the nightlife, or simply relax on wide sandy beaches.',
-        image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1200&q=80',
-        highlights: ['Vasco da Gama pillar', 'Marine park', 'Swahili culture', 'Beaches']
-      }
-    ],
-    adventures: [
-      { id: 'a1', title: 'Shimba Hills Safari Day', duration: 'Full day', priceFrom: 95, description: 'Game drive + forest walk + Sheldrick Falls. Picnic lunch included.' },
-      { id: 'a2', title: 'Dhow & Dolphin Experience', duration: 'Full day', priceFrom: 85, description: 'Boat to Kisite, snorkelling, dolphin spotting, Wasini seafood lunch.' },
-      { id: 'a3', title: 'Cultural Kaya Immersion', duration: 'Half day', priceFrom: 45, description: 'Guided sacred forest walk with elders + traditional performance.' },
-      { id: 'a4', title: 'Mwaluganje Elephant Sanctuary', duration: 'Half / Full day', priceFrom: 55, description: 'Community conservancy focused on elephants and local livelihoods.' },
-      { id: 'a5', title: 'Coastal Free Day Package', duration: 'Flexible', priceFrom: 30, description: 'Beach transfer, optional kitesurf intro or colobus conservation visit.' },
-      { id: 'a6', title: 'Multi-day Utamaduni Circuit', duration: '3–7 days', priceFrom: 320, description: 'Custom mix of wildlife, marine and cultural days with accommodation options.' },
-      { id: 'a7', title: 'Maasai Mara Migration Safari', duration: '3–5 days', priceFrom: 450, description: 'Fly-in or drive to the Mara for the greatest wildlife show on Earth. Game drives, Big Five, Maasai village visit.' },
-      { id: 'a8', title: 'Amboseli Elephants & Kilimanjaro', duration: '2–3 days', priceFrom: 320, description: 'Photograph elephant families with Mount Kilimanjaro as the backdrop. Unforgettable.' },
-      { id: 'a9', title: 'Lamu Island Cultural Retreat', duration: '2–4 days', priceFrom: 280, description: 'Dhow cruise, old town walking tour, beach relaxation and fresh seafood on Lamu Island.' },
-      { id: 'a10', title: "Hell's Gate Cycling Adventure", duration: 'Full day', priceFrom: 65, description: 'Cycle through dramatic gorges and geothermal features. Great for adventurous travelers.' }
-    ],
-    gallery: [
-      { id: 'g1', caption: 'Zebra herd roaming free on the open plains', image: '/assets/zebras-hero.jpg' },
-      { id: 'g2', caption: 'The Great Wildebeest Migration — a spectacle like no other', image: '/assets/wildbeest-migration.jpg' },
-      { id: 'g3', caption: 'Elephants crossing the river at Tsavo', image: '/assets/elephants.jpg' },
-      { id: 'g4', caption: 'Mixed wildlife grazing together in the reserve', image: '/assets/wildlife-reserve.jpg' },
-      { id: 'g5', caption: 'Dolphin surprise on the way to Wasini', image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80' },
-      { id: 'g6', caption: 'That Diani sunset feeling', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80' },
-      { id: 'g7', caption: 'Flamingos at Lake Nakuru at sunset', image: 'https://images.unsplash.com/photo-1504275107627-0c2ba7a43dba?w=800&q=80' },
-      { id: 'g8', caption: 'Lamu dhow sailing at golden hour', image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&q=80' },
-      { id: 'g9', caption: 'Hot air balloon over Maasai Mara at sunrise', image: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800&q=80' }
-    ]
+    destinations: [],
+    adventures: [],
+    gallery: []
   });
 }
 
@@ -292,7 +225,7 @@ app.get('/api/content', async (req, res) => {
 });
 
 app.post('/api/bookings', async (req, res) => {
-  const { name, email, phone, dates, guests, adventureId, message } = req.body;
+  const { name, email, phone, dates, guests, adventureId, message, userId } = req.body;
   if (!name || !email || !dates) {
     return res.status(400).json({ error: 'Name, email and preferred dates are required' });
   }
@@ -307,6 +240,7 @@ app.post('/api/bookings', async (req, res) => {
     guests: guests || 1,
     adventureId: adventureId || '',
     message: message || '',
+    userId: userId || null,
     status: 'pending',
     createdAt: new Date().toISOString()
   };
@@ -314,6 +248,68 @@ app.post('/api/bookings', async (req, res) => {
   bookings.unshift(booking);
   await writeBookingsData(bookings);
   res.status(201).json({ success: true, booking });
+});
+
+// ========== USER AUTH ==========
+app.post('/api/users/register', async (req, res) => {
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    return res.status(400).json({ error: 'Name, email and password are required' });
+  }
+
+  const users = readJSON(USERS_FILE, []);
+  if (users.find(u => u.email === email)) {
+    return res.status(400).json({ error: 'An account with this email already exists' });
+  }
+
+  const passwordHash = bcrypt.hashSync(password, 10);
+  const user = { id: uuidv4(), name, email, passwordHash, createdAt: new Date().toISOString() };
+  users.push(user);
+  writeJSON(USERS_FILE, users);
+
+  const token = jwt.sign({ userId: user.id, email: user.email, role: 'user' }, JWT_SECRET, { expiresIn: '7d' });
+  res.status(201).json({ token, user: { id: user.id, name: user.name, email: user.email } });
+});
+
+app.post('/api/users/login', async (req, res) => {
+  const { email, password } = req.body;
+  const users = readJSON(USERS_FILE, []);
+  const user = users.find(u => u.email === email);
+  if (!user) return res.status(401).json({ error: 'Invalid email or password' });
+
+  const match = await bcrypt.compare(password, user.passwordHash);
+  if (!match) return res.status(401).json({ error: 'Invalid email or password' });
+
+  const token = jwt.sign({ userId: user.id, email: user.email, role: 'user' }, JWT_SECRET, { expiresIn: '7d' });
+  res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
+});
+
+// Get user's own bookings (by email or userId)
+app.get('/api/users/bookings', async (req, res) => {
+  const header = req.headers.authorization;
+  if (!header || !header.startsWith('Bearer ')) return res.status(401).json({ error: 'Unauthorized' });
+
+  let payload;
+  try {
+    payload = jwt.verify(header.slice(7), JWT_SECRET);
+  } catch {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+
+  const bookings = await readBookingsData();
+  const userBookings = bookings.filter(b =>
+    b.userId === payload.userId || b.email === payload.email
+  );
+
+  res.json(userBookings.map(b => ({
+    id: b.id,
+    dates: b.dates,
+    guests: b.guests,
+    adventureId: b.adventureId,
+    status: b.status,
+    createdAt: b.createdAt,
+    message: b.message,
+  })));
 });
 
 // ========== AUTH ==========
@@ -350,6 +346,13 @@ app.patch('/api/admin/bookings/:id', auth, async (req, res) => {
 
   bookings[idx] = { ...bookings[idx], ...req.body, updatedAt: new Date().toISOString() };
   await writeBookingsData(bookings);
+
+  // Auto-send confirmation email when status set to 'confirmed'
+  if (req.body.status === 'confirmed') {
+    const sent = await sendConfirmationEmail(bookings[idx]);
+    return res.json({ ...bookings[idx], emailSent: sent });
+  }
+
   res.json(bookings[idx]);
 });
 

@@ -42,15 +42,13 @@ export default function About() {
   return (
     <div className="pt-20 pb-20">
       {/* Hero Header */}
-      <div
-        className="relative text-white py-28"
-        style={{
-          backgroundImage: "url('/assets/nairobi nature walk.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
-        }}
-      >
+      <div className="relative text-white py-28">
+        <img
+          src="/assets/nairobi nature walk.jpg"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          loading="eager"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-green-900/80 via-green-900/65 to-green-900/85" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <span className="text-[#d4a017] text-sm tracking-widest uppercase font-medium">About Us</span>
@@ -195,10 +193,8 @@ export default function About() {
       </section>
 
       {/* CTA */}
-      <section
-        className="py-28 relative overflow-hidden"
-        style={{ backgroundImage: "url('/assets/view.webp')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}
-      >
+      <section className="py-28 relative overflow-hidden">
+        <img src="/assets/view.webp" alt="" className="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" />
         <div className="absolute inset-0 bg-gradient-to-t from-green-900 via-green-900/85 to-green-900/70" />
         <div className="relative max-w-3xl mx-auto px-4 text-center">
           <span className="text-[#d4a017] text-sm font-medium tracking-widest uppercase">Join Us</span>
