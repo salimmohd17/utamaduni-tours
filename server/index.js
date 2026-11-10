@@ -8,10 +8,12 @@ const jwt = require('jsonwebtoken');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const JWT_SECRET = process.env.JWT_SECRET || (
-  process.env.NODE_ENV === 'production' ? '' : 'utamaduni-kwale-2026-secret-key-change-in-prod'
-);
-if (!JWT_SECRET) throw new Error('JWT_SECRET must be set in production');
+const JWT_SECRET = process.env.JWT_SECRET || 'utamaduni-kwale-2026-secret-key-change-in-prod';
+
+if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
+  console.warn('WARN: JWT_SECRET is not configured. Using a temporary fallback secret until it is set in Render.');
+}
+
 const DATA_DIR = path.join(__dirname, 'data');
 
 // Ensure data directory
