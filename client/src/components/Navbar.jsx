@@ -1,70 +1,127 @@
-import { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
-
-function SiteLogo({ size = 36 }) {
-  return (
-    <img
-      src="/assets/hippo.jpg"
-      alt="Utamaduni Safaris"
-      width={size}
-      height={size}
-      style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover', border: '2px solid #d4a017' }}
-    />
-  )
-}
-
-export { SiteLogo as LionLogo }
+import { useState, useEffect } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const location = useLocation()
+  const isHome = location.pathname === '/'
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 50)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // Close menu on route change
+  useEffect(() => { setOpen(false) }, [location])
+
+  const isTransparent = isHome && !scrolled
 
   const linkClass = ({ isActive }) =>
-    `text-sm font-medium transition ${isActive ? 'text-green-700' : 'text-stone-700 hover:text-green-700'}`
+    `text-sm font-medium transition-colors duration-200 ${
+      isActive
+        ? isTransparent ? 'text-[#d4a017]' : 'text-green-700'
+        : isTransparent ? 'text-white/90 hover:text-[#d4a017]' : 'text-stone-700 hover:text-green-700'
+    }`
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 bg-green-50/90 backdrop-blur-md border-b border-green-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
-        <Link to="/" className="flex items-center gap-2">
-          <SiteLogo />
-          <span className="font-display text-xl font-semibold text-green-900">Utamaduni Safaris</span>
+    <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
+      isTransparent
+        ? 'bg-transparent border-transparent'
+        : 'bg-white/95 backdrop-blur-md border-b border-green-100 shadow-sm'
+    }`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16 md:h-18">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2.5 group">
+          <div className="relative">
+            <img
+              src="/assets/zebras-hero.jpg"
+              alt="Utamaduni Safaris"
+              className="w-9 h-9 rounded-full object-cover border-2 border-[#d4a017] shadow group-hover:scale-110 transition duration-300"
+            />
+            <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
+          </div>
+          <div className="leading-none">
+            <span className={`font-display text-lg font-semibold block transition-colors duration-500 ${isTransparent ? 'text-white' : 'text-green-900'}`}>
+              Utamaduni Safaris
+            </span>
+            <span className={`text-xs transition-colors duration-500 ${isTransparent ? 'text-white/60' : 'text-stone-400'}`}>
+              Kenya. Wild. Alive.
+            </span>
+          </div>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8">
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-7">
           <NavLink to="/" className={linkClass} end>Home</NavLink>
           <NavLink to="/destinations" className={linkClass}>Destinations</NavLink>
           <NavLink to="/adventures" className={linkClass}>Adventures</NavLink>
           <NavLink to="/moments" className={linkClass}>Moments</NavLink>
           <NavLink to="/about" className={linkClass}>About</NavLink>
-          <Link to="/book" className="px-4 py-2 rounded-full bg-green-700 text-white text-sm font-medium hover:bg-green-900 transition">
+          <Link
+            to="/book"
+            className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-200 shadow hover:shadow-md hover:scale-105 ${
+              isTransparent
+                ? 'bg-[#d4a017] text-green-900 hover:bg-yellow-400'
+                : 'bg-green-700 text-white hover:bg-green-900'
+            }`}
+          >
             Book Now
           </Link>
-          <NavLink to="/admin" className="text-xs text-stone-400 hover:text-stone-600">Admin</NavLink>
         </nav>
 
+        {/* Mobile hamburger */}
         <button
-          className="md:hidden p-2"
+          className="md:hidden p-2 rounded-lg"
           onClick={() => setOpen(!open)}
           aria-label="Menu"
         >
           <div className="w-6 space-y-1.5">
-            <span className={`block h-0.5 bg-green-900 transition ${open ? 'rotate-45 translate-y-2' : ''}`} />
-            <span className={`block h-0.5 bg-green-900 transition ${open ? 'opacity-0' : ''}`} />
-            <span className={`block h-0.5 bg-green-900 transition ${open ? '-rotate-45 -translate-y-2' : ''}`} />
+            <span className={`block h-0.5 transition-all duration-300 ${isTransparent ? 'bg-white' : 'bg-green-900'} ${open ? 'rotate-45 translate-y-2' : ''}`} />
+            <span className={`block h-0.5 transition-all duration-300 ${isTransparent ? 'bg-white' : 'bg-green-900'} ${open ? 'opacity-0 scale-x-0' : ''}`} />
+            <span className={`block h-0.5 transition-all duration-300 ${isTransparent ? 'bg-white' : 'bg-green-900'} ${open ? '-rotate-45 -translate-y-2' : ''}`} />
           </div>
         </button>
       </div>
 
-      {open && (
-        <div className="md:hidden bg-green-50 border-t border-green-100 px-4 py-4 space-y-3">
-          <NavLink to="/" onClick={() => setOpen(false)} className="block py-2 text-stone-700">Home</NavLink>
-          <NavLink to="/destinations" onClick={() => setOpen(false)} className="block py-2 text-stone-700">Destinations</NavLink>
-          <NavLink to="/adventures" onClick={() => setOpen(false)} className="block py-2 text-stone-700">Adventures</NavLink>
-          <NavLink to="/moments" onClick={() => setOpen(false)} className="block py-2 text-stone-700">Moments</NavLink>
-          <NavLink to="/about" onClick={() => setOpen(false)} className="block py-2 text-stone-700">About</NavLink>
-          <Link to="/book" onClick={() => setOpen(false)} className="block py-2 font-medium text-green-700">Book Now</Link>
-          <NavLink to="/admin" onClick={() => setOpen(false)} className="block py-2 text-sm text-stone-400">Admin</NavLink>
+      {/* Mobile menu */}
+      <div className={`md:hidden overflow-hidden transition-all duration-300 ${open ? 'max-h-96' : 'max-h-0'}`}>
+        <div className="bg-white border-t border-green-100 px-4 py-5 space-y-1 shadow-lg">
+          {[
+            { to: '/', label: 'Home', end: true },
+            { to: '/destinations', label: 'Destinations' },
+            { to: '/adventures', label: 'Adventures' },
+            { to: '/moments', label: 'Moments' },
+            { to: '/about', label: 'About' }
+          ].map(item => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) =>
+                `block px-4 py-2.5 rounded-xl text-sm font-medium transition ${isActive ? 'bg-green-50 text-green-700' : 'text-stone-700 hover:bg-green-50 hover:text-green-700'}`
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
+          <Link
+            to="/book"
+            className="block px-4 py-3 rounded-full bg-green-700 text-white text-center font-bold hover:bg-green-900 transition mt-2"
+          >
+            Book Now
+          </Link>
+          <a
+            href="https://wa.me/254798157303"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block px-4 py-3 rounded-full bg-green-500 text-white text-center font-bold hover:bg-green-600 transition text-sm"
+          >
+            💬 WhatsApp
+          </a>
         </div>
-      )}
+      </div>
     </header>
   )
 }

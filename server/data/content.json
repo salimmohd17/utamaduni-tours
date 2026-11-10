@@ -10,255 +10,294 @@
       "id": "shimba",
       "title": "Shimba Hills National Reserve",
       "short": "Coastal rainforest, elephants & Kenya's only sable antelope.",
-      "description": "Just inland from the coast, Shimba Hills protects one of East Africa's last large coastal rainforests. Home to elephants, the rare sable antelope, and the beautiful Sheldrick Falls.",
-      "image": "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1200&q=80",
-      "highlights": [
-        "Sable antelope",
-        "Elephants",
-        "Sheldrick Falls",
-        "Birdwatching"
-      ]
+      "description": "Just inland from the coast, Shimba Hills protects one of East Africa's last large coastal rainforests. Home to elephants, the rare sable antelope, and the beautiful Sheldrick Falls. A hidden gem only an hour from Diani Beach.",
+      "image": "/assets/shimba hills waterfals.jpg",
+      "officialLink": "https://www.kws.go.ke/parks/shimba-hills-national-reserve",
+      "highlights": ["Sable antelope", "Elephants", "Sheldrick Falls", "Birdwatching", "Forest walks"]
     },
     {
       "id": "diani",
       "title": "Diani & Tiwi Beaches",
       "short": "Powder-white sands and turquoise Indian Ocean waters.",
-      "description": "Diani Beach is repeatedly voted among Africa's best. Long stretches of soft sand, calm lagoons, kitesurfing, and relaxed Swahili coastal life.",
-      "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80",
-      "highlights": [
-        "White sand",
-        "Water sports",
-        "Sunset dhows",
-        "Beach restaurants"
-      ]
+      "description": "Diani Beach is repeatedly voted among Africa's best beaches. Long stretches of soft white sand, calm lagoons for snorkelling, kitesurfing, colobus monkey forests, and relaxed Swahili coastal life make it truly special.",
+      "image": "/assets/galu kinondo beach from above.jpg",
+      "officialLink": "https://www.magicalkenya.com/destinations/coast/",
+      "highlights": ["White sand", "Water sports", "Sunset dhows", "Colobus monkeys", "Beach restaurants"]
     },
     {
       "id": "kisite",
       "title": "Kisite-Mpunguti Marine Park",
       "short": "Dolphins, coral reefs and dhow sailing to Wasini Island.",
-      "description": "Kenya's premier marine park. Snorkel vibrant reefs, swim with dolphins, sail traditional dhows and enjoy fresh seafood on car-free Wasini Island.",
-      "image": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=80",
-      "highlights": [
-        "Dolphins",
-        "Snorkelling",
-        "Wasini Island",
-        "Coral reefs"
-      ]
+      "description": "Kenya's premier marine park. Snorkel vibrant reefs, swim with wild spinner dolphins, sail traditional dhows and enjoy fresh crab and coconut seafood on car-free Wasini Island. An unforgettable ocean experience.",
+      "image": "/assets/kisite mpunguti dolphine view.jpg",
+      "officialLink": "https://www.kws.go.ke/parks/kisite-mpunguti-marine-national-park",
+      "highlights": ["Dolphins", "Snorkelling", "Wasini Island", "Coral reefs", "Seafood feast"]
     },
     {
       "id": "kaya",
-      "title": "Kaya Forests & Culture",
+      "title": "Kaya Forests & Cultural Heritage",
       "short": "Sacred Mijikenda forests and living coastal heritage.",
-      "description": "Guided walks into sacred kaya forests with community elders. Learn about traditional beliefs, conservation practices, local dances and Swahili coastal cuisine.",
-      "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&q=80",
-      "highlights": [
-        "Sacred forests",
-        "Cultural guides",
-        "Traditional dance",
-        "Local markets"
-      ]
+      "description": "Guided walks into sacred kaya forests with community elders. Learn about traditional beliefs, healing plants, conservation practices, local dances and Swahili coastal cuisine. The Kaya forests are UNESCO World Heritage Sites.",
+      "image": "/assets/historic site, gedi ruins.jpg",
+      "officialLink": "https://whc.unesco.org/en/list/1231/",
+      "highlights": ["Sacred forests", "Cultural guides", "Traditional dance", "UNESCO heritage", "Local markets"]
     },
     {
       "id": "mara",
       "title": "Maasai Mara National Reserve",
       "short": "The Great Migration and Africa's most iconic safari destination.",
-      "description": "The Maasai Mara is Kenya's most celebrated reserve, home to the annual wildebeest migration, the Big Five, and spectacular open savannah landscapes that define the African safari experience.",
-      "image": "/assets/wildbeest-migration.jpg",
-      "highlights": [
-        "Great Migration",
-        "Big Five",
-        "Hot air balloon",
-        "Maasai culture"
-      ]
+      "description": "The Maasai Mara is Kenya's most celebrated reserve, home to the annual wildebeest migration, the Big Five, and spectacular open savannah landscapes. The river crossings between July and October are the greatest wildlife spectacle on Earth.",
+      "image": "/assets/maasai mara ,ostrich.webp",
+      "officialLink": "https://www.maasaimara.com/",
+      "highlights": ["Great Migration", "Big Five", "Hot air balloon", "Maasai culture", "River crossings"]
     },
     {
       "id": "amboseli",
       "title": "Amboseli National Park",
       "short": "Elephants against the backdrop of mighty Mount Kilimanjaro.",
-      "description": "Amboseli offers some of Africa's most iconic views — massive elephant herds roaming freely beneath the snow-capped peak of Mount Kilimanjaro. A photographer's paradise.",
-      "image": "https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?w=1200&q=80",
-      "highlights": [
-        "Elephant herds",
-        "Mount Kilimanjaro views",
-        "Big Five",
-        "Photography"
-      ]
+      "description": "Amboseli offers some of Africa's most iconic views — massive elephant herds roaming freely beneath the snow-capped peak of Mount Kilimanjaro. A UNESCO Biosphere Reserve and a photographer's paradise.",
+      "image": "/assets/amboseli,giant elephany herds.webp",
+      "officialLink": "https://www.kws.go.ke/parks/amboseli-national-park",
+      "highlights": ["Elephant herds", "Mount Kilimanjaro views", "Big Five", "Photography", "Swamp ecosystems"]
     },
     {
       "id": "tsavo",
       "title": "Tsavo East & West",
       "short": "Kenya's largest park — red elephants, lava flows and vast wilderness.",
-      "description": "Tsavo is Kenya's largest national park system, divided into Tsavo East and West. Famous for its red-dusted elephants, the Mzima Springs, Lugard Falls, and incredible biodiversity.",
-      "image": "/assets/elephants.jpg",
-      "highlights": [
-        "Red elephants",
-        "Mzima Springs",
-        "Lugard Falls",
-        "Vast wilderness"
-      ]
+      "description": "Tsavo is Kenya's largest national park system. Famous for its distinctive red-dusted elephants, the crystal-clear Mzima Springs, dramatic Lugard Falls, and incredible biodiversity stretching across 21,000 square kilometres of wilderness.",
+      "image": "/assets/tsavo 1.jpg",
+      "officialLink": "https://www.kws.go.ke/parks/tsavo-east-national-park",
+      "highlights": ["Red elephants", "Mzima Springs", "Lugard Falls", "Big Five", "Vast wilderness"]
     },
     {
       "id": "mtknya",
-      "title": "Mount Kenya",
+      "title": "Mount Kenya & Surroundings",
       "short": "Africa's second-highest peak — trekking, glaciers and unique alpine wildlife.",
-      "description": "Mount Kenya offers dramatic trekking routes through bamboo forests, moorlands and glaciated peaks. The surrounding national park is home to buffalo, leopard, and rare mountain bongo.",
-      "image": "https://images.unsplash.com/photo-1570197571499-166b36435e9f?w=1200&q=80",
-      "highlights": [
-        "Trekking routes",
-        "Glaciers",
-        "Mountain bongo",
-        "Alpine scenery"
-      ]
+      "description": "Mount Kenya offers dramatic trekking routes through bamboo forests, moorlands and glaciated peaks. The surrounding national park is home to buffalo, leopard, and the rare mountain bongo antelope in breathtaking highland scenery.",
+      "image": "/assets/m elgon national park.jpg",
+      "officialLink": "https://www.kws.go.ke/parks/mount-kenya-national-park-and-reserve",
+      "highlights": ["Trekking routes", "Glaciers", "Mountain bongo", "Alpine scenery", "Buffalo & leopard"]
     },
     {
       "id": "nakuru",
       "title": "Lake Nakuru National Park",
       "short": "Flamingos, rhinos and a lake that turns pink.",
-      "description": "Lake Nakuru is famous for its stunning flamingo flocks that colour the water pink. The park is also one of Kenya's most reliable places to spot both black and white rhinos.",
-      "image": "https://images.unsplash.com/photo-1504275107627-0c2ba7a43dba?w=1200&q=80",
-      "highlights": [
-        "Flamingos",
-        "Black & white rhinos",
-        "Rothschild giraffe",
-        "Scenic lake"
-      ]
+      "description": "Lake Nakuru is famous for its stunning flamingo flocks that colour the water pink. The park is also one of Kenya's most reliable places to spot both black and white rhinos, Rothschild giraffe and tree-climbing lions.",
+      "image": "/assets/ol pojeta conservercy , rhino.webp",
+      "officialLink": "https://www.kws.go.ke/parks/lake-nakuru-national-park",
+      "highlights": ["Flamingos", "Black & white rhinos", "Rothschild giraffe", "Tree-climbing lions", "Scenic lake"]
     },
     {
       "id": "samburu",
       "title": "Samburu National Reserve",
       "short": "Rare northern species in a dramatic semi-arid landscape.",
-      "description": "Samburu is home to species found nowhere else in Kenya — the Grevy's zebra, reticulated giraffe, Somali ostrich, Beisa oryx and the gerenuk. Set in a stunning semi-arid landscape along the Ewaso Ng'iro River.",
-      "image": "https://images.unsplash.com/photo-1455287278107-115faab3049c?w=1200&q=80",
-      "highlights": [
-        "Grevy's zebra",
-        "Reticulated giraffe",
-        "Gerenuk",
-        "River wildlife"
-      ]
+      "description": "Samburu is home to the 'Samburu Special Five' — Grevy's zebra, reticulated giraffe, Somali ostrich, Beisa oryx and gerenuk. Set in a stunning semi-arid landscape along the Ewaso Ng'iro River, it's a magical destination.",
+      "image": "/assets/samburu ,crystal pool.webp",
+      "officialLink": "https://www.kws.go.ke/parks/samburu-national-reserve",
+      "highlights": ["Grevy's zebra", "Reticulated giraffe", "Gerenuk", "River wildlife", "Samburu culture"]
     },
     {
       "id": "hellsgate",
       "title": "Hell's Gate National Park",
       "short": "Cycle through gorges, geysers and dramatic cliffs — no car needed.",
-      "description": "Hell's Gate is Kenya's most unique park — you can cycle or hike through it. Dramatic volcanic cliffs, Ol Njorowa Gorge, Fischer's Tower, and natural geothermal geysers make it unforgettable.",
-      "image": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1200&q=80",
-      "highlights": [
-        "Cycling safari",
-        "Gorge hiking",
-        "Geothermal geysers",
-        "Rock climbing"
-      ]
+      "description": "Hell's Gate is Kenya's most unique park — you can cycle or hike through it without a vehicle. Dramatic volcanic cliffs, Ol Njorowa Gorge, Fischer's Tower, and natural geothermal geysers make it unforgettable for adventurers.",
+      "image": "/assets/hells gate,view.webp",
+      "officialLink": "https://www.kws.go.ke/parks/hells-gate-national-park",
+      "highlights": ["Cycling safari", "Gorge hiking", "Geothermal geysers", "Rock climbing", "Fischer's Tower"]
     },
     {
       "id": "lamu",
       "title": "Lamu Island",
       "short": "UNESCO-listed Swahili city, dhow sailing and pristine beaches.",
-      "description": "Lamu Old Town is a UNESCO World Heritage Site — Kenya's oldest living Swahili settlement. No cars, just donkeys and dhows. Stunning beaches, fresh seafood and a timeless coastal atmosphere.",
-      "image": "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=1200&q=80",
-      "highlights": [
-        "Swahili architecture",
-        "Dhow sailing",
-        "Pristine beaches",
-        "Cultural heritage"
-      ]
+      "description": "Lamu Old Town is a UNESCO World Heritage Site — Kenya's oldest living Swahili settlement. No cars, only donkeys and dhows. Stunning beaches, fresh seafood and a timeless coastal atmosphere that feels centuries removed from the modern world.",
+      "image": "/assets/lamu island.jpg",
+      "officialLink": "https://whc.unesco.org/en/list/1055/",
+      "highlights": ["Swahili architecture", "Dhow sailing", "Pristine beaches", "UNESCO heritage", "No cars"]
     },
     {
       "id": "watamu",
       "title": "Watamu Marine Park",
       "short": "Sea turtles, world-class diving and pristine coral reefs.",
-      "description": "Watamu is a marine biodiversity hotspot. The marine national park protects nesting sea turtles, vibrant coral gardens, tropical fish, and offers some of East Africa's best snorkelling and diving.",
-      "image": "https://images.unsplash.com/photo-1559827291-72ee739d0d9a?w=1200&q=80",
-      "highlights": [
-        "Sea turtles",
-        "Coral diving",
-        "Snorkelling",
-        "Blue Cave"
-      ]
+      "description": "Watamu is a marine biodiversity hotspot. The marine national park protects nesting sea turtles, vibrant coral gardens, tropical fish, and offers some of East Africa's best snorkelling and diving. The Blue Cave is a highlight.",
+      "image": "/assets/malindi marine 2.jpg",
+      "officialLink": "https://www.kws.go.ke/parks/watamu-marine-national-park",
+      "highlights": ["Sea turtles", "Coral diving", "Snorkelling", "Blue Cave", "Tropical fish"]
     },
     {
       "id": "malindi",
-      "title": "Malindi",
+      "title": "Malindi & Gedi Ruins",
       "short": "Historic Swahili coast town with beaches, heritage and marine life.",
-      "description": "Malindi blends Portuguese colonial history with Swahili coastal culture. Visit the Vasco da Gama pillar, explore the marine park, enjoy the nightlife, or simply relax on wide sandy beaches.",
-      "image": "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1200&q=80",
-      "highlights": [
-        "Vasco da Gama pillar",
-        "Marine park",
-        "Swahili culture",
-        "Beaches"
-      ]
+      "description": "Malindi blends Portuguese colonial history with Swahili coastal culture. Visit the Vasco da Gama pillar, snorkel the marine park, then explore the mysterious 15th-century ruins of Gede — a lost city hidden in the coastal forest.",
+      "image": "/assets/malindi beach.jpg",
+      "officialLink": "https://www.kws.go.ke/parks/malindi-marine-national-park",
+      "highlights": ["Vasco da Gama pillar", "Gede Ruins", "Marine snorkelling", "Swahili culture", "Wide beaches"]
     }
   ],
   "adventures": [
     {
       "id": "a1",
-      "title": "Shimba Hills Safari Day",
-      "duration": "Full day",
-      "priceFrom": 95,
-      "description": "Game drive + forest walk + Sheldrick Falls. Picnic lunch included."
+      "title": "Shimba Hills Safari",
+      "duration": "1–5 days",
+      "priceFrom": 195,
+      "priceCitizen": 45,
+      "priceResident": 95,
+      "description": "Game drive through one of East Africa's last coastal rainforests. Sable antelope, elephants & Sheldrick Falls. Picnic lunch included.",
+      "park": "Shimba Hills",
+      "parkLink": "https://www.kws.go.ke/parks/shimba-hills-national-reserve"
     },
     {
       "id": "a2",
-      "title": "Dhow & Dolphin Experience",
-      "duration": "Full day",
-      "priceFrom": 85,
-      "description": "Boat to Kisite, snorkelling, dolphin spotting, Wasini seafood lunch."
+      "title": "Dhow & Dolphin — Kisite-Mpunguti",
+      "duration": "1–3 days",
+      "priceFrom": 165,
+      "priceCitizen": 40,
+      "priceResident": 85,
+      "description": "Sail a traditional dhow to Wasini Island, snorkel coral reefs, swim with wild dolphins, and feast on fresh crab and coconut seafood lunch.",
+      "park": "Kisite-Mpunguti",
+      "parkLink": "https://www.kws.go.ke/parks/kisite-mpunguti-marine-national-park"
     },
     {
       "id": "a3",
-      "title": "Cultural Kaya Immersion",
-      "duration": "Half day",
-      "priceFrom": 45,
-      "description": "Guided sacred forest walk with elders + traditional performance."
+      "title": "Kaya Forest Cultural Immersion",
+      "duration": "Half–2 days",
+      "priceFrom": 95,
+      "priceCitizen": 25,
+      "priceResident": 55,
+      "description": "Walk sacred Mijikenda kaya forests with community elders. Traditional dances, healing plants & authentic Swahili cuisine.",
+      "park": "UNESCO Kaya Forests",
+      "parkLink": "https://whc.unesco.org/en/list/1231/"
     },
     {
       "id": "a4",
       "title": "Mwaluganje Elephant Sanctuary",
-      "duration": "Half / Full day",
-      "priceFrom": 55,
-      "description": "Community conservancy focused on elephants and local livelihoods."
+      "duration": "1–2 days",
+      "priceFrom": 125,
+      "priceCitizen": 30,
+      "priceResident": 65,
+      "description": "Drive or walk through Kenya's community-owned elephant conservancy. Free-roaming elephants, rare birds and inspiring conservation stories.",
+      "park": "Mwaluganje",
+      "parkLink": "https://www.kws.go.ke/"
     },
     {
       "id": "a5",
-      "title": "Coastal Free Day Package",
-      "duration": "Flexible",
-      "priceFrom": 30,
-      "description": "Beach transfer, optional kitesurf intro or colobus conservation visit."
+      "title": "Diani & Tiwi Beach Escape",
+      "duration": "1–7 days",
+      "priceFrom": 85,
+      "priceCitizen": 25,
+      "priceResident": 55,
+      "description": "Relax on Africa's finest white-sand beach. Kitesurf intro, colobus monkey forest walk, and sunset dhow cocktail cruise included.",
+      "park": null,
+      "parkLink": null
     },
     {
       "id": "a6",
-      "title": "Multi-day Utamaduni Circuit",
-      "duration": "3–7 days",
-      "priceFrom": 320,
-      "description": "Custom mix of wildlife, marine and cultural days with accommodation options."
+      "title": "Maasai Mara Migration Safari",
+      "duration": "3–14 days",
+      "priceFrom": 450,
+      "priceCitizen": 95,
+      "priceResident": 225,
+      "description": "Witness the greatest wildlife spectacle — millions of wildebeest and zebra crossing the Mara River. Big Five, Maasai village & optional hot-air balloon.",
+      "park": "Maasai Mara",
+      "parkLink": "https://www.maasaimara.com/"
     },
     {
       "id": "a7",
-      "title": "Maasai Mara Migration Safari",
-      "duration": "3–5 days",
-      "priceFrom": 450,
-      "description": "Fly-in or drive to the Mara for the greatest wildlife show on Earth. Game drives, Big Five, Maasai village visit."
+      "title": "Amboseli Elephants & Kilimanjaro",
+      "duration": "2–5 days",
+      "priceFrom": 380,
+      "priceCitizen": 80,
+      "priceResident": 185,
+      "description": "Photograph elephant families beneath snow-capped Kilimanjaro. Africa's most iconic landscape and a photographer's ultimate dream.",
+      "park": "Amboseli",
+      "parkLink": "https://www.kws.go.ke/parks/amboseli-national-park"
     },
     {
       "id": "a8",
-      "title": "Amboseli Elephants & Kilimanjaro",
-      "duration": "2–3 days",
-      "priceFrom": 320,
-      "description": "Photograph elephant families with Mount Kilimanjaro as the backdrop. Unforgettable."
+      "title": "Samburu Northern Frontier",
+      "duration": "2–7 days",
+      "priceFrom": 390,
+      "priceCitizen": 85,
+      "priceResident": 195,
+      "description": "Discover the rare 'Samburu Special Five' in a dramatic semi-arid landscape along the Ewaso Ng'iro River.",
+      "park": "Samburu",
+      "parkLink": "https://www.kws.go.ke/parks/samburu-national-reserve"
     },
     {
       "id": "a9",
-      "title": "Lamu Island Cultural Retreat",
-      "duration": "2–4 days",
-      "priceFrom": 280,
-      "description": "Dhow cruise, old town walking tour, beach relaxation and fresh seafood on Lamu Island."
+      "title": "Hell's Gate Cycling Adventure",
+      "duration": "1–2 days",
+      "priceFrom": 115,
+      "priceCitizen": 28,
+      "priceResident": 65,
+      "description": "Cycle through Africa's most unique national park — volcanic cliffs, gorges, geothermal geysers. No game-drive vehicle needed.",
+      "park": "Hell's Gate",
+      "parkLink": "https://www.kws.go.ke/parks/hells-gate-national-park"
     },
     {
       "id": "a10",
-      "title": "Hell's Gate Cycling Adventure",
-      "duration": "Full day",
-      "priceFrom": 65,
-      "description": "Cycle through dramatic gorges and geothermal features. Great for adventurous travelers."
+      "title": "Lamu Island Cultural Retreat",
+      "duration": "2–7 days",
+      "priceFrom": 220,
+      "priceCitizen": 55,
+      "priceResident": 120,
+      "description": "Dhow to a UNESCO World Heritage Site with no cars — ancient Swahili architecture, pristine beaches and the finest fresh seafood.",
+      "park": "Lamu UNESCO",
+      "parkLink": "https://whc.unesco.org/en/list/1055/"
+    },
+    {
+      "id": "a11",
+      "title": "Tsavo Red Elephant Wilderness",
+      "duration": "2–10 days",
+      "priceFrom": 340,
+      "priceCitizen": 70,
+      "priceResident": 165,
+      "description": "Kenya's largest park — red-dusted elephants, Mzima Springs, Lugard Falls and vast untouched wilderness.",
+      "park": "Tsavo",
+      "parkLink": "https://www.kws.go.ke/parks/tsavo-east-national-park"
+    },
+    {
+      "id": "a12",
+      "title": "Lake Nakuru Flamingo & Rhino",
+      "duration": "1–3 days",
+      "priceFrom": 285,
+      "priceCitizen": 60,
+      "priceResident": 140,
+      "description": "Watch the lake turn pink with flamingos. Kenya's most reliable spot for black & white rhinos, Rothschild giraffe and tree-climbing lions.",
+      "park": "Lake Nakuru",
+      "parkLink": "https://www.kws.go.ke/parks/lake-nakuru-national-park"
+    },
+    {
+      "id": "a13",
+      "title": "Mombasa Old Town & Fort Jesus",
+      "duration": "Half–1 day",
+      "priceFrom": 75,
+      "priceCitizen": 20,
+      "priceResident": 45,
+      "description": "Walk the streets of Mombasa Old Town with an expert guide. UNESCO Fort Jesus, spice markets, ancient mosques and street food.",
+      "park": null,
+      "parkLink": null
+    },
+    {
+      "id": "a14",
+      "title": "Malindi Marine Park & Gedi Ruins",
+      "duration": "1–3 days",
+      "priceFrom": 145,
+      "priceCitizen": 35,
+      "priceResident": 75,
+      "description": "Snorkel spectacular coral gardens then explore the mysterious 15th-century ruins of Gede — a lost Swahili city hidden in the coastal forest.",
+      "park": "Watamu Marine",
+      "parkLink": "https://www.kws.go.ke/parks/watamu-marine-national-park"
+    },
+    {
+      "id": "a15",
+      "title": "Utamaduni Grand Circuit",
+      "duration": "7–30 days",
+      "priceFrom": 420,
+      "priceCitizen": 90,
+      "priceResident": 210,
+      "description": "The ultimate Kenya experience — a custom circuit combining wildlife parks, marine adventures and cultural immersion across the entire country.",
+      "park": null,
+      "parkLink": null
     }
   ],
   "gallery": [
@@ -274,38 +313,53 @@
     },
     {
       "id": "g3",
-      "caption": "Elephants crossing the river at Tsavo",
-      "image": "/assets/elephants.jpg"
+      "caption": "Giant elephant herds beneath Kilimanjaro in Amboseli",
+      "image": "/assets/amboseli,giant elephany herds.webp"
     },
     {
       "id": "g4",
-      "caption": "Mixed wildlife grazing together in the reserve",
-      "image": "/assets/wildlife-reserve.jpg"
+      "caption": "Dolphins at play in Kisite-Mpunguti Marine Park",
+      "image": "/assets/kisite mpunguti dolphine view.jpg"
     },
     {
       "id": "g5",
-      "caption": "A happy hippo enjoying the afternoon sun 🦛",
-      "image": "/assets/hippo.jpg"
+      "caption": "Samburu's crystal pools along the Ewaso Ng'iro River",
+      "image": "/assets/samburu ,crystal pool.webp"
     },
     {
       "id": "g6",
-      "caption": "Dolphin surprise on the way to Wasini",
-      "image": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80"
+      "caption": "Lamu Island — UNESCO-listed Swahili treasure",
+      "image": "/assets/lamu island.jpg"
     },
     {
       "id": "g7",
-      "caption": "That Diani sunset feeling",
-      "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80"
+      "caption": "Galu Kinondo — Kenya's most beautiful coastline from above",
+      "image": "/assets/galu kinondo beach from above.jpg"
     },
     {
       "id": "g8",
-      "caption": "Flamingos at Lake Nakuru at sunset",
-      "image": "https://images.unsplash.com/photo-1504275107627-0c2ba7a43dba?w=800&q=80"
+      "caption": "Rhino at Ol Pejeta Conservancy",
+      "image": "/assets/ol pojeta conservercy , rhino.webp"
     },
     {
       "id": "g9",
-      "caption": "Lamu dhow sailing at golden hour",
-      "image": "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&q=80"
+      "caption": "Maasai Mara — ostrich on the golden savannah",
+      "image": "/assets/maasai mara ,ostrich.webp"
+    },
+    {
+      "id": "g10",
+      "caption": "Shimba Hills waterfall — coastal forest paradise",
+      "image": "/assets/shimba hills waterfals.jpg"
+    },
+    {
+      "id": "g11",
+      "caption": "Hell's Gate — cycling through dramatic volcanic gorges",
+      "image": "/assets/hells gate,view.webp"
+    },
+    {
+      "id": "g12",
+      "caption": "Tiwi Beach — pristine white sands of the South Coast",
+      "image": "/assets/tiwi beach.jpg"
     }
   ]
 }
