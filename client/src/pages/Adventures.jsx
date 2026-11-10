@@ -12,7 +12,7 @@ export default function Adventures() {
       <div
         className="relative bg-green-900 text-white py-20"
         style={{
-          backgroundImage: 'url(/wildbeest-migration.jpg)',
+          backgroundImage: 'url(/assets/wildbeest-migration.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}

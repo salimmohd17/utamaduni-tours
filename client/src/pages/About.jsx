@@ -34,7 +34,7 @@ export default function About() {
       <div
         className="relative bg-green-800 text-white py-24"
         style={{
-          backgroundImage: 'url(/elephants.jpg)',
+          backgroundImage: 'url(/assets/elephants.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}

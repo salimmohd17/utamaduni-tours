@@ -8,7 +8,10 @@ const jwt = require('jsonwebtoken');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const JWT_SECRET = process.env.JWT_SECRET || 'utamaduni-kwale-2026-secret-key-change-in-prod';
+const JWT_SECRET = process.env.JWT_SECRET || (
+  process.env.NODE_ENV === 'production' ? '' : 'utamaduni-kwale-2026-secret-key-change-in-prod'
+);
+if (!JWT_SECRET) throw new Error('JWT_SECRET must be set in production');
 const DATA_DIR = path.join(__dirname, 'data');
 
 // Ensure data directory
@@ -82,7 +85,7 @@ if (!fs.existsSync(CONTENT_FILE)) {
         title: 'Maasai Mara National Reserve',
         short: 'The Great Migration and Africa\'s most iconic safari destination.',
         description: 'The Maasai Mara is Kenya\'s most celebrated reserve, home to the annual wildebeest migration, the Big Five, and spectacular open savannah landscapes that define the African safari experience.',
-        image: '/wildbeest-migration.jpg',
+        image: '/assets/wildbeest-migration.jpg',
         highlights: ['Great Migration', 'Big Five', 'Hot air balloon', 'Maasai culture']
       },
       {
@@ -98,7 +101,7 @@ if (!fs.existsSync(CONTENT_FILE)) {
         title: 'Tsavo East & West',
         short: 'Kenya\'s largest park — red elephants, lava flows and vast wilderness.',
         description: 'Tsavo is Kenya\'s largest national park system, divided into Tsavo East and West. Famous for its red-dusted elephants, the Mzima Springs, Lugard Falls, and incredible biodiversity.',
-        image: '/elephants.jpg',
+        image: '/assets/elephants.jpg',
         highlights: ['Red elephants', 'Mzima Springs', 'Lugard Falls', 'Vast wilderness']
       },
       {
@@ -171,10 +174,10 @@ if (!fs.existsSync(CONTENT_FILE)) {
       { id: 'a10', title: "Hell's Gate Cycling Adventure", duration: 'Full day', priceFrom: 65, description: 'Cycle through dramatic gorges and geothermal features. Great for adventurous travelers.' }
     ],
     gallery: [
-      { id: 'g1', caption: 'Zebra herd roaming free on the open plains', image: '/zebras-hero.jpg' },
-      { id: 'g2', caption: 'The Great Wildebeest Migration — a spectacle like no other', image: '/wildbeest-migration.jpg' },
-      { id: 'g3', caption: 'Elephants crossing the river at Tsavo', image: '/elephants.jpg' },
-      { id: 'g4', caption: 'Mixed wildlife grazing together in the reserve', image: '/wildlife-reserve.jpg' },
+      { id: 'g1', caption: 'Zebra herd roaming free on the open plains', image: '/assets/zebras-hero.jpg' },
+      { id: 'g2', caption: 'The Great Wildebeest Migration — a spectacle like no other', image: '/assets/wildbeest-migration.jpg' },
+      { id: 'g3', caption: 'Elephants crossing the river at Tsavo', image: '/assets/elephants.jpg' },
+      { id: 'g4', caption: 'Mixed wildlife grazing together in the reserve', image: '/assets/wildlife-reserve.jpg' },
       { id: 'g5', caption: 'Dolphin surprise on the way to Wasini', image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80' },
       { id: 'g6', caption: 'That Diani sunset feeling', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80' },
       { id: 'g7', caption: 'Flamingos at Lake Nakuru at sunset', image: 'https://images.unsplash.com/photo-1504275107627-0c2ba7a43dba?w=800&q=80' },

@@ -25,7 +25,7 @@ export default function Home() {
       <section
         className="relative h-screen min-h-[640px] flex items-center justify-center overflow-hidden"
         style={{
-          backgroundImage: 'url(/zebras-hero.jpg)',
+          backgroundImage: 'url(/assets/zebras-hero.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed'
@@ -80,7 +80,7 @@ export default function Home() {
         <div className="flex h-64 md:h-80">
           <div
             className="flex-1 bg-cover bg-center hover:flex-[2] transition-all duration-500 cursor-pointer relative group"
-            style={{ backgroundImage: 'url(/wildlife-reserve.jpg)' }}
+            style={{ backgroundImage: 'url(/assets/wildlife-reserve.jpg)' }}
           >
             <div className="absolute inset-0 bg-green-900/40 group-hover:bg-green-900/20 transition duration-500 flex items-end p-4">
               <span className="text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition duration-300">🦓 Wildlife Reserve</span>
@@ -88,7 +88,7 @@ export default function Home() {
           </div>
           <div
             className="flex-1 bg-cover bg-center hover:flex-[2] transition-all duration-500 cursor-pointer relative group"
-            style={{ backgroundImage: 'url(/wildbeest-migration.jpg)' }}
+            style={{ backgroundImage: 'url(/assets/wildbeest-migration.jpg)' }}
           >
             <div className="absolute inset-0 bg-green-900/40 group-hover:bg-green-900/20 transition duration-500 flex items-end p-4">
               <span className="text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition duration-300">🦬 Great Migration</span>
@@ -96,7 +96,7 @@ export default function Home() {
           </div>
           <div
             className="flex-1 bg-cover bg-center hover:flex-[2] transition-all duration-500 cursor-pointer relative group"
-            style={{ backgroundImage: 'url(/elephants.jpg)' }}
+            style={{ backgroundImage: 'url(/assets/elephants.jpg)' }}
           >
             <div className="absolute inset-0 bg-green-900/40 group-hover:bg-green-900/20 transition duration-500 flex items-end p-4">
               <span className="text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition duration-300">🐘 Elephants</span>
@@ -104,7 +104,7 @@ export default function Home() {
           </div>
           <div
             className="flex-1 bg-cover bg-center hover:flex-[2] transition-all duration-500 cursor-pointer relative group"
-            style={{ backgroundImage: 'url(/zebras-hero.jpg)' }}
+            style={{ backgroundImage: 'url(/assets/zebras-hero.jpg)' }}
           >
             <div className="absolute inset-0 bg-green-900/40 group-hover:bg-green-900/20 transition duration-500 flex items-end p-4">
               <span className="text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition duration-300">🦓 Zebra Plains</span>

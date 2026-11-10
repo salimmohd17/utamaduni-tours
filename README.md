@@ -62,7 +62,27 @@ Express will serve the built React app from `client/dist`.
 - Username: `admin`
 - Password: `utamaduni2026`
 
-**Change the password** in production by editing `server/data/admin.json` or re-seeding with a new bcrypt hash.
+**Change the password before deploying** by replacing the credentials in `server/data/admin.json` with a bcrypt hash for a strong password.
+
+## Deployment
+
+### Render (API)
+
+The root `render.yaml` configures the API as a Render web service. Create a new Blueprint from this repository; Render installs dependencies from `server/package-lock.json`, starts the API, generates a `JWT_SECRET`, and checks `/api/health`.
+
+The API currently stores bookings, content, and admin credentials as JSON files in `server/data`. Render's local filesystem is not persistent across all service types and redeploys. Use a Render persistent disk or move this data to a managed database before relying on bookings in production.
+
+### Vercel (website)
+
+Create a Vercel project from this repository with **Root Directory** set to `client`. Use the Vite defaults (`npm run build`, output directory `dist`). `client/vercel.json` enables client-side route fallback.
+
+Set this Vercel environment variable for Production (and Preview if needed):
+
+```text
+VITE_API_URL=https://<your-render-service>.onrender.com/api
+```
+
+Replace the example host with the URL assigned to the Render API. The frontend reads this value at build time. For local frontend development, copy `client/.env.example` to `client/.env.local`; alternatively leave `VITE_API_URL` unset to use the Vite `/api` proxy.
 
 ## Features
 

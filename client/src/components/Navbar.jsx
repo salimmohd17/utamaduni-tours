@@ -4,7 +4,7 @@ import { Link, NavLink } from 'react-router-dom'
 function SiteLogo({ size = 36 }) {
   return (
     <img
-      src="/hippo.jpg"
+      src="/assets/hippo.jpg"
       alt="Utamaduni Safaris"
       width={size}
       height={size}

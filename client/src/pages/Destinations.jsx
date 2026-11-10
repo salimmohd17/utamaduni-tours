@@ -11,7 +11,7 @@ export default function Destinations() {
       <div
         className="relative bg-green-900 text-white py-20"
         style={{
-          backgroundImage: 'url(/wildlife-reserve.jpg)',
+          backgroundImage: 'url(/assets/wildlife-reserve.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}

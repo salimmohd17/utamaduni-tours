@@ -39,7 +39,7 @@ export default function Book() {
       <div
         className="relative bg-green-800 text-white py-20"
         style={{
-          backgroundImage: 'url(/zebras-hero.jpg)',
+          backgroundImage: 'url(/assets/zebras-hero.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}

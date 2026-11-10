@@ -63,7 +63,7 @@
       "title": "Maasai Mara National Reserve",
       "short": "The Great Migration and Africa's most iconic safari destination.",
       "description": "The Maasai Mara is Kenya's most celebrated reserve, home to the annual wildebeest migration, the Big Five, and spectacular open savannah landscapes that define the African safari experience.",
-      "image": "/wildbeest-migration.jpg",
+      "image": "/assets/wildbeest-migration.jpg",
       "highlights": [
         "Great Migration",
         "Big Five",
@@ -89,7 +89,7 @@
       "title": "Tsavo East & West",
       "short": "Kenya's largest park — red elephants, lava flows and vast wilderness.",
       "description": "Tsavo is Kenya's largest national park system, divided into Tsavo East and West. Famous for its red-dusted elephants, the Mzima Springs, Lugard Falls, and incredible biodiversity.",
-      "image": "/elephants.jpg",
+      "image": "/assets/elephants.jpg",
       "highlights": [
         "Red elephants",
         "Mzima Springs",
@@ -265,27 +265,27 @@
     {
       "id": "g1",
       "caption": "Zebra herd roaming free on the open plains",
-      "image": "/zebras-hero.jpg"
+      "image": "/assets/zebras-hero.jpg"
     },
     {
       "id": "g2",
       "caption": "The Great Wildebeest Migration — a spectacle like no other",
-      "image": "/wildbeest-migration.jpg"
+      "image": "/assets/wildbeest-migration.jpg"
     },
     {
       "id": "g3",
       "caption": "Elephants crossing the river at Tsavo",
-      "image": "/elephants.jpg"
+      "image": "/assets/elephants.jpg"
     },
     {
       "id": "g4",
       "caption": "Mixed wildlife grazing together in the reserve",
-      "image": "/wildlife-reserve.jpg"
+      "image": "/assets/wildlife-reserve.jpg"
     },
     {
       "id": "g5",
       "caption": "A happy hippo enjoying the afternoon sun 🦛",
-      "image": "/hippo.jpg"
+      "image": "/assets/hippo.jpg"
     },
     {
       "id": "g6",

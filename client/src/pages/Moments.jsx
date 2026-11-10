@@ -11,7 +11,7 @@ export default function Moments() {
       <div
         className="relative bg-green-900 text-white py-20"
         style={{
-          backgroundImage: 'url(/zebras-hero.jpg)',
+          backgroundImage: 'url(/assets/zebras-hero.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
