@@ -5,9 +5,15 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { Pool } = require('pg');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const DATABASE_URL = process.env.DATABASE_URL || '';
+const pool = DATABASE_URL ? new Pool({
+  connectionString: DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+}) : null;
 const JWT_SECRET = process.env.JWT_SECRET || 'utamaduni-kwale-2026-secret-key-change-in-prod';
 
 if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
@@ -32,6 +38,86 @@ function readJSON(file, fallback = []) {
 }
 function writeJSON(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2));
+}
+
+async function ensureDatabaseSchema() {
+  if (!pool) return;
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS site_content (
+      key TEXT PRIMARY KEY,
+      payload JSONB NOT NULL,
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS bookings (
+      id UUID PRIMARY KEY,
+      payload JSONB NOT NULL,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+
+  const content = readJSON(CONTENT_FILE, {});
+  if (Object.keys(content).length > 0) {
+    await pool.query(
+      `INSERT INTO site_content (key, payload)
+       VALUES ('main', $1)
+       ON CONFLICT (key) DO UPDATE SET payload = EXCLUDED.payload, updated_at = NOW()`,
+      [content]
+    );
+  }
+}
+
+async function readContentData() {
+  if (!pool) return readJSON(CONTENT_FILE, {});
+
+  const { rows } = await pool.query(
+    `SELECT payload FROM site_content WHERE key = 'main' LIMIT 1`
+  );
+
+  return rows[0]?.payload || readJSON(CONTENT_FILE, {});
+}
+
+async function writeContentData(content) {
+  if (!pool) {
+    writeJSON(CONTENT_FILE, content);
+    return;
+  }
+
+  await pool.query(
+    `INSERT INTO site_content (key, payload)
+     VALUES ('main', $1)
+     ON CONFLICT (key) DO UPDATE SET payload = EXCLUDED.payload, updated_at = NOW()`,
+    [content]
+  );
+}
+
+async function readBookingsData() {
+  if (!pool) return readJSON(BOOKINGS_FILE, []);
+
+  const { rows } = await pool.query(
+    `SELECT payload FROM bookings ORDER BY created_at DESC`
+  );
+
+  return rows.map(row => row.payload);
+}
+
+async function writeBookingsData(bookings) {
+  if (!pool) {
+    writeJSON(BOOKINGS_FILE, bookings);
+    return;
+  }
+
+  await pool.query('DELETE FROM bookings');
+
+  for (const booking of bookings) {
+    await pool.query(
+      `INSERT INTO bookings (id, payload) VALUES ($1, $2)`,
+      [booking.id, booking]
+    );
+  }
 }
 
 // Seed admin (password: utamaduni2026)
@@ -194,19 +280,24 @@ if (!fs.existsSync(BOOKINGS_FILE)) writeJSON(BOOKINGS_FILE, []);
 app.use(cors());
 app.use(express.json({ limit: '2mb' }));
 
+ensureDatabaseSchema().catch((error) => {
+  console.error('Database initialization failed:', error.message);
+});
+
 // ========== PUBLIC ROUTES ==========
 app.get('/api/health', (req, res) => res.json({ status: 'ok', company: 'Utamaduni Safaris' }));
 
-app.get('/api/content', (req, res) => {
-  res.json(readJSON(CONTENT_FILE, {}));
+app.get('/api/content', async (req, res) => {
+  res.json(await readContentData());
 });
 
-app.post('/api/bookings', (req, res) => {
+app.post('/api/bookings', async (req, res) => {
   const { name, email, phone, dates, guests, adventureId, message } = req.body;
   if (!name || !email || !dates) {
     return res.status(400).json({ error: 'Name, email and preferred dates are required' });
   }
-  const bookings = readJSON(BOOKINGS_FILE, []);
+
+  const bookings = await readBookingsData();
   const booking = {
     id: uuidv4(),
     name,
@@ -219,8 +310,9 @@ app.post('/api/bookings', (req, res) => {
     status: 'pending',
     createdAt: new Date().toISOString()
   };
+
   bookings.unshift(booking);
-  writeJSON(BOOKINGS_FILE, bookings);
+  await writeBookingsData(bookings);
   res.status(201).json({ success: true, booking });
 });
 
@@ -247,88 +339,89 @@ function auth(req, res, next) {
 }
 
 // ========== ADMIN ROUTES ==========
-app.get('/api/admin/bookings', auth, (req, res) => {
-  res.json(readJSON(BOOKINGS_FILE, []));
+app.get('/api/admin/bookings', auth, async (req, res) => {
+  res.json(await readBookingsData());
 });
 
-app.patch('/api/admin/bookings/:id', auth, (req, res) => {
-  const bookings = readJSON(BOOKINGS_FILE, []);
+app.patch('/api/admin/bookings/:id', auth, async (req, res) => {
+  const bookings = await readBookingsData();
   const idx = bookings.findIndex(b => b.id === req.params.id);
   if (idx === -1) return res.status(404).json({ error: 'Not found' });
+
   bookings[idx] = { ...bookings[idx], ...req.body, updatedAt: new Date().toISOString() };
-  writeJSON(BOOKINGS_FILE, bookings);
+  await writeBookingsData(bookings);
   res.json(bookings[idx]);
 });
 
-app.delete('/api/admin/bookings/:id', auth, (req, res) => {
-  let bookings = readJSON(BOOKINGS_FILE, []);
+app.delete('/api/admin/bookings/:id', auth, async (req, res) => {
+  let bookings = await readBookingsData();
   bookings = bookings.filter(b => b.id !== req.params.id);
-  writeJSON(BOOKINGS_FILE, bookings);
+  await writeBookingsData(bookings);
   res.json({ success: true });
 });
 
-app.put('/api/admin/content', auth, (req, res) => {
-  const current = readJSON(CONTENT_FILE, {});
+app.put('/api/admin/content', auth, async (req, res) => {
+  const current = await readContentData();
   const updated = { ...current, ...req.body };
-  writeJSON(CONTENT_FILE, updated);
+  await writeContentData(updated);
   res.json(updated);
 });
 
-app.get('/api/admin/content', auth, (req, res) => {
-  res.json(readJSON(CONTENT_FILE, {}));
+app.get('/api/admin/content', auth, async (req, res) => {
+  res.json(await readContentData());
 });
 
 // ========== DESTINATIONS CRUD ==========
-app.post('/api/admin/sites', auth, (req, res) => {
-  const content = readJSON(CONTENT_FILE, {});
+app.post('/api/admin/sites', auth, async (req, res) => {
+  const content = await readContentData();
   const destinations = content.destinations || [];
   const newSite = { ...req.body, id: req.body.id || uuidv4() };
   destinations.push(newSite);
   content.destinations = destinations;
-  writeJSON(CONTENT_FILE, content);
+  await writeContentData(content);
   res.status(201).json(newSite);
 });
 
-app.delete('/api/admin/sites/:id', auth, (req, res) => {
-  const content = readJSON(CONTENT_FILE, {});
+app.delete('/api/admin/sites/:id', auth, async (req, res) => {
+  const content = await readContentData();
   content.destinations = (content.destinations || []).filter(d => d.id !== req.params.id);
-  writeJSON(CONTENT_FILE, content);
+  await writeContentData(content);
   res.json({ success: true });
 });
 
 // ========== ADVENTURES CRUD ==========
-app.post('/api/admin/adventures', auth, (req, res) => {
-  const content = readJSON(CONTENT_FILE, {});
+app.post('/api/admin/adventures', auth, async (req, res) => {
+  const content = await readContentData();
   const adventures = content.adventures || [];
   const newAdv = { ...req.body, id: req.body.id || uuidv4() };
   adventures.push(newAdv);
   content.adventures = adventures;
-  writeJSON(CONTENT_FILE, content);
+  await writeContentData(content);
   res.status(201).json(newAdv);
 });
 
-app.delete('/api/admin/adventures/:id', auth, (req, res) => {
-  const content = readJSON(CONTENT_FILE, {});
+app.delete('/api/admin/adventures/:id', auth, async (req, res) => {
+  const content = await readContentData();
   content.adventures = (content.adventures || []).filter(a => a.id !== req.params.id);
-  writeJSON(CONTENT_FILE, content);
+  await writeContentData(content);
   res.json({ success: true });
 });
 
 // ========== GALLERY CRUD ==========
-app.post('/api/admin/gallery', auth, (req, res) => {
-  const content = readJSON(CONTENT_FILE, {});
+app.post('/api/admin/gallery', auth, async (req, res) => {
+  const content = await readContentData();
   const gallery = content.gallery || [];
   const newItem = { ...req.body, id: req.body.id || uuidv4() };
   gallery.push(newItem);
   content.gallery = gallery;
-  writeJSON(CONTENT_FILE, content);
+  await writeContentData(content);
   res.status(201).json(newItem);
 });
 
-app.delete('/api/admin/gallery/:id', auth, (req, res) => {
-  const content = readJSON(CONTENT_FILE, {});
+app.delete('/api/admin/gallery/:id', auth, async (req, res) => {
+  const content = await readContentData();
   content.gallery = (content.gallery || []).filter(g => g.id !== req.params.id);
-  writeJSON(CONTENT_FILE, content);
+  await writeContentData(content);
   res.json({ success: true });
 });
 
