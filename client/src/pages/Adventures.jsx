@@ -21,6 +21,13 @@ const parkLinks = {
   'Lamu':               'https://www.lamuarchipelago.org/',
   'Ol Pejeta':          'https://www.olpejetaconservancy.org/',
   'Mwaluganje':         'https://www.kws.go.ke/',
+  // Museums & Forests
+  'Fort Jesus':         'https://www.museums.or.ke/fort-jesus/',
+  'Gede Ruins':         'https://www.museums.or.ke/gede-ruins/',
+  'Arabuko-Sokoke':     'https://www.kws.go.ke/parks/arabuko-sokoke-forest-reserve',
+  'Kakamega Forest':    'https://www.kws.go.ke/parks/kakamega-forest-national-reserve',
+  'Karura Forest':      'https://www.friendsofkarura.org/',
+  'Nairobi Museum':     'https://www.museums.or.ke/nairobi-national-museum/',
 }
 
 const adventures = [
@@ -263,10 +270,107 @@ const adventures = [
     citizenBase: 90,
     includes: ['All park fees', 'Mixed accommodation', 'All meals', 'Internal flights/transfers', 'Expert team'],
     category: 'Premium Safari'
+  },
+  // ── Forests & Museums ─────────────────────────────
+  {
+    id: 'a16',
+    title: 'Fort Jesus Museum — Mombasa',
+    emoji: '🏛️',
+    park: 'Fort Jesus',
+    image: '/assets/fort jesus museams.jpg',
+    minDays: 1,
+    maxDays: 1,
+    description: "Step inside a UNESCO World Heritage Site — a 16th-century Portuguese fortress that guarded East Africa's most strategic harbour. Expert historian guides walk you through Swahili, Arab, Portuguese and British chapters written in stone.",
+    highlights: ['UNESCO World Heritage', 'Portuguese fortress 1593', 'Swahili artefacts', 'Old Town walk', 'Ocean views'],
+    foreignerBase: 55,
+    residentBase: 30,
+    citizenBase: 12,
+    includes: ['Historian guide', 'Fort entry', 'Old Town walk', 'Spice market visit', 'Transport'],
+    category: 'Museums & Heritage'
+  },
+  {
+    id: 'a17',
+    title: 'Gede Ruins — Lost City of Watamu',
+    emoji: '🏚️',
+    park: 'Gede Ruins',
+    image: '/assets/historic site, gedi ruins.jpg',
+    minDays: 1,
+    maxDays: 2,
+    description: "Discover the hauntingly beautiful ruins of Gede — a prosperous 15th-century Swahili trading town abandoned mysteriously and slowly consumed by the coastal forest. Palace, mosque, houses and tombs wrapped in ancient fig trees.",
+    highlights: ['15th-century ruins', 'Swahili palace & mosque', 'Ancient fig trees', 'Museum on site', 'Combine with snorkelling'],
+    foreignerBase: 60,
+    residentBase: 35,
+    citizenBase: 15,
+    includes: ['Licensed archaeo-guide', 'Entry fee', 'Site museum', 'Combine with Arabuko Forest or marine snorkel'],
+    category: 'Museums & Heritage'
+  },
+  {
+    id: 'a18',
+    title: 'Arabuko-Sokoke Forest Walk',
+    emoji: '🌿',
+    park: 'Arabuko-Sokoke',
+    image: '/assets/nairobi nature walk.jpg',
+    minDays: 1,
+    maxDays: 2,
+    description: "East Africa's largest coastal forest — a globally critical bird habitat. Walk misty forest trails with an expert birding guide to spot three species found nowhere else on Earth: the Sokoke scops owl, Sokoke pipit, and Clarke's weaver.",
+    highlights: ['3 endemic bird species', 'Golden-rumped elephant shrew', 'Sokoke scops owl', 'Mida Creek estuary', 'Butterfly walk'],
+    foreignerBase: 75,
+    residentBase: 40,
+    citizenBase: 18,
+    includes: ['Expert birding guide', 'Forest entry', 'Binoculars hire', 'Mida Creek boat trip (optional)'],
+    category: 'Forests & Nature'
+  },
+  {
+    id: 'a19',
+    title: 'Kakamega Rainforest Experience',
+    emoji: '🌲',
+    park: 'Kakamega Forest',
+    image: '/assets/shimba hills waterfals.jpg',
+    minDays: 1,
+    maxDays: 3,
+    description: "Kenya's only tropical rainforest — a Congo Basin relic full of red-tailed monkeys, colobus, 330+ bird species, rare butterflies and giant moss-draped trees. Guided canopy walks and night walks reveal a world few travellers ever see.",
+    highlights: ['Tropical rainforest', 'Red-tailed monkeys', '330+ birds', 'Night walk', 'Canopy view tower'],
+    foreignerBase: 95,
+    residentBase: 50,
+    citizenBase: 22,
+    includes: ['Birding/nature guide', 'Forest entry', 'Canopy walk', 'Night walk (optional)', 'Lodge or bandas on site'],
+    category: 'Forests & Nature'
+  },
+  {
+    id: 'a20',
+    title: 'Karura Forest — Nairobi City Walk',
+    emoji: '🌳',
+    park: 'Karura Forest',
+    image: '/assets/nairobi nature walk.jpg',
+    minDays: 1,
+    maxDays: 1,
+    description: "One of the world's largest urban forests, right inside Nairobi. Walk or cycle through bamboo groves and riverine forest, discover hidden waterfalls and colonial-era caves, spot colobus monkeys and over 200 bird species — a perfect half-day escape.",
+    highlights: ['Colobus monkeys', 'Hidden waterfalls', 'Bamboo groves', 'Cycling trails', 'Colonial caves'],
+    foreignerBase: 35,
+    residentBase: 20,
+    citizenBase: 10,
+    includes: ['Gate entry', 'Nature guide', 'Bicycle hire (optional)', 'Waterfall hike'],
+    category: 'Forests & Nature'
+  },
+  {
+    id: 'a21',
+    title: 'Nairobi National Museum & Snake Park',
+    emoji: '🦴',
+    park: 'Nairobi Museum',
+    image: '/assets/mombasa old town.jpg',
+    minDays: 1,
+    maxDays: 1,
+    description: "Kenya's premier museum tells the full story — from early human fossils found in the Great Rift Valley to contemporary East African art, diverse cultures, natural history and the famous 'Turkana Boy' skull. The adjacent Snake Park and botanical gardens complete a full day.",
+    highlights: ['Human evolution fossils', 'Turkana Boy skull', 'Kenyan cultures exhibit', 'Snake Park', 'Botanical garden'],
+    foreignerBase: 45,
+    residentBase: 25,
+    citizenBase: 10,
+    includes: ['Museum entry', 'Expert guide', 'Snake Park', 'Botanical garden walk'],
+    category: 'Museums & Heritage'
   }
 ]
 
-const categories = ['All', 'Wildlife', 'Marine', 'Culture', 'Beach', 'Adventure', 'Premium Safari']
+const categories = ['All', 'Wildlife', 'Marine', 'Culture', 'Beach', 'Adventure', 'Forests & Nature', 'Museums & Heritage', 'Premium Safari']
 
 function formatUSD(n) {
   return `$${n.toLocaleString()}`

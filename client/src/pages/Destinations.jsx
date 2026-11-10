@@ -18,6 +18,13 @@ const officialLinks = {
   lamu:      { url: 'https://whc.unesco.org/en/list/1055/', label: 'UNESCO — Lamu Old Town' },
   watamu:    { url: 'https://www.kws.go.ke/parks/watamu-marine-national-park', label: 'KWS — Watamu' },
   malindi:   { url: 'https://www.kws.go.ke/parks/malindi-marine-national-park', label: 'KWS — Malindi Marine' },
+  // Forests & Museums
+  fortjesus: { url: 'https://www.museums.or.ke/fort-jesus/', label: 'National Museums — Fort Jesus' },
+  gedruins:  { url: 'https://www.museums.or.ke/gede-ruins/', label: 'National Museums — Gede Ruins' },
+  arabuko:   { url: 'https://www.kws.go.ke/parks/arabuko-sokoke-forest-reserve', label: 'KWS — Arabuko-Sokoke Forest' },
+  kakamega:  { url: 'https://www.kws.go.ke/parks/kakamega-forest-national-reserve', label: 'KWS — Kakamega Forest' },
+  karura:    { url: 'https://www.friendsofkarura.org/', label: 'Friends of Karura Forest' },
+  nairobinm: { url: 'https://www.museums.or.ke/nairobi-national-museum/', label: 'National Museums of Kenya' },
 }
 
 // Better images using the uploaded local pics
@@ -34,8 +41,15 @@ const destinationImages = {
   samburu:   '/assets/samburu ,crystal pool.webp',
   hellsgate: '/assets/hells gate,view.webp',
   lamu:      '/assets/lamu island.jpg',
-  watamu:    '/assets/malindi marine.jpg',
+  watamu:    '/assets/malindi marine 2.jpg',
   malindi:   '/assets/malindi beach.jpg',
+  // Forests & Museums
+  fortjesus: '/assets/fort jesus museams.jpg',
+  gedruins:  '/assets/historic site, gedi ruins.jpg',
+  arabuko:   '/assets/nairobi nature walk.jpg',
+  kakamega:  '/assets/shimba hills waterfals.jpg',
+  karura:    '/assets/nairobi nature walk.jpg',
+  nairobinm: '/assets/mombasa old town.jpg',
 }
 
 export default function Destinations() {

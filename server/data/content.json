@@ -131,6 +131,60 @@
       "image": "/assets/malindi beach.jpg",
       "officialLink": "https://www.kws.go.ke/parks/malindi-marine-national-park",
       "highlights": ["Vasco da Gama pillar", "Gede Ruins", "Marine snorkelling", "Swahili culture", "Wide beaches"]
+    },
+    {
+      "id": "fortjesus",
+      "title": "Fort Jesus Museum — Mombasa",
+      "short": "UNESCO World Heritage fortress guarding 400 years of East African history.",
+      "description": "Built by the Portuguese in 1593, Fort Jesus is one of the most outstanding and well-preserved examples of 16th-century Portuguese military architecture. Now a UNESCO World Heritage Site and national museum, it houses artefacts from the Swahili, Arab, Portuguese, and British eras. The old town surrounding it is a living museum of Swahili coastal culture.",
+      "image": "/assets/fort jesus museams.jpg",
+      "officialLink": "https://www.museums.or.ke/fort-jesus/",
+      "highlights": ["UNESCO World Heritage", "Portuguese architecture", "Swahili artefacts", "Old Town walks", "Ocean views"]
+    },
+    {
+      "id": "gedruins",
+      "title": "Gede Ruins — Watamu",
+      "short": "A lost 15th-century Swahili city swallowed by the coastal forest.",
+      "description": "Hidden within the Arabuko-Sokoke Forest near Watamu, the ruins of Gede are one of Kenya's most haunting and atmospheric heritage sites. This prosperous Swahili trading town, abandoned mysteriously in the 17th century, features mosques, palaces, houses and tombs reclaimed by ancient trees. A truly magical step back in time.",
+      "image": "/assets/historic site, gedi ruins.jpg",
+      "officialLink": "https://www.museums.or.ke/gede-ruins/",
+      "highlights": ["15th-century ruins", "Palace & mosque", "Ancient trees", "Swahili heritage", "Bird-rich forest"]
+    },
+    {
+      "id": "arabuko",
+      "title": "Arabuko-Sokoke Forest",
+      "short": "East Africa's largest coastal forest — rare birds, golden-rumped elephant shrews.",
+      "description": "Arabuko-Sokoke is the largest surviving coastal forest in East Africa and a globally Important Bird & Biodiversity Area. It shelters over 230 bird species including three endemic species found nowhere else on Earth, plus the golden-rumped elephant shrew, Aders' duiker, and the rare Sokoke scops owl. The forest borders the Gede Ruins and Mida Creek — a perfect full-day nature combination.",
+      "image": "/assets/nairobi nature walk.jpg",
+      "officialLink": "https://www.kws.go.ke/parks/arabuko-sokoke-forest-reserve",
+      "highlights": ["Rare endemic birds", "Golden-rumped elephant shrew", "Sokoke scops owl", "Mida Creek", "Adjacent to Gede Ruins"]
+    },
+    {
+      "id": "kakamega",
+      "title": "Kakamega Rainforest",
+      "short": "Kenya's only rainforest — a Congo Basin relic full of primates and rare birds.",
+      "description": "Kakamega Forest is Kenya's only tropical rainforest — a magnificent relic of the ancient Guineo-Congolian forest that once stretched from West Africa. It is home to primates including red-tailed monkeys, colobus, and baboons, over 330 bird species, rare butterflies, and giant trees draped in moss and ferns. Guided walks and canopy viewing are unforgettable.",
+      "image": "/assets/shimba hills waterfals.jpg",
+      "officialLink": "https://www.kws.go.ke/parks/kakamega-forest-national-reserve",
+      "highlights": ["Tropical rainforest", "Red-tailed monkeys", "330+ bird species", "Rare butterflies", "Canopy walks"]
+    },
+    {
+      "id": "karura",
+      "title": "Karura Forest — Nairobi",
+      "short": "An urban forest paradise — waterfalls, caves and cycling trails inside Nairobi.",
+      "description": "Karura Forest is a remarkable 1,041-hectare gazetted forest right inside Nairobi city — one of the world's largest urban forests. Home to colobus monkeys, bushbuck, and over 200 bird species. Walk or cycle through bamboo groves, discover hidden waterfalls, and explore old colonial-era caves, all minutes from the city centre.",
+      "image": "/assets/nairobi nature walk.jpg",
+      "officialLink": "https://www.friendsofkarura.org/",
+      "highlights": ["Urban forest", "Colobus monkeys", "Hidden waterfalls", "Cycling trails", "Colonial caves"]
+    },
+    {
+      "id": "nairobinm",
+      "title": "Nairobi National Museum",
+      "short": "Kenya's premier museum — culture, history, art and natural history in one place.",
+      "description": "The Nairobi National Museum is Kenya's most comprehensive museum, housing exhibits on natural history, Kenya's diverse cultures and peoples, prehistoric fossils from the Great Rift Valley, contemporary East African art, and the remarkable story of human evolution. The adjacent Snake Park and botanical gardens add to a full day of discovery.",
+      "image": "/assets/mombasa old town.jpg",
+      "officialLink": "https://www.museums.or.ke/nairobi-national-museum/",
+      "highlights": ["Natural history", "Human evolution fossils", "Kenyan cultures", "Contemporary art", "Snake Park"]
     }
   ],
   "adventures": [

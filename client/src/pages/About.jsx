@@ -7,7 +7,7 @@ const founders = [
     role: 'Co-Founder & CEO',
     from: 'Kombani, Kwale',
     bio: "Salim grew up in Kombani surrounded by the coastal forests and wildlife of Kwale. His passion for Kenya's natural beauty and deep knowledge of local culture drives every safari Utamaduni creates. He leads the company's vision to make Kenya accessible to all — from international guests to local families.",
-    image: '/assets/salim mwamkoba.jpeg',
+    image: '/assets/salim-mwamkoba.jpeg',
     emoji: '🌿'
   },
   {
@@ -15,7 +15,7 @@ const founders = [
     role: 'Co-Founder & Operations Director',
     from: 'Kombani, Kwale',
     bio: "Abdallah's roots in Kwale County gave him an unparalleled understanding of Kenya's diverse landscapes. From organizing seamless logistics to building relationships with local communities, he ensures every trip runs smoothly and authentically. His warm hospitality is legendary among guests.",
-    image: '/assets/abdallah nyale.jpeg',
+    image: '/assets/abdallah-nyale.jpeg',
     emoji: '⛵'
   }
 ]

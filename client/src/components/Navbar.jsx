@@ -13,7 +13,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Close menu on route change
   useEffect(() => { setOpen(false) }, [location])
 
   const isTransparent = isHome && !scrolled
@@ -31,17 +30,14 @@ export default function Navbar() {
         ? 'bg-transparent border-transparent'
         : 'bg-white/95 backdrop-blur-md border-b border-green-100 shadow-sm'
     }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16 md:h-18">
-        {/* Logo */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+        {/* Logo — hippo icon */}
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="relative">
-            <img
-              src="/assets/zebras-hero.jpg"
-              alt="Utamaduni Safaris"
-              className="w-9 h-9 rounded-full object-cover border-2 border-[#d4a017] shadow group-hover:scale-110 transition duration-300"
-            />
-            <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
-          </div>
+          <img
+            src="/assets/hippo.jpg"
+            alt="Utamaduni Safaris"
+            className="w-9 h-9 rounded-full object-cover border-2 border-[#d4a017] shadow group-hover:scale-110 transition duration-300"
+          />
           <div className="leading-none">
             <span className={`font-display text-lg font-semibold block transition-colors duration-500 ${isTransparent ? 'text-white' : 'text-green-900'}`}>
               Utamaduni Safaris
@@ -89,11 +85,11 @@ export default function Navbar() {
       <div className={`md:hidden overflow-hidden transition-all duration-300 ${open ? 'max-h-96' : 'max-h-0'}`}>
         <div className="bg-white border-t border-green-100 px-4 py-5 space-y-1 shadow-lg">
           {[
-            { to: '/', label: 'Home', end: true },
-            { to: '/destinations', label: 'Destinations' },
-            { to: '/adventures', label: 'Adventures' },
-            { to: '/moments', label: 'Moments' },
-            { to: '/about', label: 'About' }
+            { to: '/', label: '🏠 Home', end: true },
+            { to: '/destinations', label: '📍 Destinations' },
+            { to: '/adventures', label: '🧭 Adventures' },
+            { to: '/moments', label: '📸 Moments' },
+            { to: '/about', label: '👥 About' },
           ].map(item => (
             <NavLink
               key={item.to}
@@ -106,10 +102,7 @@ export default function Navbar() {
               {item.label}
             </NavLink>
           ))}
-          <Link
-            to="/book"
-            className="block px-4 py-3 rounded-full bg-green-700 text-white text-center font-bold hover:bg-green-900 transition mt-2"
-          >
+          <Link to="/book" className="block px-4 py-3 rounded-full bg-green-700 text-white text-center font-bold hover:bg-green-900 transition mt-2">
             Book Now
           </Link>
           <a
