@@ -29,27 +29,27 @@ const officialLinks = {
 
 // Better images using the uploaded local pics
 const destinationImages = {
-  shimba:    '/assets/shimba hills waterfals.jpg',
-  diani:     '/assets/galu kinondo beach from above.jpg',
-  kisite:    '/assets/kisite mpunguti dolphine view.jpg',
-  kaya:      '/assets/historic site, gedi ruins.jpg',
-  mara:      '/assets/maasai mara ,ostrich.webp',
-  amboseli:  '/assets/amboseli,giant elephany herds.webp',
-  tsavo:     '/assets/tsavo 1.jpg',
-  mtknya:    '/assets/m elgon national park.jpg',
-  nakuru:    '/assets/ol pojeta conservercy , rhino.webp',
-  samburu:   '/assets/samburu ,crystal pool.webp',
-  hellsgate: '/assets/hells gate,view.webp',
-  lamu:      '/assets/lamu island.jpg',
-  watamu:    '/assets/malindi marine 2.jpg',
-  malindi:   '/assets/malindi beach.jpg',
+  shimba:    '/assets/images/shimba hills waterfals.jpg',
+  diani:     '/assets/images/galu kinondo beach from above.jpg',
+  kisite:    '/assets/images/kisite mpunguti dolphine view.jpg',
+  kaya:      '/assets/images/historic site, gedi ruins.jpg',
+  mara:      '/assets/images/maasai mara ,ostrich.webp',
+  amboseli:  '/assets/images/amboseli,giant elephany herds.webp',
+  tsavo:     '/assets/images/tsavo 1.jpg',
+  mtknya:    '/assets/images/m elgon national park.jpg',
+  nakuru:    '/assets/images/ol pojeta conservercy , rhino.webp',
+  samburu:   '/assets/images/samburu ,crystal pool.webp',
+  hellsgate: '/assets/images/hells gate,view.webp',
+  lamu:      '/assets/images/lamu island.jpg',
+  watamu:    '/assets/images/malindi marine 2.jpg',
+  malindi:   '/assets/images/malindi beach.jpg',
   // Forests & Museums
-  fortjesus: '/assets/fort jesus museams.jpg',
-  gedruins:  '/assets/historic site, gedi ruins.jpg',
-  arabuko:   '/assets/nairobi nature walk.jpg',
-  kakamega:  '/assets/shimba hills waterfals.jpg',
-  karura:    '/assets/nairobi nature walk.jpg',
-  nairobinm: '/assets/mombasa old town.jpg',
+  fortjesus: '/assets/images/fort jesus museams.jpg',
+  gedruins:  '/assets/images/historic site, gedi ruins.jpg',
+  arabuko:   '/assets/images/nairobi nature walk.jpg',
+  kakamega:  '/assets/images/shimba hills waterfals.jpg',
+  karura:    '/assets/images/nairobi nature walk.jpg',
+  nairobinm: '/assets/images/mombasa old town.jpg',
 }
 
 export default function Destinations() {
@@ -63,7 +63,7 @@ export default function Destinations() {
       {/* Hero Header — mobile-safe (no backgroundAttachment:fixed on mobile) */}
       <div className="relative text-white py-24 sm:py-28">
         <img
-          src="/assets/samburu ,crystal pool.webp"
+          src="/assets/images/samburu ,crystal pool.webp"
           alt="Destinations hero"
           className="absolute inset-0 w-full h-full object-cover object-center"
           loading="eager"
@@ -163,7 +163,7 @@ export default function Destinations() {
       {/* Bottom CTA */}
       <div className="mt-24 mx-4 sm:mx-8 rounded-3xl overflow-hidden relative py-20 px-8 text-center">
         <img
-          src="/assets/view.webp"
+          src="/assets/images/view.webp"
           alt=""
           className="absolute inset-0 w-full h-full object-cover object-center"
           loading="lazy"

@@ -32,6 +32,7 @@ const BOOKINGS_FILE = path.join(DATA_DIR, 'bookings.json');
 const CONTENT_FILE  = path.join(DATA_DIR, 'content.json');
 const ADMIN_FILE    = path.join(DATA_DIR, 'admin.json');
 const USERS_FILE    = path.join(DATA_DIR, 'users.json');
+const PUBLIC_IMAGE_PATH = /^\/assets\/(?!images\/)(.+\.(?:jpe?g|png|webp|gif|avif))(?:[?#].*)?$/i;
 
 // Helpers
 function readJSON(file, fallback = []) {
@@ -42,6 +43,18 @@ function readJSON(file, fallback = []) {
 }
 function writeJSON(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2));
+}
+function updateImagePaths(value) {
+  if (typeof value === 'string') {
+    return value.replace(PUBLIC_IMAGE_PATH, '/assets/images/$1');
+  }
+  if (Array.isArray(value)) return value.map(updateImagePaths);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, updateImagePaths(item)])
+    );
+  }
+  return value;
 }
 
 // ---- Nodemailer transporter ----
@@ -150,7 +163,7 @@ async function ensureDatabaseSchema() {
   await pool.query('CREATE INDEX IF NOT EXISTS bookings_created_at_idx ON bookings (created_at DESC)');
   await pool.query('CREATE INDEX IF NOT EXISTS bookings_email_idx ON bookings ((payload->>\'email\'))');
 
-  const content = readJSON(CONTENT_FILE, {});
+  const content = updateImagePaths(readJSON(CONTENT_FILE, {}));
   if (Object.keys(content).length > 0) {
     await pool.query(
       `INSERT INTO site_content (key, payload)
@@ -158,6 +171,19 @@ async function ensureDatabaseSchema() {
        ON CONFLICT (key) DO NOTHING`,
       [content]
     );
+  }
+
+  const { rows: contentRows } = await pool.query(
+    `SELECT payload FROM site_content WHERE key = 'main' LIMIT 1`
+  );
+  if (contentRows[0]) {
+    const updatedContent = updateImagePaths(contentRows[0].payload);
+    if (JSON.stringify(updatedContent) !== JSON.stringify(contentRows[0].payload)) {
+      await pool.query(
+        `UPDATE site_content SET payload = $1, updated_at = NOW() WHERE key = 'main'`,
+        [updatedContent]
+      );
+    }
   }
 
   for (const booking of readJSON(BOOKINGS_FILE, [])) {

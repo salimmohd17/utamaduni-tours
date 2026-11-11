@@ -4,23 +4,23 @@ import { Link } from 'react-router-dom'
 
 // Extra gallery items using the uploaded local images
 const extraGallery = [
-  { id: 'e1', caption: 'Amboseli scenery — golden hour on the savannah', image: '/assets/amboseli scenery.jpg' },
-  { id: 'e2', caption: 'Amboseli views — wide open plains', image: '/assets/amboseli views.jpg' },
-  { id: 'e3', caption: 'Diving in Mombasa Marine — underwater paradise', image: '/assets/Diving-Mombasa-Marine.jpg' },
-  { id: 'e4', caption: "Hell's Gate — warthog encounter", image: "/assets/hels,wathog.webp" },
-  { id: 'e5', caption: 'Lamu Island — timeless Swahili island life', image: '/assets/lamu.jpg' },
-  { id: 'e6', caption: 'Malindi Beach — the wide golden coast', image: '/assets/malindi beach.jpg' },
-  { id: 'e7', caption: 'Malindi Marine — coral reef wonders', image: '/assets/malindi marine 2.jpg' },
-  { id: 'e8', caption: 'Mombasa Old Town — history in every stone', image: '/assets/mombasa old town.jpg' },
-  { id: 'e9', caption: 'Nairobi National Park — bird life at sunset', image: "/assets/nairobi nationa park, bird.webp" },
-  { id: 'e10', caption: 'Nguuni Sanctuary — where wildlife roams free', image: '/assets/nguuni sanctuary.jpg' },
-  { id: 'e11', caption: 'Sand dunes — the hidden desert of Kenya coast', image: '/assets/sand dunes.jpg' },
-  { id: 'e12', caption: 'Shanzu Beach — peaceful northern coast', image: '/assets/shanzu beach.jpg' },
-  { id: 'e13', caption: 'Samburu Reserve — impala on the plains', image: '/assets/samburu,impala.webp' },
-  { id: 'e14', caption: "Hell's Gate — zebra in the gorge", image: "/assets/hells gate,zebra.webp" },
-  { id: 'e15', caption: 'Sibiloi National Park — the jade sea', image: '/assets/sibiloi view.jpg' },
-  { id: 'e16', caption: 'Tsavo East — red earth and big sky', image: '/assets/tsavo 2.jpg' },
-  { id: 'e17', caption: 'Nairobi nature walk — urban wild beauty', image: '/assets/nairobi nature walk.jpg' },
+  { id: 'e1', caption: 'Amboseli scenery — golden hour on the savannah', image: '/assets/images/amboseli scenery.jpg' },
+  { id: 'e2', caption: 'Amboseli views — wide open plains', image: '/assets/images/amboseli views.jpg' },
+  { id: 'e3', caption: 'Diving in Mombasa Marine — underwater paradise', image: '/assets/images/Diving-Mombasa-Marine.jpg' },
+  { id: 'e4', caption: "Hell's Gate — warthog encounter", image: "/assets/images/hels,wathog.webp" },
+  { id: 'e5', caption: 'Lamu Island — timeless Swahili island life', image: '/assets/images/lamu.jpg' },
+  { id: 'e6', caption: 'Malindi Beach — the wide golden coast', image: '/assets/images/malindi beach.jpg' },
+  { id: 'e7', caption: 'Malindi Marine — coral reef wonders', image: '/assets/images/malindi marine 2.jpg' },
+  { id: 'e8', caption: 'Mombasa Old Town — history in every stone', image: '/assets/images/mombasa old town.jpg' },
+  { id: 'e9', caption: 'Nairobi National Park — bird life at sunset', image: "/assets/images/nairobi nationa park, bird.webp" },
+  { id: 'e10', caption: 'Nguuni Sanctuary — where wildlife roams free', image: '/assets/images/nguuni sanctuary.jpg' },
+  { id: 'e11', caption: 'Sand dunes — the hidden desert of Kenya coast', image: '/assets/images/sand dunes.jpg' },
+  { id: 'e12', caption: 'Shanzu Beach — peaceful northern coast', image: '/assets/images/shanzu beach.jpg' },
+  { id: 'e13', caption: 'Samburu Reserve — impala on the plains', image: '/assets/images/samburu,impala.webp' },
+  { id: 'e14', caption: "Hell's Gate — zebra in the gorge", image: "/assets/images/hells gate,zebra.webp" },
+  { id: 'e15', caption: 'Sibiloi National Park — the jade sea', image: '/assets/images/sibiloi view.jpg' },
+  { id: 'e16', caption: 'Tsavo East — red earth and big sky', image: '/assets/images/tsavo 2.jpg' },
+  { id: 'e17', caption: 'Nairobi nature walk — urban wild beauty', image: '/assets/images/nairobi nature walk.jpg' },
 ]
 
 export default function Moments() {
@@ -38,7 +38,7 @@ export default function Moments() {
       {/* Hero Header */}
       <div className="relative text-white py-28">
         <img
-          src="/assets/nairobi nationa park, bird.webp"
+          src="/assets/images/nairobi nationa park, bird.webp"
           alt=""
           className="absolute inset-0 w-full h-full object-cover object-center"
           loading="eager"
@@ -134,7 +134,7 @@ export default function Moments() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 mt-20">
         <div
           className="rounded-3xl overflow-hidden relative py-16 px-8 text-center"
-          style={{ backgroundImage: "url('/assets/view.webp')", backgroundSize: 'cover', backgroundPosition: 'center' }}
+          style={{ backgroundImage: "url('/assets/images/view.webp')", backgroundSize: 'cover', backgroundPosition: 'center' }}
         >
           <div className="absolute inset-0 bg-green-900/85" />
           <div className="relative">

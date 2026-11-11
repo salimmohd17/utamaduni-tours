@@ -7,7 +7,7 @@ const founders = [
     role: 'Co-Founder & CEO',
     from: 'Kombani, Kwale',
     bio: "Salim grew up in Kombani surrounded by the coastal forests and wildlife of Kwale. His passion for Kenya's natural beauty and deep knowledge of local culture drives every safari Utamaduni creates. He leads the company's vision to make Kenya accessible to all — from international guests to local families.",
-    image: '/assets/salim-mwamkoba.jpeg',
+    image: '/assets/images/salim-mwamkoba.jpeg',
     emoji: '🌿'
   },
   {
@@ -15,7 +15,7 @@ const founders = [
     role: 'Co-Founder & Operations Director',
     from: 'Kombani, Kwale',
     bio: "Abdallah's roots in Kwale County gave him an unparalleled understanding of Kenya's diverse landscapes. From organizing seamless logistics to building relationships with local communities, he ensures every trip runs smoothly and authentically. His warm hospitality is legendary among guests.",
-    image: '/assets/abdallah-nyale.jpeg',
+    image: '/assets/images/abdallah-nyale.jpeg',
     emoji: '⛵'
   }
 ]
@@ -44,7 +44,7 @@ export default function About() {
       {/* Hero Header */}
       <div className="relative text-white py-28">
         <img
-          src="/assets/nairobi nature walk.jpg"
+          src="/assets/images/nairobi nature walk.jpg"
           alt=""
           className="absolute inset-0 w-full h-full object-cover object-center"
           loading="eager"
@@ -79,10 +79,10 @@ export default function About() {
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <img src="/assets/shimba hills waterfals.jpg" alt="Shimba Hills" className="rounded-2xl object-cover h-56 w-full shadow-xl hover:scale-105 transition duration-500" />
-              <img src="/assets/kisite mpunguti dolphine view.jpg" alt="Marine" className="rounded-2xl object-cover h-56 w-full shadow-xl hover:scale-105 transition duration-500 mt-8" />
-              <img src="/assets/maasai mara ,ostrich.webp" alt="Maasai Mara" className="rounded-2xl object-cover h-56 w-full shadow-xl hover:scale-105 transition duration-500 -mt-4" />
-              <img src="/assets/lamu island.jpg" alt="Lamu" className="rounded-2xl object-cover h-56 w-full shadow-xl hover:scale-105 transition duration-500 mt-4" />
+              <img src="/assets/images/shimba hills waterfals.jpg" alt="Shimba Hills" className="rounded-2xl object-cover h-56 w-full shadow-xl hover:scale-105 transition duration-500" />
+              <img src="/assets/images/kisite mpunguti dolphine view.jpg" alt="Marine" className="rounded-2xl object-cover h-56 w-full shadow-xl hover:scale-105 transition duration-500 mt-8" />
+              <img src="/assets/images/maasai mara ,ostrich.webp" alt="Maasai Mara" className="rounded-2xl object-cover h-56 w-full shadow-xl hover:scale-105 transition duration-500 -mt-4" />
+              <img src="/assets/images/lamu island.jpg" alt="Lamu" className="rounded-2xl object-cover h-56 w-full shadow-xl hover:scale-105 transition duration-500 mt-4" />
             </div>
           </div>
         </div>
@@ -177,11 +177,11 @@ export default function About() {
       <section className="py-0 overflow-hidden">
         <div className="flex h-64 md:h-80">
           {[
-            '/assets/samburu,impala.webp',
-            '/assets/hells gate,zebra.webp',
-            '/assets/amboseli views.jpg',
-            '/assets/mombasa old town.jpg',
-            '/assets/shanzu beach.jpg',
+            '/assets/images/samburu,impala.webp',
+            '/assets/images/hells gate,zebra.webp',
+            '/assets/images/amboseli views.jpg',
+            '/assets/images/mombasa old town.jpg',
+            '/assets/images/shanzu beach.jpg',
           ].map((img, i) => (
             <div
               key={i}
@@ -194,7 +194,7 @@ export default function About() {
 
       {/* CTA */}
       <section className="py-28 relative overflow-hidden">
-        <img src="/assets/view.webp" alt="" className="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" />
+        <img src="/assets/images/view.webp" alt="" className="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" />
         <div className="absolute inset-0 bg-gradient-to-t from-green-900 via-green-900/85 to-green-900/70" />
         <div className="relative max-w-3xl mx-auto px-4 text-center">
           <span className="text-[#d4a017] text-sm font-medium tracking-widest uppercase">Join Us</span>

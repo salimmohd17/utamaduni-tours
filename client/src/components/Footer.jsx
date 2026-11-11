@@ -20,12 +20,12 @@ export default function Footer() {
       {/* Top image strip */}
       <div className="flex h-32 overflow-hidden">
         {[
-          '/assets/maasai mara ,ostrich.webp',
-          '/assets/kisite mpunguti dolphine view.jpg',
-          '/assets/lamu island.jpg',
-          '/assets/amboseli,giant elephany herds.webp',
-          '/assets/hells gate,view.webp',
-          '/assets/tiwi beach.jpg',
+          '/assets/images/maasai mara ,ostrich.webp',
+          '/assets/images/kisite mpunguti dolphine view.jpg',
+          '/assets/images/lamu island.jpg',
+          '/assets/images/amboseli,giant elephany herds.webp',
+          '/assets/images/hells gate,view.webp',
+          '/assets/images/tiwi beach.jpg',
         ].map((img, i) => (
           <div
             key={i}
@@ -40,7 +40,7 @@ export default function Footer() {
         <div className="lg:col-span-1">
           <div className="flex items-center gap-3 mb-5">
             <img
-              src="/assets/zebras-hero.jpg"
+              src="/assets/images/zebras-hero.jpg"
               alt="Utamaduni Safaris"
               className="w-10 h-10 rounded-full object-cover border-2 border-[#d4a017]"
             />

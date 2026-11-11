@@ -36,7 +36,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5 group">
           <img
-            src="/assets/hippo.jpg"
+            src="/assets/images/hippo.jpg"
             alt="Utamaduni Safaris"
             className="w-9 h-9 rounded-full object-cover border-2 border-[#d4a017] shadow group-hover:scale-110 transition duration-300"
           />

@@ -11,7 +11,7 @@
       "title": "Shimba Hills National Reserve",
       "short": "Coastal rainforest, elephants & Kenya's only sable antelope.",
       "description": "Just inland from the coast, Shimba Hills protects one of East Africa's last large coastal rainforests. Home to elephants, the rare sable antelope, and the beautiful Sheldrick Falls. A hidden gem only an hour from Diani Beach.",
-      "image": "/assets/shimba hills waterfals.jpg",
+      "image": "/assets/images/shimba hills waterfals.jpg",
       "officialLink": "https://www.kws.go.ke/parks/shimba-hills-national-reserve",
       "highlights": ["Sable antelope", "Elephants", "Sheldrick Falls", "Birdwatching", "Forest walks"]
     },
@@ -20,7 +20,7 @@
       "title": "Diani & Tiwi Beaches",
       "short": "Powder-white sands and turquoise Indian Ocean waters.",
       "description": "Diani Beach is repeatedly voted among Africa's best beaches. Long stretches of soft white sand, calm lagoons for snorkelling, kitesurfing, colobus monkey forests, and relaxed Swahili coastal life make it truly special.",
-      "image": "/assets/galu kinondo beach from above.jpg",
+      "image": "/assets/images/galu kinondo beach from above.jpg",
       "officialLink": "https://www.magicalkenya.com/destinations/coast/",
       "highlights": ["White sand", "Water sports", "Sunset dhows", "Colobus monkeys", "Beach restaurants"]
     },
@@ -29,7 +29,7 @@
       "title": "Kisite-Mpunguti Marine Park",
       "short": "Dolphins, coral reefs and dhow sailing to Wasini Island.",
       "description": "Kenya's premier marine park. Snorkel vibrant reefs, swim with wild spinner dolphins, sail traditional dhows and enjoy fresh crab and coconut seafood on car-free Wasini Island. An unforgettable ocean experience.",
-      "image": "/assets/kisite mpunguti dolphine view.jpg",
+      "image": "/assets/images/kisite mpunguti dolphine view.jpg",
       "officialLink": "https://www.kws.go.ke/parks/kisite-mpunguti-marine-national-park",
       "highlights": ["Dolphins", "Snorkelling", "Wasini Island", "Coral reefs", "Seafood feast"]
     },
@@ -38,7 +38,7 @@
       "title": "Kaya Forests & Cultural Heritage",
       "short": "Sacred Mijikenda forests and living coastal heritage.",
       "description": "Guided walks into sacred kaya forests with community elders. Learn about traditional beliefs, healing plants, conservation practices, local dances and Swahili coastal cuisine. The Kaya forests are UNESCO World Heritage Sites.",
-      "image": "/assets/historic site, gedi ruins.jpg",
+      "image": "/assets/images/historic site, gedi ruins.jpg",
       "officialLink": "https://whc.unesco.org/en/list/1231/",
       "highlights": ["Sacred forests", "Cultural guides", "Traditional dance", "UNESCO heritage", "Local markets"]
     },
@@ -47,7 +47,7 @@
       "title": "Maasai Mara National Reserve",
       "short": "The Great Migration and Africa's most iconic safari destination.",
       "description": "The Maasai Mara is Kenya's most celebrated reserve, home to the annual wildebeest migration, the Big Five, and spectacular open savannah landscapes. The river crossings between July and October are the greatest wildlife spectacle on Earth.",
-      "image": "/assets/maasai mara ,ostrich.webp",
+      "image": "/assets/images/maasai mara ,ostrich.webp",
       "officialLink": "https://www.maasaimara.com/",
       "highlights": ["Great Migration", "Big Five", "Hot air balloon", "Maasai culture", "River crossings"]
     },
@@ -56,7 +56,7 @@
       "title": "Amboseli National Park",
       "short": "Elephants against the backdrop of mighty Mount Kilimanjaro.",
       "description": "Amboseli offers some of Africa's most iconic views — massive elephant herds roaming freely beneath the snow-capped peak of Mount Kilimanjaro. A UNESCO Biosphere Reserve and a photographer's paradise.",
-      "image": "/assets/amboseli,giant elephany herds.webp",
+      "image": "/assets/images/amboseli,giant elephany herds.webp",
       "officialLink": "https://www.kws.go.ke/parks/amboseli-national-park",
       "highlights": ["Elephant herds", "Mount Kilimanjaro views", "Big Five", "Photography", "Swamp ecosystems"]
     },
@@ -65,7 +65,7 @@
       "title": "Tsavo East & West",
       "short": "Kenya's largest park — red elephants, lava flows and vast wilderness.",
       "description": "Tsavo is Kenya's largest national park system. Famous for its distinctive red-dusted elephants, the crystal-clear Mzima Springs, dramatic Lugard Falls, and incredible biodiversity stretching across 21,000 square kilometres of wilderness.",
-      "image": "/assets/tsavo 1.jpg",
+      "image": "/assets/images/tsavo 1.jpg",
       "officialLink": "https://www.kws.go.ke/parks/tsavo-east-national-park",
       "highlights": ["Red elephants", "Mzima Springs", "Lugard Falls", "Big Five", "Vast wilderness"]
     },
@@ -74,7 +74,7 @@
       "title": "Mount Kenya & Surroundings",
       "short": "Africa's second-highest peak — trekking, glaciers and unique alpine wildlife.",
       "description": "Mount Kenya offers dramatic trekking routes through bamboo forests, moorlands and glaciated peaks. The surrounding national park is home to buffalo, leopard, and the rare mountain bongo antelope in breathtaking highland scenery.",
-      "image": "/assets/m elgon national park.jpg",
+      "image": "/assets/images/m elgon national park.jpg",
       "officialLink": "https://www.kws.go.ke/parks/mount-kenya-national-park-and-reserve",
       "highlights": ["Trekking routes", "Glaciers", "Mountain bongo", "Alpine scenery", "Buffalo & leopard"]
     },
@@ -83,7 +83,7 @@
       "title": "Lake Nakuru National Park",
       "short": "Flamingos, rhinos and a lake that turns pink.",
       "description": "Lake Nakuru is famous for its stunning flamingo flocks that colour the water pink. The park is also one of Kenya's most reliable places to spot both black and white rhinos, Rothschild giraffe and tree-climbing lions.",
-      "image": "/assets/ol pojeta conservercy , rhino.webp",
+      "image": "/assets/images/ol pojeta conservercy , rhino.webp",
       "officialLink": "https://www.kws.go.ke/parks/lake-nakuru-national-park",
       "highlights": ["Flamingos", "Black & white rhinos", "Rothschild giraffe", "Tree-climbing lions", "Scenic lake"]
     },
@@ -92,7 +92,7 @@
       "title": "Samburu National Reserve",
       "short": "Rare northern species in a dramatic semi-arid landscape.",
       "description": "Samburu is home to the 'Samburu Special Five' — Grevy's zebra, reticulated giraffe, Somali ostrich, Beisa oryx and gerenuk. Set in a stunning semi-arid landscape along the Ewaso Ng'iro River, it's a magical destination.",
-      "image": "/assets/samburu ,crystal pool.webp",
+      "image": "/assets/images/samburu ,crystal pool.webp",
       "officialLink": "https://www.kws.go.ke/parks/samburu-national-reserve",
       "highlights": ["Grevy's zebra", "Reticulated giraffe", "Gerenuk", "River wildlife", "Samburu culture"]
     },
@@ -101,7 +101,7 @@
       "title": "Hell's Gate National Park",
       "short": "Cycle through gorges, geysers and dramatic cliffs — no car needed.",
       "description": "Hell's Gate is Kenya's most unique park — you can cycle or hike through it without a vehicle. Dramatic volcanic cliffs, Ol Njorowa Gorge, Fischer's Tower, and natural geothermal geysers make it unforgettable for adventurers.",
-      "image": "/assets/hells gate,view.webp",
+      "image": "/assets/images/hells gate,view.webp",
       "officialLink": "https://www.kws.go.ke/parks/hells-gate-national-park",
       "highlights": ["Cycling safari", "Gorge hiking", "Geothermal geysers", "Rock climbing", "Fischer's Tower"]
     },
@@ -110,7 +110,7 @@
       "title": "Lamu Island",
       "short": "UNESCO-listed Swahili city, dhow sailing and pristine beaches.",
       "description": "Lamu Old Town is a UNESCO World Heritage Site — Kenya's oldest living Swahili settlement. No cars, only donkeys and dhows. Stunning beaches, fresh seafood and a timeless coastal atmosphere that feels centuries removed from the modern world.",
-      "image": "/assets/lamu island.jpg",
+      "image": "/assets/images/lamu island.jpg",
       "officialLink": "https://whc.unesco.org/en/list/1055/",
       "highlights": ["Swahili architecture", "Dhow sailing", "Pristine beaches", "UNESCO heritage", "No cars"]
     },
@@ -119,7 +119,7 @@
       "title": "Watamu Marine Park",
       "short": "Sea turtles, world-class diving and pristine coral reefs.",
       "description": "Watamu is a marine biodiversity hotspot. The marine national park protects nesting sea turtles, vibrant coral gardens, tropical fish, and offers some of East Africa's best snorkelling and diving. The Blue Cave is a highlight.",
-      "image": "/assets/malindi marine 2.jpg",
+      "image": "/assets/images/malindi marine 2.jpg",
       "officialLink": "https://www.kws.go.ke/parks/watamu-marine-national-park",
       "highlights": ["Sea turtles", "Coral diving", "Snorkelling", "Blue Cave", "Tropical fish"]
     },
@@ -128,7 +128,7 @@
       "title": "Malindi & Gedi Ruins",
       "short": "Historic Swahili coast town with beaches, heritage and marine life.",
       "description": "Malindi blends Portuguese colonial history with Swahili coastal culture. Visit the Vasco da Gama pillar, snorkel the marine park, then explore the mysterious 15th-century ruins of Gede — a lost city hidden in the coastal forest.",
-      "image": "/assets/malindi beach.jpg",
+      "image": "/assets/images/malindi beach.jpg",
       "officialLink": "https://www.kws.go.ke/parks/malindi-marine-national-park",
       "highlights": ["Vasco da Gama pillar", "Gede Ruins", "Marine snorkelling", "Swahili culture", "Wide beaches"]
     },
@@ -137,7 +137,7 @@
       "title": "Fort Jesus Museum — Mombasa",
       "short": "UNESCO World Heritage fortress guarding 400 years of East African history.",
       "description": "Built by the Portuguese in 1593, Fort Jesus is one of the most outstanding and well-preserved examples of 16th-century Portuguese military architecture. Now a UNESCO World Heritage Site and national museum, it houses artefacts from the Swahili, Arab, Portuguese, and British eras. The old town surrounding it is a living museum of Swahili coastal culture.",
-      "image": "/assets/fort jesus museams.jpg",
+      "image": "/assets/images/fort jesus museams.jpg",
       "officialLink": "https://www.museums.or.ke/fort-jesus/",
       "highlights": ["UNESCO World Heritage", "Portuguese architecture", "Swahili artefacts", "Old Town walks", "Ocean views"]
     },
@@ -146,7 +146,7 @@
       "title": "Gede Ruins — Watamu",
       "short": "A lost 15th-century Swahili city swallowed by the coastal forest.",
       "description": "Hidden within the Arabuko-Sokoke Forest near Watamu, the ruins of Gede are one of Kenya's most haunting and atmospheric heritage sites. This prosperous Swahili trading town, abandoned mysteriously in the 17th century, features mosques, palaces, houses and tombs reclaimed by ancient trees. A truly magical step back in time.",
-      "image": "/assets/historic site, gedi ruins.jpg",
+      "image": "/assets/images/historic site, gedi ruins.jpg",
       "officialLink": "https://www.museums.or.ke/gede-ruins/",
       "highlights": ["15th-century ruins", "Palace & mosque", "Ancient trees", "Swahili heritage", "Bird-rich forest"]
     },
@@ -155,7 +155,7 @@
       "title": "Arabuko-Sokoke Forest",
       "short": "East Africa's largest coastal forest — rare birds, golden-rumped elephant shrews.",
       "description": "Arabuko-Sokoke is the largest surviving coastal forest in East Africa and a globally Important Bird & Biodiversity Area. It shelters over 230 bird species including three endemic species found nowhere else on Earth, plus the golden-rumped elephant shrew, Aders' duiker, and the rare Sokoke scops owl. The forest borders the Gede Ruins and Mida Creek — a perfect full-day nature combination.",
-      "image": "/assets/nairobi nature walk.jpg",
+      "image": "/assets/images/nairobi nature walk.jpg",
       "officialLink": "https://www.kws.go.ke/parks/arabuko-sokoke-forest-reserve",
       "highlights": ["Rare endemic birds", "Golden-rumped elephant shrew", "Sokoke scops owl", "Mida Creek", "Adjacent to Gede Ruins"]
     },
@@ -164,7 +164,7 @@
       "title": "Kakamega Rainforest",
       "short": "Kenya's only rainforest — a Congo Basin relic full of primates and rare birds.",
       "description": "Kakamega Forest is Kenya's only tropical rainforest — a magnificent relic of the ancient Guineo-Congolian forest that once stretched from West Africa. It is home to primates including red-tailed monkeys, colobus, and baboons, over 330 bird species, rare butterflies, and giant trees draped in moss and ferns. Guided walks and canopy viewing are unforgettable.",
-      "image": "/assets/shimba hills waterfals.jpg",
+      "image": "/assets/images/shimba hills waterfals.jpg",
       "officialLink": "https://www.kws.go.ke/parks/kakamega-forest-national-reserve",
       "highlights": ["Tropical rainforest", "Red-tailed monkeys", "330+ bird species", "Rare butterflies", "Canopy walks"]
     },
@@ -173,7 +173,7 @@
       "title": "Karura Forest — Nairobi",
       "short": "An urban forest paradise — waterfalls, caves and cycling trails inside Nairobi.",
       "description": "Karura Forest is a remarkable 1,041-hectare gazetted forest right inside Nairobi city — one of the world's largest urban forests. Home to colobus monkeys, bushbuck, and over 200 bird species. Walk or cycle through bamboo groves, discover hidden waterfalls, and explore old colonial-era caves, all minutes from the city centre.",
-      "image": "/assets/nairobi nature walk.jpg",
+      "image": "/assets/images/nairobi nature walk.jpg",
       "officialLink": "https://www.friendsofkarura.org/",
       "highlights": ["Urban forest", "Colobus monkeys", "Hidden waterfalls", "Cycling trails", "Colonial caves"]
     },
@@ -182,7 +182,7 @@
       "title": "Nairobi National Museum",
       "short": "Kenya's premier museum — culture, history, art and natural history in one place.",
       "description": "The Nairobi National Museum is Kenya's most comprehensive museum, housing exhibits on natural history, Kenya's diverse cultures and peoples, prehistoric fossils from the Great Rift Valley, contemporary East African art, and the remarkable story of human evolution. The adjacent Snake Park and botanical gardens add to a full day of discovery.",
-      "image": "/assets/mombasa old town.jpg",
+      "image": "/assets/images/mombasa old town.jpg",
       "officialLink": "https://www.museums.or.ke/nairobi-national-museum/",
       "highlights": ["Natural history", "Human evolution fossils", "Kenyan cultures", "Contemporary art", "Snake Park"]
     }
@@ -358,62 +358,62 @@
     {
       "id": "g1",
       "caption": "Zebra herd roaming free on the open plains",
-      "image": "/assets/zebras-hero.jpg"
+      "image": "/assets/images/zebras-hero.jpg"
     },
     {
       "id": "g2",
       "caption": "The Great Wildebeest Migration — a spectacle like no other",
-      "image": "/assets/wildbeest-migration.jpg"
+      "image": "/assets/images/wildbeest-migration.jpg"
     },
     {
       "id": "g3",
       "caption": "Giant elephant herds beneath Kilimanjaro in Amboseli",
-      "image": "/assets/amboseli,giant elephany herds.webp"
+      "image": "/assets/images/amboseli,giant elephany herds.webp"
     },
     {
       "id": "g4",
       "caption": "Dolphins at play in Kisite-Mpunguti Marine Park",
-      "image": "/assets/kisite mpunguti dolphine view.jpg"
+      "image": "/assets/images/kisite mpunguti dolphine view.jpg"
     },
     {
       "id": "g5",
       "caption": "Samburu's crystal pools along the Ewaso Ng'iro River",
-      "image": "/assets/samburu ,crystal pool.webp"
+      "image": "/assets/images/samburu ,crystal pool.webp"
     },
     {
       "id": "g6",
       "caption": "Lamu Island — UNESCO-listed Swahili treasure",
-      "image": "/assets/lamu island.jpg"
+      "image": "/assets/images/lamu island.jpg"
     },
     {
       "id": "g7",
       "caption": "Galu Kinondo — Kenya's most beautiful coastline from above",
-      "image": "/assets/galu kinondo beach from above.jpg"
+      "image": "/assets/images/galu kinondo beach from above.jpg"
     },
     {
       "id": "g8",
       "caption": "Rhino at Ol Pejeta Conservancy",
-      "image": "/assets/ol pojeta conservercy , rhino.webp"
+      "image": "/assets/images/ol pojeta conservercy , rhino.webp"
     },
     {
       "id": "g9",
       "caption": "Maasai Mara — ostrich on the golden savannah",
-      "image": "/assets/maasai mara ,ostrich.webp"
+      "image": "/assets/images/maasai mara ,ostrich.webp"
     },
     {
       "id": "g10",
       "caption": "Shimba Hills waterfall — coastal forest paradise",
-      "image": "/assets/shimba hills waterfals.jpg"
+      "image": "/assets/images/shimba hills waterfals.jpg"
     },
     {
       "id": "g11",
       "caption": "Hell's Gate — cycling through dramatic volcanic gorges",
-      "image": "/assets/hells gate,view.webp"
+      "image": "/assets/images/hells gate,view.webp"
     },
     {
       "id": "g12",
       "caption": "Tiwi Beach — pristine white sands of the South Coast",
-      "image": "/assets/tiwi beach.jpg"
+      "image": "/assets/images/tiwi beach.jpg"
     }
   ]
 }

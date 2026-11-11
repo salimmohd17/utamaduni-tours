@@ -196,7 +196,7 @@ export default function MyBookings() {
       <div
         className="relative text-white py-20"
         style={{
-          backgroundImage: "url('/assets/samburu ,crystal pool.webp')",
+          backgroundImage: "url('/assets/images/samburu ,crystal pool.webp')",
           backgroundSize: 'cover',
           backgroundPosition: 'center top',
         }}

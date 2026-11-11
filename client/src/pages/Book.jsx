@@ -77,7 +77,7 @@ export default function Book() {
       <div
         className="relative text-white py-20 sm:py-28"
         style={{
-          backgroundImage: "url('/assets/amboseli scenery.jpg')",
+          backgroundImage: "url('/assets/images/amboseli scenery.jpg')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -455,7 +455,7 @@ export default function Book() {
             {/* Featured image */}
             <div className="rounded-2xl overflow-hidden shadow-lg">
               <img
-                src="/assets/samburu ,crystal pool.webp"
+                src="/assets/images/samburu ,crystal pool.webp"
                 alt="Samburu"
                 className="w-full h-48 object-cover hover:scale-105 transition duration-700"
               />

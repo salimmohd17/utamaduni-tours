@@ -25,12 +25,12 @@ const testimonials = [
 ]
 
 const heroSlides = [
-  { image: '/assets/maasai mara ,ostrich.webp', title: 'Maasai Mara', subtitle: 'The Greatest Wildlife Show on Earth', tag: '🦁 Big Five Country' },
-  { image: '/assets/amboseli,giant elephany herds.webp', title: 'Amboseli', subtitle: 'Giants Under Kilimanjaro', tag: '🐘 Elephant Paradise' },
-  { image: '/assets/samburu ,crystal pool.webp', title: 'Samburu', subtitle: 'Wild North — Rare Species, Pristine Rivers', tag: '🦒 Reticulated Giraffe' },
-  { image: '/assets/kisite mpunguti dolphine view.jpg', title: 'Kisite-Mpunguti', subtitle: 'Dolphins, Dhows & Coral Reefs', tag: '🐬 Marine Paradise' },
-  { image: '/assets/hells gate,view.webp', title: "Hell's Gate", subtitle: 'Cycle Through Volcanic Gorges', tag: '🚴 Adventure Cycling' },
-  { image: '/assets/lamu island.jpg', title: 'Lamu Island', subtitle: "UNESCO's Living Swahili Heritage", tag: '⛵ Dhow Sailing' }
+  { image: '/assets/images/maasai mara ,ostrich.webp', title: 'Maasai Mara', subtitle: 'The Greatest Wildlife Show on Earth', tag: '🦁 Big Five Country' },
+  { image: '/assets/images/amboseli,giant elephany herds.webp', title: 'Amboseli', subtitle: 'Giants Under Kilimanjaro', tag: '🐘 Elephant Paradise' },
+  { image: '/assets/images/samburu ,crystal pool.webp', title: 'Samburu', subtitle: 'Wild North — Rare Species, Pristine Rivers', tag: '🦒 Reticulated Giraffe' },
+  { image: '/assets/images/kisite mpunguti dolphine view.jpg', title: 'Kisite-Mpunguti', subtitle: 'Dolphins, Dhows & Coral Reefs', tag: '🐬 Marine Paradise' },
+  { image: '/assets/images/hells gate,view.webp', title: "Hell's Gate", subtitle: 'Cycle Through Volcanic Gorges', tag: '🚴 Adventure Cycling' },
+  { image: '/assets/images/lamu island.jpg', title: 'Lamu Island', subtitle: "UNESCO's Living Swahili Heritage", tag: '⛵ Dhow Sailing' }
 ]
 
 const TOTAL = heroSlides.length
@@ -215,7 +215,7 @@ export default function Home() {
       {/* Stats */}
       <section className="py-16 bg-gradient-to-r from-green-900 via-green-800 to-green-900 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <img src="/assets/view.webp" alt="" className="w-full h-full object-cover" loading="lazy" />
+          <img src="/assets/images/view.webp" alt="" className="w-full h-full object-cover" loading="lazy" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-10">
@@ -237,11 +237,11 @@ export default function Home() {
       <section className="overflow-hidden">
         <div className="flex h-64 md:h-80 lg:h-96">
           {[
-            { img: '/assets/wildlife-reserve.jpg',              label: '🦓 Wildlife Reserve', link: '/destinations#shimba' },
-            { img: '/assets/wildbeest-migration.jpg',           label: '🦬 Great Migration',   link: '/destinations#mara' },
-            { img: '/assets/samburu,impala.webp',               label: '🦌 Samburu Reserve',   link: '/destinations#samburu' },
-            { img: '/assets/kisite mpunguti dolphine view.jpg', label: '🐬 Marine Park',       link: '/destinations#kisite' },
-            { img: '/assets/hells gate,zebra.webp',             label: "🏔️ Hell's Gate",       link: '/destinations#hellsgate' },
+            { img: '/assets/images/wildlife-reserve.jpg',              label: '🦓 Wildlife Reserve', link: '/destinations#shimba' },
+            { img: '/assets/images/wildbeest-migration.jpg',           label: '🦬 Great Migration',   link: '/destinations#mara' },
+            { img: '/assets/images/samburu,impala.webp',               label: '🦌 Samburu Reserve',   link: '/destinations#samburu' },
+            { img: '/assets/images/kisite mpunguti dolphine view.jpg', label: '🐬 Marine Park',       link: '/destinations#kisite' },
+            { img: '/assets/images/hells gate,zebra.webp',             label: "🏔️ Hell's Gate",       link: '/destinations#hellsgate' },
           ].map((item) => (
             <Link
               key={item.img}
@@ -332,7 +332,7 @@ export default function Home() {
       {/* Adventure Preview CTA Strip */}
       <section className="py-28 relative overflow-hidden">
         <img
-          src="/assets/ol pojeta conservercy , rhino.webp"
+          src="/assets/images/ol pojeta conservercy , rhino.webp"
           alt=""
           className="absolute inset-0 w-full h-full object-cover object-center"
           loading="lazy"
@@ -435,7 +435,7 @@ export default function Home() {
 
       {/* Final CTA */}
       <section className="py-28 relative overflow-hidden">
-        <img src="/assets/shanzu beach.jpg" alt="" className="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async" />
+        <img src="/assets/images/shanzu beach.jpg" alt="" className="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async" />
         <div className="absolute inset-0 bg-gradient-to-t from-green-900 via-green-900/80 to-green-900/60" />
         <div className="relative max-w-3xl mx-auto px-4 text-center">
           <span className="text-[#d4a017] text-sm font-medium tracking-widest uppercase">Ready?</span>
