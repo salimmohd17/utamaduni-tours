@@ -2,27 +2,6 @@ import { useContent } from '../context/ContentContext'
 import { PawPrint, Waves, Camera, Image } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-// Extra gallery items using the uploaded local images
-const extraGallery = [
-  { id: 'e1', caption: 'Amboseli scenery — golden hour on the savannah', image: '/assets/images/amboseli scenery.jpg' },
-  { id: 'e2', caption: 'Amboseli views — wide open plains', image: '/assets/images/amboseli views.jpg' },
-  { id: 'e3', caption: 'Diving in Mombasa Marine — underwater paradise', image: '/assets/images/Diving-Mombasa-Marine.jpg' },
-  { id: 'e4', caption: "Hell's Gate — warthog encounter", image: "/assets/images/hels,wathog.webp" },
-  { id: 'e5', caption: 'Lamu Island — timeless Swahili island life', image: '/assets/images/lamu.jpg' },
-  { id: 'e6', caption: 'Malindi Beach — the wide golden coast', image: '/assets/images/malindi beach.jpg' },
-  { id: 'e7', caption: 'Malindi Marine — coral reef wonders', image: '/assets/images/malindi marine 2.jpg' },
-  { id: 'e8', caption: 'Mombasa Old Town — history in every stone', image: '/assets/images/mombasa old town.jpg' },
-  { id: 'e9', caption: 'Nairobi National Park — bird life at sunset', image: "/assets/images/nairobi nationa park, bird.webp" },
-  { id: 'e10', caption: 'Nguuni Sanctuary — where wildlife roams free', image: '/assets/images/nguuni sanctuary.jpg' },
-  { id: 'e11', caption: 'Sand dunes — the hidden desert of Kenya coast', image: '/assets/images/sand dunes.jpg' },
-  { id: 'e12', caption: 'Shanzu Beach — peaceful northern coast', image: '/assets/images/shanzu beach.jpg' },
-  { id: 'e13', caption: 'Samburu Reserve — impala on the plains', image: '/assets/images/samburu,impala.webp' },
-  { id: 'e14', caption: "Hell's Gate — zebra in the gorge", image: "/assets/images/hells gate,zebra.webp" },
-  { id: 'e15', caption: 'Sibiloi National Park — the jade sea', image: '/assets/images/sibiloi view.jpg' },
-  { id: 'e16', caption: 'Tsavo East — red earth and big sky', image: '/assets/images/tsavo 2.jpg' },
-  { id: 'e17', caption: 'Nairobi nature walk — urban wild beauty', image: '/assets/images/nairobi nature walk.jpg' },
-]
-
 export default function Moments() {
   const { content, loading } = useContent()
   if (loading) return (
@@ -31,7 +10,7 @@ export default function Moments() {
     </div>
   )
 
-  const gallery = [...(content?.gallery || []), ...extraGallery]
+  const gallery = content?.gallery || []
 
   return (
     <div className="pt-20 pb-20">
@@ -109,6 +88,9 @@ export default function Moments() {
 
         {/* Masonry-style grid */}
         <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-5 space-y-5">
+          {gallery.length === 0 && (
+            <p className="text-center text-stone-500 py-12">No gallery photos yet.</p>
+          )}
           {gallery.map((g) => (
             <figure key={g.id} className="break-inside-avoid group rounded-2xl overflow-hidden bg-green-50 border border-green-100 relative shadow hover:shadow-xl transition duration-300 hover:-translate-y-0.5">
               <div className="overflow-hidden relative">

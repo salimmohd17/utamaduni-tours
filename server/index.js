@@ -160,17 +160,95 @@ async function ensureDatabaseSchema() {
     );
   `);
 
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS app_migrations (
+      name TEXT PRIMARY KEY,
+      applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
   await pool.query('CREATE INDEX IF NOT EXISTS bookings_created_at_idx ON bookings (created_at DESC)');
   await pool.query('CREATE INDEX IF NOT EXISTS bookings_email_idx ON bookings ((payload->>\'email\'))');
 
-  const content = updateImagePaths(readJSON(CONTENT_FILE, {}));
-  if (Object.keys(content).length > 0) {
-    await pool.query(
-      `INSERT INTO site_content (key, payload)
-       VALUES ('main', $1)
-       ON CONFLICT (key) DO NOTHING`,
-      [content]
-    );
+  const migration = 'legacy_json_import_v1';
+  const { rows: migrationRows } = await pool.query(
+    'SELECT 1 FROM app_migrations WHERE name = $1',
+    [migration]
+  );
+
+  if (migrationRows.length === 0) {
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', [migration]);
+
+      const { rows: completedRows } = await client.query(
+        'SELECT 1 FROM app_migrations WHERE name = $1',
+        [migration]
+      );
+
+      if (completedRows.length === 0) {
+        const { rows: existingRows } = await client.query(`
+          SELECT
+            EXISTS (SELECT 1 FROM site_content) OR
+            EXISTS (SELECT 1 FROM bookings) OR
+            EXISTS (SELECT 1 FROM users) OR
+            EXISTS (SELECT 1 FROM admin_users) AS has_data
+        `);
+
+        if (!existingRows[0].has_data) {
+          const content = updateImagePaths(readJSON(CONTENT_FILE, {}));
+          if (Object.keys(content).length > 0) {
+            await client.query(
+              `INSERT INTO site_content (key, payload)
+               VALUES ('main', $1)
+               ON CONFLICT (key) DO NOTHING`,
+              [content]
+            );
+          }
+
+          for (const booking of readJSON(BOOKINGS_FILE, [])) {
+            await client.query(
+              `INSERT INTO bookings (id, payload, created_at)
+               VALUES ($1, $2, COALESCE($3::timestamptz, NOW()))
+               ON CONFLICT (id) DO NOTHING`,
+              [booking.id, booking, booking.createdAt || null]
+            );
+          }
+
+          for (const user of readJSON(USERS_FILE, [])) {
+            await client.query(
+              `INSERT INTO users (id, name, email, password_hash, created_at)
+               VALUES ($1, $2, $3, $4, COALESCE($5::timestamptz, NOW()))
+               ON CONFLICT DO NOTHING`,
+              [user.id, user.name, user.email, user.passwordHash, user.createdAt || null]
+            );
+          }
+
+          const admin = readJSON(ADMIN_FILE, {});
+          if (admin.username && admin.passwordHash) {
+            await client.query(
+              `INSERT INTO admin_users (username, password_hash)
+               VALUES ($1, $2)
+               ON CONFLICT (username) DO NOTHING`,
+              [admin.username, admin.passwordHash]
+            );
+          }
+        }
+
+        await client.query(
+          'INSERT INTO app_migrations (name) VALUES ($1) ON CONFLICT (name) DO NOTHING',
+          [migration]
+        );
+      }
+
+      await client.query('COMMIT');
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
   }
 
   const { rows: contentRows } = await pool.query(
@@ -185,34 +263,6 @@ async function ensureDatabaseSchema() {
       );
     }
   }
-
-  for (const booking of readJSON(BOOKINGS_FILE, [])) {
-    await pool.query(
-      `INSERT INTO bookings (id, payload, created_at)
-       VALUES ($1, $2, COALESCE($3::timestamptz, NOW()))
-       ON CONFLICT (id) DO NOTHING`,
-      [booking.id, booking, booking.createdAt || null]
-    );
-  }
-
-  for (const user of readJSON(USERS_FILE, [])) {
-    await pool.query(
-      `INSERT INTO users (id, name, email, password_hash, created_at)
-       VALUES ($1, $2, $3, $4, COALESCE($5::timestamptz, NOW()))
-       ON CONFLICT DO NOTHING`,
-      [user.id, user.name, user.email, user.passwordHash, user.createdAt || null]
-    );
-  }
-
-  const admin = readJSON(ADMIN_FILE, {});
-  if (admin.username && admin.passwordHash) {
-    await pool.query(
-      `INSERT INTO admin_users (username, password_hash)
-       VALUES ($1, $2)
-       ON CONFLICT (username) DO NOTHING`,
-      [admin.username, admin.passwordHash]
-    );
-  }
 }
 
 async function readContentData() {
@@ -222,7 +272,7 @@ async function readContentData() {
     `SELECT payload FROM site_content WHERE key = 'main' LIMIT 1`
   );
 
-  return rows[0]?.payload || readJSON(CONTENT_FILE, {});
+  return rows[0]?.payload || {};
 }
 
 async function writeContentData(content) {

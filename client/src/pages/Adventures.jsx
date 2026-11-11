@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Clock, Compass, MapPin, Users, ChevronDown, ExternalLink } from 'lucide-react'
 import { useState } from 'react'
+import { useContent } from '../context/ContentContext'
 
 // 1 USD ≈ 130 KES (indicative rate)
 const USD_TO_KES = 130
@@ -371,6 +372,7 @@ const adventures = [
 ]
 
 const categories = ['All', 'Wildlife', 'Marine', 'Culture', 'Beach', 'Adventure', 'Forests & Nature', 'Museums & Heritage', 'Premium Safari']
+const adventurePresets = new Map(adventures.map(adventure => [adventure.id, adventure]))
 
 function formatUSD(n) {
   return `$${n.toLocaleString()}`
@@ -559,6 +561,33 @@ function PriceCard({ adventure }) {
 export default function Adventures() {
   const [activeCategory, setActiveCategory] = useState('All')
   const [search, setSearch] = useState('')
+  const { content, loading } = useContent()
+  const adventures = (content?.adventures || []).map((savedAdventure) => {
+    const preset = adventurePresets.get(savedAdventure.id)
+    const priceFrom = Number(savedAdventure.priceFrom) || preset?.foreignerBase || 0
+    const minDays = Number(savedAdventure.minDays) || preset?.minDays || Number.parseInt(savedAdventure.duration, 10) || 1
+
+    return {
+      ...preset,
+      ...savedAdventure,
+      emoji: savedAdventure.emoji || preset?.emoji || '🌍',
+      park: savedAdventure.park || preset?.park || null,
+      image: savedAdventure.image || preset?.image || '/assets/images/view.webp',
+      minDays,
+      maxDays: Number(savedAdventure.maxDays) || preset?.maxDays || minDays,
+      description: savedAdventure.description || preset?.description || '',
+      highlights: savedAdventure.highlights || preset?.highlights || [],
+      includes: savedAdventure.includes || preset?.includes || [],
+      category: savedAdventure.category || preset?.category || 'Adventure',
+      foreignerBase: Number(savedAdventure.foreignerBase) || priceFrom,
+      residentBase: Number(savedAdventure.residentBase) || preset?.residentBase || priceFrom,
+      citizenBase: Number(savedAdventure.citizenBase) || preset?.citizenBase || priceFrom
+    }
+  })
+
+  if (loading) {
+    return <div className="pt-24 min-h-screen flex items-center justify-center text-xl text-green-700">Loading adventures…</div>
+  }
 
   const filtered = adventures.filter((a) => {
     const catOk = activeCategory === 'All' || a.category === activeCategory

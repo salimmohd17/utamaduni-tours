@@ -25,12 +25,12 @@ const testimonials = [
 ]
 
 const heroSlides = [
-  { image: '/assets/images/maasai mara ,ostrich.webp', title: 'Maasai Mara', subtitle: 'The Greatest Wildlife Show on Earth', tag: '🦁 Big Five Country' },
-  { image: '/assets/images/amboseli,giant elephany herds.webp', title: 'Amboseli', subtitle: 'Giants Under Kilimanjaro', tag: '🐘 Elephant Paradise' },
-  { image: '/assets/images/samburu ,crystal pool.webp', title: 'Samburu', subtitle: 'Wild North — Rare Species, Pristine Rivers', tag: '🦒 Reticulated Giraffe' },
-  { image: '/assets/images/kisite mpunguti dolphine view.jpg', title: 'Kisite-Mpunguti', subtitle: 'Dolphins, Dhows & Coral Reefs', tag: '🐬 Marine Paradise' },
-  { image: '/assets/images/hells gate,view.webp', title: "Hell's Gate", subtitle: 'Cycle Through Volcanic Gorges', tag: '🚴 Adventure Cycling' },
-  { image: '/assets/images/lamu island.jpg', title: 'Lamu Island', subtitle: "UNESCO's Living Swahili Heritage", tag: '⛵ Dhow Sailing' }
+  { image: '/assets/images/maasai mara ,ostrich.webp', position: 'center 55%', title: 'Maasai Mara', subtitle: 'The Greatest Wildlife Show on Earth', tag: '🦁 Big Five Country' },
+  { image: '/assets/images/amboseli,giant elephany herds.webp', position: 'center 50%', title: 'Amboseli', subtitle: 'Giants Under Kilimanjaro', tag: '🐘 Elephant Paradise' },
+  { image: '/assets/images/samburu ,crystal pool.webp', position: 'center 58%', title: 'Samburu', subtitle: 'Wild North — Rare Species, Pristine Rivers', tag: '🦒 Reticulated Giraffe' },
+  { image: '/assets/images/kisite mpunguti dolphine view.jpg', position: '65% center', title: 'Kisite-Mpunguti', subtitle: 'Dolphins, Dhows & Coral Reefs', tag: '🐬 Marine Paradise' },
+  { image: '/assets/images/hells gate,view.webp', position: 'center 60%', title: "Hell's Gate", subtitle: 'Cycle Through Volcanic Gorges', tag: '🚴 Adventure Cycling' },
+  { image: '/assets/images/lamu island.jpg', position: 'center 50%', title: 'Lamu Island', subtitle: "UNESCO's Living Swahili Heritage", tag: '⛵ Dhow Sailing' }
 ]
 
 const TOTAL = heroSlides.length
@@ -95,9 +95,10 @@ function HeroSlider() {
             src={prevSlide.image}
             alt={prevSlide.title}
             className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectPosition: prevSlide.position }}
             fetchpriority="low"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/70" />
         </div>
       )}
 
@@ -115,10 +116,11 @@ function HeroSlider() {
           src={slide.image}
           alt={slide.title}
           className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: slide.position }}
           fetchpriority={current === 0 ? 'high' : 'auto'}
           loading={current === 0 ? 'eager' : 'lazy'}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/70" />
       </div>
 
       {/* Preload next image (hidden) */}
@@ -234,36 +236,6 @@ export default function Home() {
       </section>
 
       {/* Wildlife Photo Showcase Strip */}
-      <section className="overflow-hidden">
-        <div className="flex h-64 md:h-80 lg:h-96">
-          {[
-            { img: '/assets/images/wildlife-reserve.jpg',              label: '🦓 Wildlife Reserve', link: '/destinations#shimba' },
-            { img: '/assets/images/wildbeest-migration.jpg',           label: '🦬 Great Migration',   link: '/destinations#mara' },
-            { img: '/assets/images/samburu,impala.webp',               label: '🦌 Samburu Reserve',   link: '/destinations#samburu' },
-            { img: '/assets/images/kisite mpunguti dolphine view.jpg', label: '🐬 Marine Park',       link: '/destinations#kisite' },
-            { img: '/assets/images/hells gate,zebra.webp',             label: "🏔️ Hell's Gate",       link: '/destinations#hellsgate' },
-          ].map((item) => (
-            <Link
-              key={item.img}
-              to={item.link}
-              className="flex-1 hover:flex-[2.5] transition-all duration-700 cursor-pointer relative group overflow-hidden"
-            >
-              <img
-                src={item.img}
-                alt={item.label}
-                className="absolute inset-0 w-full h-full object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-              <div className="absolute inset-0 bg-green-900/40 group-hover:bg-green-900/10 transition duration-500 flex items-end p-4">
-                <span className="text-white text-sm font-bold bg-black/50 px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition duration-300 backdrop-blur-sm">
-                  {item.label}
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
 
       {/* Why Choose Us */}
       <section className="py-24 bg-white">
