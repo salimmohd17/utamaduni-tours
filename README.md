@@ -70,7 +70,9 @@ Express will serve the built React app from `client/dist`.
 
 The root `render.yaml` configures the API as a Render web service. Create a new Blueprint from this repository; Render installs dependencies from `server/package-lock.json`, starts the API, generates a `JWT_SECRET`, and checks `/api/health`.
 
-The API currently stores bookings, content, and admin credentials as JSON files in `server/data`. Render's local filesystem is not persistent across all service types and redeploys. Use a Render persistent disk or move this data to a managed database before relying on bookings in production.
+Set `DATABASE_URL` in the Render service's Environment settings to the Supabase PostgreSQL connection URI. The API creates its `bookings` and `site_content` tables on startup. For booking confirmation emails, also set `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, and `SMTP_FROM` in Render's Environment settings. For local development, copy `server/.env.example` to `server/.env` and set the database and SMTP credentials there; `.env` files are ignored by Git.
+
+When `DATABASE_URL` is configured, bookings and site content are stored in PostgreSQL; otherwise, they fall back to JSON files in `server/data`. Render's local filesystem is not persistent across redeploys, and existing JSON bookings are not automatically imported into PostgreSQL. Admin credentials and user accounts remain in JSON files.
 
 ### Vercel (website)
 

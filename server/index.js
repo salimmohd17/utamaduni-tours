@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -212,10 +214,6 @@ if (!fs.existsSync(BOOKINGS_FILE)) writeJSON(BOOKINGS_FILE, []);
 
 app.use(cors());
 app.use(express.json({ limit: '2mb' }));
-
-ensureDatabaseSchema().catch((error) => {
-  console.error('Database initialization failed:', error.message);
-});
 
 // ========== PUBLIC ROUTES ==========
 app.get('/api/health', (req, res) => res.json({ status: 'ok', company: 'Utamaduni Safaris' }));
@@ -437,7 +435,20 @@ if (fs.existsSync(clientBuild)) {
   });
 }
 
-app.listen(PORT, () => {
-  console.log(`\n🌿 Utamaduni Safaris API running on http://localhost:${PORT}`);
-  console.log(`   Admin login: username "admin" / password "utamaduni2026"\n`);
-});
+async function startServer() {
+  try {
+    await ensureDatabaseSchema();
+  } catch (error) {
+    console.error('Database initialization failed:', error.message);
+    if (pool) await pool.end();
+    process.exitCode = 1;
+    return;
+  }
+
+  app.listen(PORT, () => {
+    console.log(`\n🌿 Utamaduni Safaris API running on http://localhost:${PORT}`);
+    console.log(`   Admin login: username "admin" / password "utamaduni2026"\n`);
+  });
+}
+
+startServer();
