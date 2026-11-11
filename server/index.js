@@ -1,9 +1,9 @@
-require('dotenv').config();
-
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -107,7 +107,12 @@ async function sendConfirmationEmail(booking) {
 }
 
 async function ensureDatabaseSchema() {
-  if (!pool) return;
+  if (!pool) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('DATABASE_URL must be configured in production to persist application data.');
+    }
+    return;
+  }
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS site_content (
@@ -125,13 +130,61 @@ async function ensureDatabaseSchema() {
     );
   `);
 
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id UUID PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL UNIQUE,
+      password_hash TEXT NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS admin_users (
+      username TEXT PRIMARY KEY,
+      password_hash TEXT NOT NULL
+    );
+  `);
+
+  await pool.query('CREATE INDEX IF NOT EXISTS bookings_created_at_idx ON bookings (created_at DESC)');
+  await pool.query('CREATE INDEX IF NOT EXISTS bookings_email_idx ON bookings ((payload->>\'email\'))');
+
   const content = readJSON(CONTENT_FILE, {});
   if (Object.keys(content).length > 0) {
     await pool.query(
       `INSERT INTO site_content (key, payload)
        VALUES ('main', $1)
-       ON CONFLICT (key) DO UPDATE SET payload = EXCLUDED.payload, updated_at = NOW()`,
+       ON CONFLICT (key) DO NOTHING`,
       [content]
+    );
+  }
+
+  for (const booking of readJSON(BOOKINGS_FILE, [])) {
+    await pool.query(
+      `INSERT INTO bookings (id, payload, created_at)
+       VALUES ($1, $2, COALESCE($3::timestamptz, NOW()))
+       ON CONFLICT (id) DO NOTHING`,
+      [booking.id, booking, booking.createdAt || null]
+    );
+  }
+
+  for (const user of readJSON(USERS_FILE, [])) {
+    await pool.query(
+      `INSERT INTO users (id, name, email, password_hash, created_at)
+       VALUES ($1, $2, $3, $4, COALESCE($5::timestamptz, NOW()))
+       ON CONFLICT DO NOTHING`,
+      [user.id, user.name, user.email, user.passwordHash, user.createdAt || null]
+    );
+  }
+
+  const admin = readJSON(ADMIN_FILE, {});
+  if (admin.username && admin.passwordHash) {
+    await pool.query(
+      `INSERT INTO admin_users (username, password_hash)
+       VALUES ($1, $2)
+       ON CONFLICT (username) DO NOTHING`,
+      [admin.username, admin.passwordHash]
     );
   }
 }
@@ -170,20 +223,71 @@ async function readBookingsData() {
   return rows.map(row => row.payload);
 }
 
-async function writeBookingsData(bookings) {
+async function writeBookingData(booking) {
   if (!pool) {
+    const bookings = readJSON(BOOKINGS_FILE, []);
+    const index = bookings.findIndex(item => item.id === booking.id);
+    if (index === -1) bookings.unshift(booking);
+    else bookings[index] = booking;
     writeJSON(BOOKINGS_FILE, bookings);
     return;
   }
 
-  await pool.query('DELETE FROM bookings');
+  await pool.query(
+    `INSERT INTO bookings (id, payload, created_at)
+     VALUES ($1, $2, COALESCE($3::timestamptz, NOW()))
+     ON CONFLICT (id) DO UPDATE SET payload = EXCLUDED.payload`,
+    [booking.id, booking, booking.createdAt || null]
+  );
+}
 
-  for (const booking of bookings) {
-    await pool.query(
-      `INSERT INTO bookings (id, payload) VALUES ($1, $2)`,
-      [booking.id, booking]
-    );
+async function deleteBookingData(id) {
+  if (!pool) {
+    writeJSON(BOOKINGS_FILE, readJSON(BOOKINGS_FILE, []).filter(booking => booking.id !== id));
+    return;
   }
+
+  await pool.query('DELETE FROM bookings WHERE id = $1', [id]);
+}
+
+async function readUserByEmail(email) {
+  if (!pool) return readJSON(USERS_FILE, []).find(user => user.email === email);
+
+  const { rows } = await pool.query(
+    `SELECT id, name, email, password_hash AS "passwordHash", created_at AS "createdAt"
+     FROM users WHERE email = $1 LIMIT 1`,
+    [email]
+  );
+  return rows[0];
+}
+
+async function createUser(user) {
+  if (!pool) {
+    const users = readJSON(USERS_FILE, []);
+    users.push(user);
+    writeJSON(USERS_FILE, users);
+    return;
+  }
+
+  await pool.query(
+    `INSERT INTO users (id, name, email, password_hash, created_at)
+     VALUES ($1, $2, $3, $4, $5)`,
+    [user.id, user.name, user.email, user.passwordHash, user.createdAt]
+  );
+}
+
+async function readAdminByUsername(username) {
+  if (!pool) {
+    const admin = readJSON(ADMIN_FILE, {});
+    return admin.username === username ? admin : null;
+  }
+
+  const { rows } = await pool.query(
+    `SELECT username, password_hash AS "passwordHash"
+     FROM admin_users WHERE username = $1 LIMIT 1`,
+    [username]
+  );
+  return rows[0];
 }
 
 // Seed admin (password: utamaduni2026)
@@ -228,7 +332,6 @@ app.post('/api/bookings', async (req, res) => {
     return res.status(400).json({ error: 'Name, email and preferred dates are required' });
   }
 
-  const bookings = await readBookingsData();
   const booking = {
     id: uuidv4(),
     name,
@@ -243,8 +346,7 @@ app.post('/api/bookings', async (req, res) => {
     createdAt: new Date().toISOString()
   };
 
-  bookings.unshift(booking);
-  await writeBookingsData(bookings);
+  await writeBookingData(booking);
   res.status(201).json({ success: true, booking });
 });
 
@@ -255,15 +357,21 @@ app.post('/api/users/register', async (req, res) => {
     return res.status(400).json({ error: 'Name, email and password are required' });
   }
 
-  const users = readJSON(USERS_FILE, []);
-  if (users.find(u => u.email === email)) {
+  if (await readUserByEmail(email)) {
     return res.status(400).json({ error: 'An account with this email already exists' });
   }
 
   const passwordHash = bcrypt.hashSync(password, 10);
   const user = { id: uuidv4(), name, email, passwordHash, createdAt: new Date().toISOString() };
-  users.push(user);
-  writeJSON(USERS_FILE, users);
+  try {
+    await createUser(user);
+  } catch (error) {
+    if (error.code === '23505') {
+      return res.status(400).json({ error: 'An account with this email already exists' });
+    }
+    console.error('User registration failed:', error.message);
+    return res.status(500).json({ error: 'Unable to create account' });
+  }
 
   const token = jwt.sign({ userId: user.id, email: user.email, role: 'user' }, JWT_SECRET, { expiresIn: '7d' });
   res.status(201).json({ token, user: { id: user.id, name: user.name, email: user.email } });
@@ -271,8 +379,7 @@ app.post('/api/users/register', async (req, res) => {
 
 app.post('/api/users/login', async (req, res) => {
   const { email, password } = req.body;
-  const users = readJSON(USERS_FILE, []);
-  const user = users.find(u => u.email === email);
+  const user = await readUserByEmail(email);
   if (!user) return res.status(401).json({ error: 'Invalid email or password' });
 
   const match = await bcrypt.compare(password, user.passwordHash);
@@ -313,7 +420,8 @@ app.get('/api/users/bookings', async (req, res) => {
 // ========== AUTH ==========
 app.post('/api/admin/login', async (req, res) => {
   const { username, password } = req.body;
-  const admin = readJSON(ADMIN_FILE, {});
+  const admin = await readAdminByUsername(username);
+  if (!admin) return res.status(401).json({ error: 'Invalid credentials' });
   if (username !== admin.username) return res.status(401).json({ error: 'Invalid credentials' });
   const match = await bcrypt.compare(password, admin.passwordHash);
   if (!match) return res.status(401).json({ error: 'Invalid credentials' });
@@ -343,7 +451,7 @@ app.patch('/api/admin/bookings/:id', auth, async (req, res) => {
   if (idx === -1) return res.status(404).json({ error: 'Not found' });
 
   bookings[idx] = { ...bookings[idx], ...req.body, updatedAt: new Date().toISOString() };
-  await writeBookingsData(bookings);
+  await writeBookingData(bookings[idx]);
 
   // Auto-send confirmation email when status set to 'confirmed'
   if (req.body.status === 'confirmed') {
@@ -355,9 +463,7 @@ app.patch('/api/admin/bookings/:id', auth, async (req, res) => {
 });
 
 app.delete('/api/admin/bookings/:id', auth, async (req, res) => {
-  let bookings = await readBookingsData();
-  bookings = bookings.filter(b => b.id !== req.params.id);
-  await writeBookingsData(bookings);
+  await deleteBookingData(req.params.id);
   res.json({ success: true });
 });
 

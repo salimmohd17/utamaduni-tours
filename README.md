@@ -70,9 +70,9 @@ Express will serve the built React app from `client/dist`.
 
 The root `render.yaml` configures the API as a Render web service. Create a new Blueprint from this repository; Render installs dependencies from `server/package-lock.json`, starts the API, generates a `JWT_SECRET`, and checks `/api/health`.
 
-Set `DATABASE_URL` in the Render service's Environment settings to the Supabase PostgreSQL connection URI. The API creates its `bookings` and `site_content` tables on startup. For booking confirmation emails, also set `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, and `SMTP_FROM` in Render's Environment settings. For local development, copy `server/.env.example` to `server/.env` and set the database and SMTP credentials there; `.env` files are ignored by Git.
+Set `DATABASE_URL` in the Render service's Environment settings to the Supabase PostgreSQL connection URI. On startup, the API creates its `bookings`, `site_content`, `users`, and `admin_users` tables and idempotently imports the legacy JSON bookings, site content, users, and admin account if their records are not already present. New bookings and accounts are then stored in PostgreSQL. For booking confirmation emails, also set `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, and `SMTP_FROM` in Render's Environment settings. For local development, copy `server/.env.example` to `server/.env` and set the database and SMTP credentials there; `.env` files are ignored by Git.
 
-When `DATABASE_URL` is configured, bookings and site content are stored in PostgreSQL; otherwise, they fall back to JSON files in `server/data`. Render's local filesystem is not persistent across redeploys, and existing JSON bookings are not automatically imported into PostgreSQL. Admin credentials and user accounts remain in JSON files.
+In local development, omitting `DATABASE_URL` keeps data in JSON files. Production startup requires `DATABASE_URL` so the API cannot silently use Render's temporary filesystem. JSON records already present in `server/data` are imported into PostgreSQL without overwriting existing database records.
 
 ### Vercel (website)
 
