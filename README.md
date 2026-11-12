@@ -7,15 +7,16 @@ A full-stack tourism website with:
 
 - Immersive **3D hero** (React Three Fiber)
 - Destinations, Adventures, Gallery (Moments), About, Booking
-- **Reservation system** stored on the server
+- **User accounts** with booking status tracking and saved reviews
+- **Reservation system** stored on the server and linked to signed-in accounts
 - **Admin dashboard** (view/manage bookings + edit site content)
 
 ## Tech Stack
 
 - **Frontend**: React 19 + Vite + Tailwind CSS v4 + React Router + Three.js / R3F
 - **Backend**: Node.js + Express
-- **Auth**: JWT (admin)
-- **Storage**: JSON files (easy to swap for a real DB later)
+- **Auth**: JWT (admin and customer accounts)
+- **Storage**: PostgreSQL in production; JSON files for local development
 
 ## Quick Start
 
@@ -70,7 +71,7 @@ Express will serve the built React app from `client/dist`.
 
 The root `render.yaml` configures the API as a Render web service. Create a new Blueprint from this repository; Render installs dependencies from `server/package-lock.json`, starts the API, generates a `JWT_SECRET`, and checks `/api/health`.
 
-Set `DATABASE_URL` in the Render service's Environment settings to the Supabase PostgreSQL connection URI. On startup, the API creates its `bookings`, `site_content`, `users`, `admin_users`, and migration tables. Legacy JSON data is imported once only into a completely empty database; after that, PostgreSQL is authoritative and deleted content is not restored from JSON. New bookings and accounts are stored in PostgreSQL.
+Set `DATABASE_URL` in the Render service's Environment settings to the Supabase PostgreSQL connection URI. On startup, the API creates its `bookings`, `site_content`, `users`, `reviews`, `admin_users`, and migration tables. Legacy JSON data is imported once only into a completely empty database; after that, PostgreSQL is authoritative and deleted content is not restored from JSON. New bookings, accounts, and reviews are stored in PostgreSQL.
 
 Render Free web services block outbound SMTP on ports 25, 465, and 587. Use Resend's HTTPS API for booking emails: set `RESEND_API_KEY` and `RESEND_FROM` in Render's Environment settings. For initial testing, Resend permits its `onboarding@resend.dev` sender only to your own Resend account email. To send to customers, verify a domain in Resend and set `RESEND_FROM` to an address on that domain. When `RESEND_API_KEY` is set, the API uses Resend instead of SMTP. For local development, copy `server/.env.example` to `server/.env`; `.env` files are ignored by Git.
 

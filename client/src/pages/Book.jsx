@@ -50,7 +50,7 @@ export default function Book() {
     setStatus('loading')
     setErrorMsg('')
     try {
-      await api.post('/bookings', { ...form, userId: user?.id || null })
+      await api.post('/bookings', form)
       setStatus('success')
       setForm({ name: user?.name || '', email: user?.email || '', phone: '', dates: '', days: 2, guests: 2, adventureId: '', visitorType: 'foreigner', message: '' })
     } catch (err) {

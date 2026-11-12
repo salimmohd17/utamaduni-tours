@@ -149,9 +149,14 @@ export default function MyBookings() {
   const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
   const [authed, setAuthed] = useState(false)
+  const [reviews, setReviews] = useState([])
+  const [reviewForm, setReviewForm] = useState({ rating: 5, text: '' })
+  const [reviewMessage, setReviewMessage] = useState('')
+  const [reviewError, setReviewError] = useState('')
+  const [savingReview, setSavingReview] = useState(false)
 
-  const loadBookings = async () => {
-    setLoading(true)
+  const loadBookings = async (showLoading = true) => {
+    if (showLoading) setLoading(true)
     try {
       const { data } = await api.get('/users/bookings', {
         headers: { Authorization: `Bearer ${localStorage.getItem('utamaduni_user_token')}` }
@@ -160,14 +165,50 @@ export default function MyBookings() {
     } catch (e) {
       console.error(e)
     } finally {
-      setLoading(false)
+      if (showLoading) setLoading(false)
+    }
+  }
+
+  const loadReviews = async () => {
+    try {
+      const { data } = await api.get('/users/reviews')
+      setReviews(data)
+    } catch (e) {
+      console.error('Unable to load account reviews:', e)
+    }
+  }
+
+  const submitReview = async (e) => {
+    e.preventDefault()
+    setReviewMessage('')
+    setReviewError('')
+    setSavingReview(true)
+    try {
+      const { data } = await api.post('/users/reviews', reviewForm)
+      setReviews(current => [data, ...current])
+      setReviewForm({ rating: 5, text: '' })
+      setReviewMessage('Thank you! Your review has been saved.')
+    } catch (err) {
+      setReviewError(err.response?.data?.error || 'Unable to save your review. Please try again.')
+    } finally {
+      setSavingReview(false)
     }
   }
 
   useEffect(() => {
     if (user) {
       loadBookings()
+      loadReviews()
       setAuthed(true)
+      const interval = setInterval(() => loadBookings(false), 30000)
+      const refreshWhenVisible = () => {
+        if (document.visibilityState === 'visible') loadBookings(false)
+      }
+      document.addEventListener('visibilitychange', refreshWhenVisible)
+      return () => {
+        clearInterval(interval)
+        document.removeEventListener('visibilitychange', refreshWhenVisible)
+      }
     }
   }, [user])
 
@@ -226,6 +267,68 @@ export default function MyBookings() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 mt-10">
+        <section className="bg-white rounded-2xl border border-green-100 shadow-sm p-6 mb-6">
+          <h2 className="font-display text-2xl text-green-900 mb-2">Share Your Experience</h2>
+          <p className="text-sm text-stone-500 mb-5">Your review will appear on the website for other travelers.</p>
+          <form onSubmit={submitReview} className="space-y-4">
+            <div>
+              <label htmlFor="review-rating" className="block text-sm font-semibold text-stone-700 mb-1.5">Your rating</label>
+              <select
+                id="review-rating"
+                value={reviewForm.rating}
+                onChange={e => setReviewForm(current => ({ ...current, rating: Number(e.target.value) }))}
+                className="px-3 py-2 rounded-xl border border-green-200 focus:ring-2 focus:ring-green-500 outline-none"
+              >
+                {[5, 4, 3, 2, 1].map(rating => (
+                  <option key={rating} value={rating}>{rating} star{rating === 1 ? '' : 's'}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="review-text" className="block text-sm font-semibold text-stone-700 mb-1.5">Your review</label>
+              <textarea
+                id="review-text"
+                required
+                minLength={10}
+                maxLength={2000}
+                rows={4}
+                value={reviewForm.text}
+                onChange={e => setReviewForm(current => ({ ...current, text: e.target.value }))}
+                placeholder="Tell us about your experience..."
+                className="w-full px-4 py-3 rounded-xl border border-green-200 focus:ring-2 focus:ring-green-500 outline-none resize-y"
+              />
+            </div>
+            {reviewError && <p role="alert" className="text-sm text-red-700">{reviewError}</p>}
+            {reviewMessage && <p role="status" className="text-sm text-green-700">{reviewMessage}</p>}
+            <button
+              type="submit"
+              disabled={savingReview}
+              className="px-6 py-2.5 rounded-full bg-green-700 text-white font-semibold hover:bg-green-900 transition disabled:opacity-60"
+            >
+              {savingReview ? 'Saving…' : 'Submit Review'}
+            </button>
+          </form>
+
+          {reviews.length > 0 && (
+            <div className="mt-6 border-t border-green-100 pt-5">
+              <h3 className="font-semibold text-green-900 mb-3">Your saved reviews</h3>
+              <div className="space-y-3">
+                {reviews.map(review => (
+                  <article key={review.id} className="rounded-xl bg-green-50 p-4">
+                    <p className="text-[#d4a017]" aria-label={`${review.rating} out of 5 stars`}>
+                      {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
+                    </p>
+                    <p className="text-sm text-stone-700 mt-1">{review.text}</p>
+                    <p className="text-xs text-stone-400 mt-2">
+                      {new Date(review.createdAt).toLocaleDateString()}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+
         {/* Filter + Search */}
         <div className="bg-white rounded-2xl border border-green-100 shadow-sm p-4 mb-6">
           <div className="flex flex-col sm:flex-row gap-3">
@@ -331,7 +434,15 @@ export default function MyBookings() {
                       <div className="text-xs mt-1 opacity-75">We'll confirm within 24h</div>
                     )}
                     {b.status === 'confirmed' && (
-                      <div className="text-xs mt-1 opacity-75">Check your email!</div>
+                      <div className="text-xs mt-1 opacity-75">
+                        {b.confirmationEmailSent === true
+                          ? 'Confirmation email sent'
+                          : b.confirmationEmailConfigured === true
+                            ? 'Email delivery failed — contact us for details'
+                            : b.confirmationEmailConfigured === false
+                              ? 'Email notifications are not configured — contact us for details'
+                              : 'Your booking is confirmed'}
+                      </div>
                     )}
                   </div>
                 </div>

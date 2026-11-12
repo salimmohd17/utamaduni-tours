@@ -32,6 +32,7 @@ const BOOKINGS_FILE = path.join(DATA_DIR, 'bookings.json');
 const CONTENT_FILE  = path.join(DATA_DIR, 'content.json');
 const ADMIN_FILE    = path.join(DATA_DIR, 'admin.json');
 const USERS_FILE    = path.join(DATA_DIR, 'users.json');
+const REVIEWS_FILE  = path.join(DATA_DIR, 'reviews.json');
 const PUBLIC_IMAGE_PATH = /^\/assets\/(?!images\/)(.+\.(?:jpe?g|png|webp|gif|avif))(?:[?#].*)?$/i;
 
 // Helpers
@@ -194,6 +195,15 @@ async function ensureDatabaseSchema() {
   `);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS reviews (
+      id UUID PRIMARY KEY,
+      user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      payload JSONB NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS admin_users (
       username TEXT PRIMARY KEY,
       password_hash TEXT NOT NULL
@@ -209,6 +219,8 @@ async function ensureDatabaseSchema() {
 
   await pool.query('CREATE INDEX IF NOT EXISTS bookings_created_at_idx ON bookings (created_at DESC)');
   await pool.query('CREATE INDEX IF NOT EXISTS bookings_email_idx ON bookings ((payload->>\'email\'))');
+  await pool.query('CREATE INDEX IF NOT EXISTS reviews_created_at_idx ON reviews (created_at DESC)');
+  await pool.query('CREATE INDEX IF NOT EXISTS reviews_user_id_idx ON reviews (user_id)');
 
   const migration = 'legacy_json_import_v1';
   const { rows: migrationRows } = await pool.query(
@@ -392,6 +404,40 @@ async function createUser(user) {
   );
 }
 
+async function readUserById(id) {
+  if (!pool) return readJSON(USERS_FILE, []).find(user => user.id === id);
+
+  const { rows } = await pool.query(
+    `SELECT id, name, email FROM users WHERE id = $1 LIMIT 1`,
+    [id]
+  );
+  return rows[0];
+}
+
+async function readReviewsData() {
+  if (!pool) return readJSON(REVIEWS_FILE, []).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+
+  const { rows } = await pool.query(
+    `SELECT payload FROM reviews ORDER BY created_at DESC`
+  );
+  return rows.map(row => row.payload);
+}
+
+async function writeReviewData(review) {
+  if (!pool) {
+    const reviews = readJSON(REVIEWS_FILE, []);
+    reviews.unshift(review);
+    writeJSON(REVIEWS_FILE, reviews);
+    return;
+  }
+
+  await pool.query(
+    `INSERT INTO reviews (id, user_id, payload, created_at)
+     VALUES ($1, $2, $3, $4)`,
+    [review.id, review.userId, review, review.createdAt]
+  );
+}
+
 async function readAdminByUsername(username) {
   if (!pool) {
     const admin = readJSON(ADMIN_FILE, {});
@@ -414,6 +460,7 @@ if (!fs.existsSync(ADMIN_FILE)) {
 
 // Seed users file
 if (!fs.existsSync(USERS_FILE)) writeJSON(USERS_FILE, []);
+if (!fs.existsSync(REVIEWS_FILE)) writeJSON(REVIEWS_FILE, []);
 
 // Seed default content
 if (!fs.existsSync(CONTENT_FILE)) {
@@ -442,22 +489,22 @@ app.get('/api/content', async (req, res) => {
   res.json(await readContentData());
 });
 
-app.post('/api/bookings', async (req, res) => {
-  const { name, email, phone, dates, guests, adventureId, message, userId } = req.body;
+app.post('/api/bookings', optionalUserAuth, async (req, res) => {
+  const { name, email, phone, dates, guests, adventureId, message } = req.body;
   if (!name || !email || !dates) {
     return res.status(400).json({ error: 'Name, email and preferred dates are required' });
   }
 
   const booking = {
     id: uuidv4(),
-    name,
-    email,
+    name: req.user?.name || name,
+    email: req.user?.email || email,
     phone: phone || '',
     dates,
     guests: guests || 1,
     adventureId: adventureId || '',
     message: message || '',
-    userId: userId || null,
+    userId: req.user?.id || null,
     status: 'pending',
     createdAt: new Date().toISOString()
   };
@@ -468,7 +515,8 @@ app.post('/api/bookings', async (req, res) => {
 
 // ========== USER AUTH ==========
 app.post('/api/users/register', async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, password } = req.body;
+  const email = typeof req.body.email === 'string' ? req.body.email.trim().toLowerCase() : '';
   if (!name || !email || !password) {
     return res.status(400).json({ error: 'Name, email and password are required' });
   }
@@ -494,7 +542,8 @@ app.post('/api/users/register', async (req, res) => {
 });
 
 app.post('/api/users/login', async (req, res) => {
-  const { email, password } = req.body;
+  const email = typeof req.body.email === 'string' ? req.body.email.trim().toLowerCase() : '';
+  const { password } = req.body;
   const user = await readUserByEmail(email);
   if (!user) return res.status(401).json({ error: 'Invalid email or password' });
 
@@ -505,22 +554,10 @@ app.post('/api/users/login', async (req, res) => {
   res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
 });
 
-// Get user's own bookings (by email or userId)
-app.get('/api/users/bookings', async (req, res) => {
-  const header = req.headers.authorization;
-  if (!header || !header.startsWith('Bearer ')) return res.status(401).json({ error: 'Unauthorized' });
-
-  let payload;
-  try {
-    payload = jwt.verify(header.slice(7), JWT_SECRET);
-  } catch {
-    return res.status(401).json({ error: 'Invalid token' });
-  }
-
+// Get bookings and reviews belonging to the authenticated user.
+app.get('/api/users/bookings', userAuth, async (req, res) => {
   const bookings = await readBookingsData();
-  const userBookings = bookings.filter(b =>
-    b.userId === payload.userId || b.email === payload.email
-  );
+  const userBookings = bookings.filter(b => b.userId === req.user.id);
 
   res.json(userBookings.map(b => ({
     id: b.id,
@@ -530,8 +567,84 @@ app.get('/api/users/bookings', async (req, res) => {
     status: b.status,
     createdAt: b.createdAt,
     message: b.message,
+    confirmationEmailSent: b.confirmationEmailSent,
+    confirmationEmailConfigured: b.confirmationEmailConfigured,
   })));
 });
+
+app.get('/api/users/reviews', userAuth, async (req, res) => {
+  const reviews = await readReviewsData();
+  res.json(reviews.filter(review => review.userId === req.user.id));
+});
+
+app.post('/api/users/reviews', userAuth, async (req, res) => {
+  const rating = Number(req.body.rating);
+  const text = typeof req.body.text === 'string' ? req.body.text.trim() : '';
+  if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+    return res.status(400).json({ error: 'Choose a rating from 1 to 5 stars' });
+  }
+  if (text.length < 10 || text.length > 2000) {
+    return res.status(400).json({ error: 'Your review must be between 10 and 2000 characters' });
+  }
+
+  const review = {
+    id: uuidv4(),
+    userId: req.user.id,
+    name: req.user.name,
+    rating,
+    text,
+    createdAt: new Date().toISOString(),
+  };
+  await writeReviewData(review);
+  res.status(201).json(review);
+});
+
+app.get('/api/reviews', async (req, res) => {
+  const reviews = await readReviewsData();
+  res.json(reviews.slice(0, 20).map(({ id, name, rating, text, createdAt }) => ({
+    id, name, rating, text, createdAt,
+  })));
+});
+
+/*
+ * Account endpoints use the verified identity from the signed token; client
+ * supplied user IDs and emails are never used to authorize access.
+ */
+async function userFromAuthorization(req) {
+  const header = req.headers.authorization;
+  if (!header || !header.startsWith('Bearer ')) return null;
+  let payload;
+  try {
+    payload = jwt.verify(header.slice(7), JWT_SECRET);
+  } catch {
+    return null;
+  }
+  if (payload.role !== 'user' || !payload.userId) return null;
+  return readUserById(payload.userId);
+}
+
+async function userAuth(req, res, next) {
+  try {
+    req.user = await userFromAuthorization(req);
+    if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
+    next();
+  } catch (error) {
+    console.error('User authentication failed:', error.message);
+    return res.status(500).json({ error: 'Unable to authenticate user' });
+  }
+}
+
+async function optionalUserAuth(req, res, next) {
+  if (!req.headers.authorization) return next();
+  try {
+    req.user = await userFromAuthorization(req);
+    if (!req.user) return res.status(401).json({ error: 'Invalid user token' });
+    next();
+  } catch (error) {
+    console.error('Booking user authentication failed:', error.message);
+    return res.status(500).json({ error: 'Unable to authenticate user' });
+  }
+}
 
 // ========== AUTH ==========
 app.post('/api/admin/login', async (req, res) => {
@@ -549,7 +662,8 @@ function auth(req, res, next) {
   const header = req.headers.authorization;
   if (!header || !header.startsWith('Bearer ')) return res.status(401).json({ error: 'Unauthorized' });
   try {
-    jwt.verify(header.slice(7), JWT_SECRET);
+    const payload = jwt.verify(header.slice(7), JWT_SECRET);
+    if (payload.role !== 'admin') return res.status(403).json({ error: 'Forbidden' });
     next();
   } catch {
     return res.status(401).json({ error: 'Invalid token' });
@@ -562,16 +676,30 @@ app.get('/api/admin/bookings', auth, async (req, res) => {
 });
 
 app.patch('/api/admin/bookings/:id', auth, async (req, res) => {
+  const allowedStatuses = ['pending', 'confirmed', 'contacted', 'cancelled'];
+  if (req.body.status && !allowedStatuses.includes(req.body.status)) {
+    return res.status(400).json({ error: 'Invalid booking status' });
+  }
   const bookings = await readBookingsData();
   const idx = bookings.findIndex(b => b.id === req.params.id);
   if (idx === -1) return res.status(404).json({ error: 'Not found' });
 
-  bookings[idx] = { ...bookings[idx], ...req.body, updatedAt: new Date().toISOString() };
+  bookings[idx] = {
+    ...bookings[idx],
+    ...(req.body.status ? { status: req.body.status } : {}),
+    updatedAt: new Date().toISOString(),
+  };
   await writeBookingData(bookings[idx]);
 
   // Auto-send confirmation email when status set to 'confirmed'
   if (req.body.status === 'confirmed') {
     const email = await sendConfirmationEmail(bookings[idx]);
+    bookings[idx] = {
+      ...bookings[idx],
+      confirmationEmailSent: email.sent,
+      confirmationEmailConfigured: email.configured,
+    };
+    await writeBookingData(bookings[idx]);
     return res.json({
       ...bookings[idx],
       emailSent: email.sent,

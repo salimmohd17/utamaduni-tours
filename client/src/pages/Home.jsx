@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useContent } from '../context/ContentContext'
+import api from '../api/client'
 import { Globe, PawPrint, Waves, Map, ChevronLeft, ChevronRight, Star } from 'lucide-react'
 import { useState, useEffect, useRef, useCallback } from 'react'
 const stats = [
@@ -209,6 +210,18 @@ function HeroSlider() {
 
 export default function Home() {
   const { content } = useContent()
+  const [reviews, setReviews] = useState([])
+
+  useEffect(() => {
+    api.get('/reviews')
+      .then(({ data }) => setReviews(data))
+      .catch(error => console.error('Unable to load public reviews:', error))
+  }, [])
+
+  const displayTestimonials = [
+    ...reviews.map(review => ({ ...review, stars: review.rating, country: 'Guest review' })),
+    ...testimonials,
+  ]
 
   return (
     <div>
@@ -376,7 +389,7 @@ export default function Home() {
         {/* Infinite marquee track */}
         <div className="relative">
           <div className="flex gap-6 testimonials-track" style={{ width: 'max-content' }}>
-            {[...testimonials, ...testimonials, ...testimonials].map((t, i) => (
+            {[...displayTestimonials, ...displayTestimonials, ...displayTestimonials].map((t, i) => (
               <div
                 key={i}
                 className="w-80 shrink-0 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-7 border border-green-100 shadow-sm"
@@ -400,7 +413,7 @@ export default function Home() {
           }
           @keyframes testimonialScroll {
             0%   { transform: translateX(0); }
-            100% { transform: translateX(calc(-320px * ${testimonials.length} - 24px * ${testimonials.length})); }
+            100% { transform: translateX(calc(-320px * ${displayTestimonials.length} - 24px * ${displayTestimonials.length})); }
           }
         `}</style>
       </section>
