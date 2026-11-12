@@ -59,7 +59,6 @@ function updateImagePaths(value) {
 
 // ---- Nodemailer transporter ----
 function createTransporter() {
-  if (!process.env.SMTP_HOST) return null;
   return nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: parseInt(process.env.SMTP_PORT || '587'),
@@ -72,12 +71,12 @@ function createTransporter() {
 }
 
 async function sendConfirmationEmail(booking) {
-  const transporter = createTransporter();
-  if (!transporter) {
+  if (!process.env.SMTP_HOST) {
     console.log('SMTP not configured — skipping confirmation email for', booking.email);
-    return false;
+    return { sent: false, configured: false };
   }
   try {
+    const transporter = createTransporter();
     await transporter.sendMail({
       from: `"Utamaduni Safaris" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
       to: booking.email,
@@ -112,10 +111,10 @@ async function sendConfirmationEmail(booking) {
         </div>
       `,
     });
-    return true;
+    return { sent: true, configured: true };
   } catch (err) {
     console.error('Email send failed:', err.message);
-    return false;
+    return { sent: false, configured: true };
   }
 }
 
@@ -531,8 +530,12 @@ app.patch('/api/admin/bookings/:id', auth, async (req, res) => {
 
   // Auto-send confirmation email when status set to 'confirmed'
   if (req.body.status === 'confirmed') {
-    const sent = await sendConfirmationEmail(bookings[idx]);
-    return res.json({ ...bookings[idx], emailSent: sent });
+    const email = await sendConfirmationEmail(bookings[idx]);
+    return res.json({
+      ...bookings[idx],
+      emailSent: email.sent,
+      emailConfigured: email.configured,
+    });
   }
 
   res.json(bookings[idx]);

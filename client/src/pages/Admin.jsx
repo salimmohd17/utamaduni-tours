@@ -32,7 +32,7 @@ export default function Admin() {
   const [bookingFilter, setBookingFilter] = useState('all')
   const [bookingSearch, setBookingSearch] = useState('')
   const [confirmingId, setConfirmingId] = useState(null)
-  const [emailStatus, setEmailStatus] = useState({}) // id -> 'sent' | 'failed' | null
+  const [emailStatus, setEmailStatus] = useState({}) // id -> 'sent' | 'failed' | 'no-smtp'
   const [tab, setTab] = useState('bookings')
   const [contentEdit, setContentEdit] = useState(null)
   const { refresh } = useContent()
@@ -103,7 +103,12 @@ export default function Admin() {
     const { data } = await api.patch(`/admin/bookings/${id}`, { status })
     if (status === 'confirmed') {
       setConfirmingId(null)
-      setEmailStatus(prev => ({ ...prev, [id]: data.emailSent ? 'sent' : 'no-smtp' }))
+      const emailState = data.emailSent
+        ? 'sent'
+        : data.emailConfigured
+          ? 'failed'
+          : 'no-smtp'
+      setEmailStatus(prev => ({ ...prev, [id]: emailState }))
     }
     loadBookings()
   }
@@ -328,6 +333,9 @@ export default function Admin() {
                         )}
                         {emailStatus[b.id] === 'no-smtp' && (
                           <span className="text-amber-600 font-medium">📧 Confirmed (configure SMTP to auto-email)</span>
+                        )}
+                        {emailStatus[b.id] === 'failed' && (
+                          <span className="text-red-600 font-medium">📧 Confirmed, but email failed (check backend logs)</span>
                         )}
                       </div>
                     </div>
