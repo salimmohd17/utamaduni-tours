@@ -59,14 +59,19 @@ function updateImagePaths(value) {
 
 // ---- Nodemailer transporter ----
 function createTransporter() {
+  const port = parseInt(process.env.SMTP_PORT || '465');
+  const secure = port === 465 ? true : process.env.SMTP_SECURE === 'true';
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: process.env.SMTP_SECURE === 'true',
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port,
+    secure,                   // true for 465 (SSL), false for 587 (STARTTLS)
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
+    connectionTimeout: 10000, // 10 s to establish TCP connection
+    greetingTimeout:   10000, // 10 s to receive SMTP greeting
+    socketTimeout:     15000, // 15 s of socket inactivity before abort
   });
 }
 

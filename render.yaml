@@ -13,3 +13,18 @@ services:
         generateValue: true
       - key: DATABASE_URL
         sync: false
+
+      # --- Email (Gmail SMTP via App Password) ---
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 465
+      - key: SMTP_SECURE
+        value: true
+      # SMTP_PASS is set privately in the Render dashboard (never commit it to git)
+      - key: SMTP_USER
+        value: salomonsterk@gmail.com
+      - key: SMTP_FROM
+        value: salomonsterk@gmail.com
+      - key: SMTP_PASS
+        sync: false
