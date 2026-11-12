@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import api from '../api/client'
+import { notifyNewBooking } from '../api/emailjs'
 import { useContent } from '../context/ContentContext'
 import { useUser } from '../context/UserContext'
 import { Calendar, Users, MessageSquare, Phone, Mail, MapPin, Minus, Plus, LogIn } from 'lucide-react'
@@ -50,7 +51,9 @@ export default function Book() {
     setStatus('loading')
     setErrorMsg('')
     try {
-      await api.post('/bookings', form)
+      const { data } = await api.post('/bookings', form)
+      // Fire-and-forget: notify admin via EmailJS (works even if Resend/SMTP is broken)
+      notifyNewBooking(data.booking || { ...form, id: data.booking?.id || '' })
       setStatus('success')
       setForm({ name: user?.name || '', email: user?.email || '', phone: '', dates: '', days: 2, guests: 2, adventureId: '', visitorType: 'foreigner', message: '' })
     } catch (err) {

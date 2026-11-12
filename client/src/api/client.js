@@ -6,12 +6,23 @@ const api = axios.create({
 })
 
 api.interceptors.request.use((config) => {
-  // Admin token
-  const token = localStorage.getItem('utamaduni_token')
-  if (token) config.headers.Authorization = `Bearer ${token}`
-  // User token (for /users/bookings endpoint)
+  const url = config.url || ''
+
+  // Admin-only routes: use admin token
+  const isAdminRoute = url.startsWith('/admin')
+  const adminToken = localStorage.getItem('utamaduni_token')
+
+  // User routes: use user token
   const userToken = localStorage.getItem('utamaduni_user_token')
-  if (userToken && !token) config.headers.Authorization = `Bearer ${userToken}`
+
+  if (isAdminRoute && adminToken) {
+    config.headers.Authorization = `Bearer ${adminToken}`
+  } else if (userToken) {
+    config.headers.Authorization = `Bearer ${userToken}`
+  } else if (adminToken) {
+    config.headers.Authorization = `Bearer ${adminToken}`
+  }
+
   return config
 })
 
