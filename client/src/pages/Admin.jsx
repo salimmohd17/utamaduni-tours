@@ -332,7 +332,7 @@ export default function Admin() {
                           <span className="text-green-600 font-medium">✉️ Confirmation email sent!</span>
                         )}
                         {emailStatus[b.id] === 'no-smtp' && (
-                          <span className="text-amber-600 font-medium">📧 Confirmed (configure SMTP to auto-email)</span>
+                          <span className="text-amber-600 font-medium">📧 Confirmed (configure email delivery to auto-email)</span>
                         )}
                         {emailStatus[b.id] === 'failed' && (
                           <span className="text-red-600 font-medium">📧 Confirmed, but email failed (check backend logs)</span>

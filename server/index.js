@@ -70,52 +70,88 @@ function createTransporter() {
   });
 }
 
-async function sendConfirmationEmail(booking) {
-  if (!process.env.SMTP_HOST) {
-    console.log('SMTP not configured — skipping confirmation email for', booking.email);
-    return { sent: false, configured: false };
-  }
-  try {
-    const transporter = createTransporter();
-    await transporter.sendMail({
-      from: `"Utamaduni Safaris" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
-      to: booking.email,
-      subject: 'Booking Confirmed – Utamaduni Safaris 🌿',
-      html: `
-        <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#f0fdf4;padding:30px;border-radius:12px;">
-          <div style="text-align:center;margin-bottom:24px;">
-            <h1 style="color:#14532d;font-size:28px;margin:0;">🌿 Utamaduni Safaris</h1>
-            <p style="color:#15803d;font-size:14px;margin:4px 0;">Kenya. Wild. Alive.</p>
-          </div>
-          <div style="background:#fff;padding:28px;border-radius:10px;border:1px solid #bbf7d0;">
-            <h2 style="color:#14532d;margin-top:0;">Your Booking is Confirmed! ✅</h2>
-            <p style="color:#374151;">Dear <strong>${booking.name}</strong>,</p>
-            <p style="color:#374151;">We're thrilled to confirm your reservation. Here are your details:</p>
-            <table style="width:100%;border-collapse:collapse;margin:16px 0;">
-              <tr><td style="padding:8px 0;color:#6b7280;font-size:14px;">📅 Dates</td><td style="padding:8px 0;font-weight:600;color:#14532d;">${booking.dates}</td></tr>
-              <tr><td style="padding:8px 0;color:#6b7280;font-size:14px;">👥 Guests</td><td style="padding:8px 0;font-weight:600;color:#14532d;">${booking.guests}</td></tr>
-              <tr><td style="padding:8px 0;color:#6b7280;font-size:14px;">🗺️ Adventure</td><td style="padding:8px 0;font-weight:600;color:#14532d;">${booking.adventureId || 'Custom itinerary'}</td></tr>
-              <tr><td style="padding:8px 0;color:#6b7280;font-size:14px;">🔖 Reference</td><td style="padding:8px 0;font-weight:600;color:#14532d;">${booking.id.slice(0,8).toUpperCase()}</td></tr>
-            </table>
-            <p style="color:#374151;">Our team will be in touch shortly with your full itinerary and payment details.</p>
-            <div style="margin-top:24px;padding:16px;background:#f0fdf4;border-radius:8px;text-align:center;">
-              <p style="margin:0;font-size:14px;color:#374151;">Need help? Contact us:</p>
-              <p style="margin:4px 0;color:#15803d;font-weight:600;">📞 +254 798 157 303 &nbsp;|&nbsp; +254 750 135 285</p>
-              <p style="margin:4px 0;color:#15803d;">💬 WhatsApp us anytime</p>
-            </div>
-          </div>
-          <p style="text-align:center;color:#9ca3af;font-size:12px;margin-top:20px;">
-            Utamaduni Safaris · Kombani, Kwale County, Kenya<br>
-            &copy; 2026 Utamaduni Safaris. All rights reserved.
-          </p>
+function createConfirmationEmailHtml(booking) {
+  return `
+    <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#f0fdf4;padding:30px;border-radius:12px;">
+      <div style="text-align:center;margin-bottom:24px;">
+        <h1 style="color:#14532d;font-size:28px;margin:0;">🌿 Utamaduni Safaris</h1>
+        <p style="color:#15803d;font-size:14px;margin:4px 0;">Kenya. Wild. Alive.</p>
+      </div>
+      <div style="background:#fff;padding:28px;border-radius:10px;border:1px solid #bbf7d0;">
+        <h2 style="color:#14532d;margin-top:0;">Your Booking is Confirmed! ✅</h2>
+        <p style="color:#374151;">Dear <strong>${booking.name}</strong>,</p>
+        <p style="color:#374151;">We're thrilled to confirm your reservation. Here are your details:</p>
+        <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+          <tr><td style="padding:8px 0;color:#6b7280;font-size:14px;">📅 Dates</td><td style="padding:8px 0;font-weight:600;color:#14532d;">${booking.dates}</td></tr>
+          <tr><td style="padding:8px 0;color:#6b7280;font-size:14px;">👥 Guests</td><td style="padding:8px 0;font-weight:600;color:#14532d;">${booking.guests}</td></tr>
+          <tr><td style="padding:8px 0;color:#6b7280;font-size:14px;">🗺️ Adventure</td><td style="padding:8px 0;font-weight:600;color:#14532d;">${booking.adventureId || 'Custom itinerary'}</td></tr>
+          <tr><td style="padding:8px 0;color:#6b7280;font-size:14px;">🔖 Reference</td><td style="padding:8px 0;font-weight:600;color:#14532d;">${booking.id.slice(0,8).toUpperCase()}</td></tr>
+        </table>
+        <p style="color:#374151;">Our team will be in touch shortly with your full itinerary and payment details.</p>
+        <div style="margin-top:24px;padding:16px;background:#f0fdf4;border-radius:8px;text-align:center;">
+          <p style="margin:0;font-size:14px;color:#374151;">Need help? Contact us:</p>
+          <p style="margin:4px 0;color:#15803d;font-weight:600;">📞 +254 798 157 303 &nbsp;|&nbsp; +254 750 135 285</p>
+          <p style="margin:4px 0;color:#15803d;">💬 WhatsApp us anytime</p>
         </div>
-      `,
-    });
-    return { sent: true, configured: true };
-  } catch (err) {
-    console.error('Email send failed:', err.message);
-    return { sent: false, configured: true };
+      </div>
+      <p style="text-align:center;color:#9ca3af;font-size:12px;margin-top:20px;">
+        Utamaduni Safaris · Kombani, Kwale County, Kenya<br>
+        &copy; 2026 Utamaduni Safaris. All rights reserved.
+      </p>
+    </div>
+  `;
+}
+
+async function sendWithResend(booking) {
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: process.env.RESEND_FROM || 'Utamaduni Safaris <onboarding@resend.dev>',
+      to: [booking.email],
+      subject: 'Booking Confirmed – Utamaduni Safaris 🌿',
+      html: createConfirmationEmailHtml(booking),
+    }),
+    signal: AbortSignal.timeout(15000),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Resend API returned HTTP ${response.status}`);
   }
+}
+
+async function sendConfirmationEmail(booking) {
+  if (process.env.RESEND_API_KEY) {
+    try {
+      await sendWithResend(booking);
+      return { sent: true, configured: true };
+    } catch (err) {
+      console.error('Email send failed (Resend):', err.message);
+      return { sent: false, configured: true };
+    }
+  }
+
+  if (process.env.SMTP_HOST) {
+    try {
+      const transporter = createTransporter();
+      await transporter.sendMail({
+        from: `"Utamaduni Safaris" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+        to: booking.email,
+        subject: 'Booking Confirmed – Utamaduni Safaris 🌿',
+        html: createConfirmationEmailHtml(booking),
+      });
+      return { sent: true, configured: true };
+    } catch (err) {
+      console.error('Email send failed (SMTP):', err.message);
+      return { sent: false, configured: true };
+    }
+  }
+
+  console.log('Email delivery is not configured — skipping confirmation email for', booking.email);
+  return { sent: false, configured: false };
 }
 
 async function ensureDatabaseSchema() {
